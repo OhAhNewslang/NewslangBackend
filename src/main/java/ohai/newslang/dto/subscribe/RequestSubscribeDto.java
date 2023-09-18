@@ -1,4 +1,4 @@
-package ohai.newslang.repository.subscribe.dto;
+package ohai.newslang.dto.subscribe;
 
 import lombok.*;
 

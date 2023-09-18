@@ -12,6 +12,7 @@ import javax.persistence.Embeddable;
 public class News {
     private String url;
     private String mediaName;
+    private String categoryName;
     private String writer;
     private String title;
     private String contents;

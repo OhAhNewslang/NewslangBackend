@@ -1,4 +1,4 @@
-package ohai.newslang.repository.scrap.dto;
+package ohai.newslang.dto.scrap;
 
 import lombok.*;
 import ohai.newslang.domain.RequestResult;

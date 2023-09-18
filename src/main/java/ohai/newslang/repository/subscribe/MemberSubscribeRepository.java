@@ -32,4 +32,8 @@ public class MemberSubscribeRepository {
                 .setParameter("memberId", memberId)
                 .getSingleResult();
     }
+
+    public List<MemberSubscribe> findMemberSubscribes(Long memberId){
+
+    }
 }

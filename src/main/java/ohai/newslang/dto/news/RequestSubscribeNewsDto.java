@@ -1,13 +1,12 @@
-package ohai.newslang.repository.scrap.dto;
+package ohai.newslang.dto.news;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RequestScrapNewsDto {
-
-    private String url;
+public class RequestSubscribeNewsDto {
 }

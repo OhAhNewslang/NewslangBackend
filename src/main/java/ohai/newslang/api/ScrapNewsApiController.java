@@ -6,9 +6,9 @@ import ohai.newslang.domain.NewsArchive;
 import ohai.newslang.domain.RequestResult;
 import ohai.newslang.domain.ScrapNews;
 import ohai.newslang.domain.scrap.MemberScrapNewsArchive;
-import ohai.newslang.repository.scrap.dto.RequestScrapNewsDto;
-import ohai.newslang.repository.scrap.dto.ResultScrapNewsDto;
-import ohai.newslang.repository.subscribe.dto.ResultDto;
+import ohai.newslang.dto.scrap.RequestScrapNewsDto;
+import ohai.newslang.dto.scrap.ResultScrapNewsDto;
+import ohai.newslang.dto.subscribe.ResultDto;
 import ohai.newslang.service.NewsArchiveService;
 import ohai.newslang.service.scrap.MemberScrapNewsService;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class ScrapNewsApiController {
     private final MemberScrapNewsService memberScrapNewsService;
     private final NewsArchiveService newsArchiveService;
 
-    @PostMapping("/api/news/scrap/{id]")
+    @PostMapping("/api/news/scrap/{id}")
     public ResultDto scrapNews(@PathVariable("id") Long id, @RequestBody @Valid RequestScrapNewsDto request){
         return this.getScrapNewsDto(id, request, true);
     }
