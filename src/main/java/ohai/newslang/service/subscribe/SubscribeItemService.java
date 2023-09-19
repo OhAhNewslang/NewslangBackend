@@ -23,7 +23,7 @@ public class SubscribeItemService {
     }
 
     public List<SubscribeItem> findSubscribeItemList(Class<?> entityType){
-        List<SubscribeItem> allSubscribeItems = subscribeItemRepository.findAll(entityType);
+        List<SubscribeItem> allSubscribeItems = subscribeItemRepository.findAllWithEntityType(entityType);
         return allSubscribeItems;
     }
 

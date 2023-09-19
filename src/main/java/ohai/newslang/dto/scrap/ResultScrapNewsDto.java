@@ -2,7 +2,7 @@ package ohai.newslang.dto.scrap;
 
 import lombok.*;
 import ohai.newslang.domain.RequestResult;
-import ohai.newslang.domain.ScrapNews;
+import ohai.newslang.domain.scrap.ScrapNews;
 
 import java.util.List;
 

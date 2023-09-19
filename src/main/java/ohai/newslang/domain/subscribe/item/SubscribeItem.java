@@ -1,8 +1,11 @@
 package ohai.newslang.domain.subscribe.item;
 
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ohai.newslang.domain.subscribe.MemberSubscribeItem;
 
 import javax.persistence.*;
 
@@ -10,7 +13,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 @Getter
-@Setter
+@NoArgsConstructor
 public abstract class SubscribeItem {
 
     @Id
@@ -20,4 +23,16 @@ public abstract class SubscribeItem {
 
     @Column(nullable = false)
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_subscribe_item_id")
+    private MemberSubscribeItem memberSubscribeItem;
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setMemberSubscribeItem(MemberSubscribeItem memberSubscribeItem){
+        this.memberSubscribeItem = memberSubscribeItem;
+    }
 }

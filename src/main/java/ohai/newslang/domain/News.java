@@ -1,5 +1,6 @@
 package ohai.newslang.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,4 +17,14 @@ public class News {
     private String writer;
     private String title;
     private String contents;
+
+    @Builder
+    public News(String url, String mediaName, String categoryName, String writer, String title, String contents) {
+        this.url = url;
+        this.mediaName = mediaName;
+        this.categoryName = categoryName;
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+    }
 }

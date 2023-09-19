@@ -3,9 +3,6 @@ package ohai.newslang.domain.scrap;
 import lombok.Getter;
 import ohai.newslang.domain.Member;
 import ohai.newslang.domain.NewsArchive;
-import ohai.newslang.domain.subscribe.MemberSubscribe;
-import ohai.newslang.domain.subscribe.MemberSubscribeItem;
-import ohai.newslang.domain.subscribe.item.SubscribeItem;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -21,7 +18,7 @@ public class MemberScrapNews {
     @Column(name = "member_scrap_news_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 

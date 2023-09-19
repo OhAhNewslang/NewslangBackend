@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.News;
 import ohai.newslang.domain.NewsArchive;
 import ohai.newslang.domain.RequestResult;
-import ohai.newslang.domain.ScrapNews;
+import ohai.newslang.domain.scrap.ScrapNews;
 import ohai.newslang.domain.scrap.MemberScrapNewsArchive;
 import ohai.newslang.dto.scrap.RequestScrapNewsDto;
 import ohai.newslang.dto.scrap.ResultScrapNewsDto;

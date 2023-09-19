@@ -4,7 +4,7 @@ import ohai.newslang.domain.Member;
 import ohai.newslang.domain.subscribe.item.Keyword;
 import ohai.newslang.domain.subscribe.item.Media;
 import ohai.newslang.repository.subscribe.SubscribeItemRepository;
-import ohai.newslang.service.subscribe.MemberSubscribeService;
+import ohai.newslang.service.subscribe.MemberSubscribeItemService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class MemberSubscribeServiceTest {
     @Autowired
     SubscribeItemRepository subscribeItemRepository;
     @Autowired
-    MemberSubscribeService memberSubscribeService;
+    MemberSubscribeItemService memberSubscribeItemService;
 
     @Test
     @Rollback(false)
@@ -53,7 +53,7 @@ public class MemberSubscribeServiceTest {
         mediaNameList.add("조선일보");
         mediaNameList.add("중앙일보");
         try {
-            memberSubscribeService.updateSubscribe(member1.getId(), mediaNameList, Media.class);
+            memberSubscribeItemService.updateSubscribe(member1.getId(), mediaNameList, Media.class);
         } catch (Exception ex){
 
         }
@@ -63,7 +63,7 @@ public class MemberSubscribeServiceTest {
         keywordList.add("조선일보");
         keywordList.add("중앙일보");
         try {
-        memberSubscribeService.updateSubscribe(member1.getId(), keywordList, Keyword.class);
+        memberSubscribeItemService.updateSubscribe(member1.getId(), keywordList, Keyword.class);
         } catch (Exception ex){
 
         }
@@ -73,7 +73,7 @@ public class MemberSubscribeServiceTest {
         mediaNameList2.add("TIMES");
         mediaNameList2.add("경향신문");
             try {
-        memberSubscribeService.updateSubscribe(member2.getId(), mediaNameList2, Media.class);
+        memberSubscribeItemService.updateSubscribe(member2.getId(), mediaNameList2, Media.class);
             } catch (Exception ex){
 
             }
@@ -84,12 +84,12 @@ public class MemberSubscribeServiceTest {
         mediaNameList3.add("TIMES");
         mediaNameList3.add("경향신문");
                 try {
-        memberSubscribeService.updateSubscribe(1L, mediaNameList3, Media.class);
+        memberSubscribeItemService.updateSubscribe(1L, mediaNameList3, Media.class);
                 } catch (Exception ex){
 
                 }
 
-//        List<Long> ids = subscribeItemRepository.findAllIdWithName();
+//        List<Long> ids = subscribeItemRepository.findAllWithUrls();
 //        System.out.println("asdf");
     }
 
@@ -102,7 +102,7 @@ public class MemberSubscribeServiceTest {
 //        List<String> mediaNameList = findSubscribeItemList.stream()
 //                .map(o -> o.getName())
 //                .collect(Collectors.toList());
-//        return subscribeItemRepository.findAllIdWithName(mediaNameList, entityType);
+//        return subscribeItemRepository.findAllWithUrls(mediaNameList, entityType);
 //    }
 
     private Member createMember(String name, String imagePath, LocalDateTime joinTime){

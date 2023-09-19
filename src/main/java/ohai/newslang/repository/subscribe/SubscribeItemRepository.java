@@ -5,8 +5,9 @@ import ohai.newslang.domain.subscribe.item.SubscribeItem;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class SubscribeItemRepository {
                 .getSingleResult();
     }
 
-    public List<SubscribeItem> findAllIdWithName(List<String> nameList, Class<?> entityType){
+    public List<SubscribeItem> findAllIdWithNames(List<String> nameList, Class<?> entityType){
         return em.createQuery(
                         "select si from SubscribeItem si" +
                                 " where type(si) = :entityType and si.name in :nameList", SubscribeItem.class)
@@ -39,11 +40,28 @@ public class SubscribeItemRepository {
                 .getResultList();
     }
 
-    public List<SubscribeItem> findAll(Class<?> entityType){
+    public List<SubscribeItem> findAllWithMemberSubscribeItemId(Long memberSubscribeItemId, Class<?> entityType){
+        return em.createQuery(
+                        "select si from SubscribeItem si" +
+                                " where si.memberSubscribeItem.id = :memberSubscribeItemId and type(si) = :entityType", SubscribeItem.class)
+                .setParameter("memberSubscribeItemId", memberSubscribeItemId)
+                .setParameter("entityType", entityType)
+                .getResultList();
+    }
+
+    public List<SubscribeItem> findAllWithEntityType(Class<?> entityType){
         return em.createQuery(
                         "select si from SubscribeItem si" +
                                 " where type(si) = :entityType", SubscribeItem.class)
                 .setParameter("entityType", entityType)
                 .getResultList();
+    }
+
+    public void deleteWithIds(List<Long> Ids){
+        Query q = em.createQuery(
+                        "delete from SubscribeItem si" +
+                                " where si.id in :Ids")
+                .setParameter("Ids", Ids);
+        q.executeUpdate();
     }
 }

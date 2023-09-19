@@ -1,11 +1,14 @@
 package ohai.newslang.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class NewsArchive {
 
     @Id
@@ -15,4 +18,8 @@ public class NewsArchive {
 
     @Embedded
     private News news;
+
+    public NewsArchive(News news) {
+        this.news = news;
+    }
 }

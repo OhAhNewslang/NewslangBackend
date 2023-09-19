@@ -14,20 +14,20 @@ public class MemberSubscribeItemRepository {
 
     private final EntityManager em;
 
-    public List<MemberSubscribeItem> findAllWithMemberSubscribeId(Long memberSubscribeId, List<Long> subscribeItemIds){
-        return em.createQuery("select msi from MemberSubscribeItem msi" +
-                " where msi.memberSubscribe.id = :memberSubscribeId and msi.subscribeItem.id in :subscribeItemIds")
-                .setParameter("memberSubscribeId", memberSubscribeId)
-                .setParameter("subscribeItemIds", subscribeItemIds)
-                .getResultList();
+    public void save(MemberSubscribeItem memberSubscribeItem){
+        em.persist(memberSubscribeItem);
     }
 
-    public void delete(Long memberSubscribeId, List<Long> subscribeItemIds){
-        Query q = em.createQuery(
-                "delete from MemberSubscribeItem msi"+
-                " where msi.memberSubscribe.id = :subscribeMemberId and msi.subscribeItem.id in :subscribeItemIds")
-                .setParameter("subscribeMemberId", memberSubscribeId)
-                .setParameter("subscribeItemIds", subscribeItemIds);
-        q.executeUpdate();
+    public boolean isExistMemberSubscribeItem(Long memberId){
+        Long result = (Long)em.createQuery("select count(msi.id) from MemberSubscribeItem msi where msi.member.id = :memberId")
+                .setParameter("memberId", memberId)
+                .getSingleResult();
+        return ((result.equals(0L)) ? false : true);
+    }
+//
+    public MemberSubscribeItem findOne(Long memberId){
+        return em.createQuery("select msi from MemberSubscribeItem msi where msi.member.id = :memberId", MemberSubscribeItem.class)
+                .setParameter("memberId", memberId)
+                .getSingleResult();
     }
 }

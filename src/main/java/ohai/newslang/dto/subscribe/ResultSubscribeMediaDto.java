@@ -3,7 +3,7 @@ package ohai.newslang.dto.subscribe;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ohai.newslang.domain.MediaDetail;
+import ohai.newslang.domain.subscribe.MediaDetail;
 import ohai.newslang.domain.RequestResult;
 
 import java.util.List;

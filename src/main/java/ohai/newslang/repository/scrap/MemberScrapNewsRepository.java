@@ -2,7 +2,6 @@ package ohai.newslang.repository.scrap;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.scrap.MemberScrapNews;
-import ohai.newslang.domain.subscribe.MemberSubscribe;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

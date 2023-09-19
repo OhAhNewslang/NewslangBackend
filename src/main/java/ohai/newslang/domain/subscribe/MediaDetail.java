@@ -1,4 +1,4 @@
-package ohai.newslang.domain;
+package ohai.newslang.domain.subscribe;
 
 import lombok.Builder;
 import lombok.Getter;

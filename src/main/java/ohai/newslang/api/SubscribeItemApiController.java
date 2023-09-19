@@ -1,7 +1,7 @@
 package ohai.newslang.api;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.MediaDetail;
+import ohai.newslang.domain.subscribe.MediaDetail;
 import ohai.newslang.domain.RequestResult;
 import ohai.newslang.domain.subscribe.item.Category;
 import ohai.newslang.domain.subscribe.item.Keyword;
