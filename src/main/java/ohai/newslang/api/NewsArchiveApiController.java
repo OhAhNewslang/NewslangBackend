@@ -33,7 +33,7 @@ public class NewsArchiveApiController {
         List<SubscribeSimpleNews> collect = newsArchiveList.stream()
                 .map(n -> {
                     News news = n.getNews();
-                    return SubscribeSimpleNews.builder().url(news.getUrl()).mediaName(news.getMediaName()).categoryName(news.getCategoryName()).title(news.getTitle()).contents(news.getContents()).build();
+                    return SubscribeSimpleNews.builder().url(news.getUrl()).mediaName(news.getMediaName()).categoryName(news.getCategoryName()).title(news.getTitle()).contents(news.getContents()).thumbnailImagePath(news.getThumbnailImagePath()).build();
                 })
                 .collect(Collectors.toList());
 
@@ -43,6 +43,6 @@ public class NewsArchiveApiController {
     @GetMapping("/api/news/detail/{url}")
     public ResultSubscribeNewsDetailDto getSubscribeDetailNews(@PathVariable("url") String url){
         News news = newsArchiveService.findByUrl(url).getNews();
-        return new ResultSubscribeNewsDetailDto(SubscribeSimpleNews.builder().url(news.getUrl()).mediaName(news.getMediaName()).categoryName(news.getCategoryName()).title(news.getTitle()).contents(news.getContents()).build());
+        return new ResultSubscribeNewsDetailDto(SubscribeSimpleNews.builder().url(news.getUrl()).mediaName(news.getMediaName()).categoryName(news.getCategoryName()).title(news.getTitle()).contents(news.getContents()).thumbnailImagePath(news.getThumbnailImagePath()).build());
     }
 }

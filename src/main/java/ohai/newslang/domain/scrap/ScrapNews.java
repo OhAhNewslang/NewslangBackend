@@ -14,15 +14,17 @@ public class ScrapNews {
     private String writer;
     private String title;
     private String contents;
+    private String thumbnailImagePath;
     private LocalDate scrapDate;
 
     @Builder
-    public ScrapNews(String url, String mediaName, String writer, String title, String contents, LocalDate scrapDate) {
+    public ScrapNews(String url, String mediaName, String writer, String title, String contents, String thumbnailImagePath, LocalDate scrapDate) {
         this.url = url;
         this.mediaName = mediaName;
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.thumbnailImagePath = thumbnailImagePath;
         this.scrapDate = scrapDate;
     }
 }
