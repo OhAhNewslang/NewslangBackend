@@ -11,4 +11,8 @@ public class NewslangApplication {
 		SpringApplication.run(NewslangApplication.class, args);
 	}
 
+	public void test(){
+		
+	}
+
 }
