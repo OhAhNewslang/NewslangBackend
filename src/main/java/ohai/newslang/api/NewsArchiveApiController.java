@@ -7,6 +7,7 @@ import ohai.newslang.domain.subscribe.SubscribeSimpleNews;
 import ohai.newslang.domain.subscribe.item.Category;
 import ohai.newslang.domain.subscribe.item.Keyword;
 import ohai.newslang.domain.subscribe.item.Media;
+import ohai.newslang.dto.news.ResultSubscribeNewsDetailDto;
 import ohai.newslang.dto.news.ResultSubscribeNewsDto;
 import ohai.newslang.service.NewsArchiveService;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
@@ -32,15 +33,16 @@ public class NewsArchiveApiController {
         List<SubscribeSimpleNews> collect = newsArchiveList.stream()
                 .map(n -> {
                     News news = n.getNews();
-                    return new SubscribeSimpleNews(news.getUrl(), news.getMediaName(), news.getCategoryName(), news.getTitle(), news.getContents());
+                    return SubscribeSimpleNews.builder().url(news.getUrl()).mediaName(news.getMediaName()).categoryName(news.getCategoryName()).title(news.getTitle()).contents(news.getContents()).build();
                 })
                 .collect(Collectors.toList());
 
         return new ResultSubscribeNewsDto(collect);
     }
-//
-//    @GetMapping("/api/news/detail/{id}")
-//    public ResultSubscribeNewsDetailDto getSubscribeDetailNews(@PathVariable("id") Long id, @RequestBody @Valid RequestSubscribeDetailNewsDto){
-//
-//    }
+
+    @GetMapping("/api/news/detail/{url}")
+    public ResultSubscribeNewsDetailDto getSubscribeDetailNews(@PathVariable("url") String url){
+        News news = newsArchiveService.findByUrl(url).getNews();
+        return new ResultSubscribeNewsDetailDto(SubscribeSimpleNews.builder().url(news.getUrl()).mediaName(news.getMediaName()).categoryName(news.getCategoryName()).title(news.getTitle()).contents(news.getContents()).build());
+    }
 }

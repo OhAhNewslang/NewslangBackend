@@ -1,7 +1,15 @@
 # Branching
-private branch - push - main branch merge
 
-# git
+### private branch push
+private branch -> pull -> 작업 -> add -> commit -> push
+
+### main branch merge, push
+-> checkout main -> pull -> merge private branch -> push
+
+### merge private branch
+-> checkout private branch -> merge main branch -> push
+
+# Git
 git clone url
 
 git branch [private branch]
@@ -29,4 +37,3 @@ git checkout [private branch]
 git merge main
 
 git push
-
