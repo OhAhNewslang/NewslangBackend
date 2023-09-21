@@ -6,10 +6,12 @@ import ohai.newslang.domain.ThumbnailNews;
 import ohai.newslang.domain.subscribe.item.Category;
 import ohai.newslang.domain.subscribe.item.SubscribeItem;
 import ohai.newslang.repository.subscribe.SubscribeItemRepository;
+import ohai.newslang.service.crawling.MediaCrawlingServiceImpl;
 import ohai.newslang.service.crawling.ThumbnailNewsCrawlingServiceImpl;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +47,8 @@ public class NewsBatchController {
     }
 
     private boolean crawling(String category, String date, int page){
-        List<ThumbnailNews> thumbnailNewsList = detailNewsCrawlingService.crawling("https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + category + "&date=" + date + "&page=" + page);
+        List<ThumbnailNews> thumbnailNewsList = detailNewsCrawlingService.crawlingThumbnailNews("https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + category + "&date=" + date + "&page=" + page);
+
         return false;
     }
 

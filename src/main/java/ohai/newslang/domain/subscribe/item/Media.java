@@ -9,5 +9,7 @@ import javax.persistence.*;
 @DiscriminatorValue("MEDIA")
 @Getter @Setter
 public class Media extends SubscribeItem{
+    private String mediaGroup;
+    private String mediaParamId;
     private String imagePath;
 }

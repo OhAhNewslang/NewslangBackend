@@ -1,6 +1,7 @@
 package ohai.newslang.service.crawling;
 
 import ohai.newslang.domain.ThumbnailNews;
+import ohai.newslang.domain.subscribe.item.Media;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ThumbnailNewsCrawlingServiceImpl implements CrawlingService{
 
     @Override
-    public List<ThumbnailNews> crawling(String url) {
+    public List<ThumbnailNews> crawlingThumbnailNews(String url) {
         List<ThumbnailNews> thumbnailNewsList = new ArrayList<>();
         Document doc = null;
         Connection conn = Jsoup.connect(url);
@@ -32,6 +33,11 @@ public class ThumbnailNewsCrawlingServiceImpl implements CrawlingService{
         thumbnailNewsList.addAll(getThumbnailNewsList(type06));
 
         return thumbnailNewsList;
+    }
+
+    @Override
+    public List<Media> crawlingMedia(String url) {
+        return null;
     }
 
     private List<ThumbnailNews> getThumbnailNewsList(Elements root){
