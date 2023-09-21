@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.RequestResult;
 import ohai.newslang.domain.subscribe.item.Category;
 import ohai.newslang.domain.subscribe.item.Keyword;
-import ohai.newslang.domain.subscribe.item.Media;
-import ohai.newslang.domain.subscribe.item.SubscribeItem;
 import ohai.newslang.dto.subscribe.RequestSubscribeDto;
 import ohai.newslang.dto.subscribe.ResultDto;
 import ohai.newslang.dto.subscribe.ResultSubscribeDto;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +24,7 @@ public class SubscribeApiController {
     @PostMapping("/api/media/{id}")
     public ResultDto subscribeMedia(@PathVariable("id") Long id, @RequestBody @Valid RequestSubscribeDto request){
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribe(id, request.getNameList(), Media.class);
+            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeMedias(id, request.getNameList());
             return ResultDto.builder().isSuccess(true).failCode("").build();
         } catch (Exception e) {
             // to do list finder
@@ -41,7 +38,7 @@ public class SubscribeApiController {
     @GetMapping("/api/media/{id}")
     public ResultSubscribeDto getMedias(@PathVariable("id") Long id){
         try {
-            List<String> subscribeNameList = this.memberSubscribeItemService.findSubscribeNameList(id, Media.class);
+            List<String> subscribeNameList = this.memberSubscribeItemService.findSubscribeMediaNameList(id);
             return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
         } catch (Exception e){
             // to do list finder

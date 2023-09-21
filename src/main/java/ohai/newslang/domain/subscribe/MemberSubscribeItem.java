@@ -5,7 +5,7 @@ import lombok.Setter;
 import ohai.newslang.domain.Member;
 import ohai.newslang.domain.subscribe.item.Category;
 import ohai.newslang.domain.subscribe.item.Keyword;
-import ohai.newslang.domain.subscribe.item.Media;
+import ohai.newslang.domain.subscribe.item.MediaItem;
 import ohai.newslang.domain.subscribe.item.SubscribeItem;
 
 import javax.persistence.*;
@@ -30,6 +30,9 @@ public class MemberSubscribeItem {
     @OneToMany(mappedBy = "memberSubscribeItem", cascade = CascadeType.ALL)
     private List<SubscribeItem> subscribeItemList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "memberSubscribeItem", cascade = CascadeType.ALL)
+    private List<MemberSubscribeMediaItem> memberSubscribeMediaItemList = new ArrayList<>();
+
     //연관관계 메서드
     public void setMember(Member member){
         this.member = member;
@@ -38,13 +41,12 @@ public class MemberSubscribeItem {
     public void addSubscribeItems(List<String> subscribeNameList, Class<?> entityType){
         subscribeNameList.forEach(sn -> {
             SubscribeItem subscribeItem = null;
-            if (entityType == Media.class){
-                subscribeItem = new Media();
-            }else if (entityType == Category.class){
+            if (entityType == Category.class){
                 subscribeItem = new Category();
             }else if (entityType == Keyword.class){
                 subscribeItem = new Keyword();
             }
+            else return;
             subscribeItem.setName(sn);
             subscribeItem.setMemberSubscribeItem(this);
             this.subscribeItemList.add(subscribeItem);
@@ -62,6 +64,30 @@ public class MemberSubscribeItem {
 
         for (SubscribeItem item : subscribeItemsToRemove) {
             this.subscribeItemList.remove(item);
+        }
+    }
+
+    public void addMemberSubscribeMediaItems(List<MediaItem> mediaItemList){
+        mediaItemList.forEach(sn -> {
+            MemberSubscribeMediaItem msmi = new MemberSubscribeMediaItem();
+            msmi.setMediaItem(sn);
+            msmi.setMemberSubscribeItem(this);
+            this.memberSubscribeMediaItemList.add(msmi);
+        });
+    }
+
+    public void removeMemberSubscribeMediaItems(List<Long> memberSubscribeMediaItemIdList) {
+        List<MemberSubscribeMediaItem> memberSubscribeMediaItems = this.memberSubscribeMediaItemList
+                .stream()
+                .filter(item -> {
+                    item.setMediaItem(null);
+                    item.setMemberSubscribeItem(null);
+                    return memberSubscribeMediaItemIdList.contains(item.getId());
+                })
+                .collect(Collectors.toList());
+
+        for (MemberSubscribeMediaItem item : memberSubscribeMediaItems) {
+            this.memberSubscribeMediaItemList.remove(item);
         }
     }
 }

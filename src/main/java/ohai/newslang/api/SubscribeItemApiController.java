@@ -5,15 +5,17 @@ import ohai.newslang.domain.subscribe.MediaDetail;
 import ohai.newslang.domain.RequestResult;
 import ohai.newslang.domain.subscribe.item.Category;
 import ohai.newslang.domain.subscribe.item.Keyword;
-import ohai.newslang.domain.subscribe.item.Media;
+import ohai.newslang.domain.subscribe.item.MediaItem;
 import ohai.newslang.domain.subscribe.item.SubscribeItem;
 import ohai.newslang.dto.subscribe.ResultSubscribeCategoryDto;
 import ohai.newslang.dto.subscribe.ResultSubscribeKeywordDto;
 import ohai.newslang.dto.subscribe.ResultSubscribeMediaDto;
+import ohai.newslang.service.subscribe.MediaItemService;
 import ohai.newslang.service.subscribe.SubscribeItemService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,10 +24,11 @@ import java.util.stream.Collectors;
 public class SubscribeItemApiController {
 
     private final SubscribeItemService subscribeItemService;
+    private final MediaItemService mediaItemService;
 
     @GetMapping("/api/media")
     public ResultSubscribeMediaDto getAllMedias() {
-        return this.getResultSubscribeMediaDto(Media.class);
+        return this.getResultSubscribeMediaDto();
     }
 
     @GetMapping("/api/category")
@@ -40,11 +43,11 @@ public class SubscribeItemApiController {
         return ResultSubscribeKeywordDto.builder().nameList(nameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
     }
 
-    private ResultSubscribeMediaDto getResultSubscribeMediaDto(Class<?> entityType){
-        List<SubscribeItem> subscribeItems = subscribeItemService.findSubscribeItemList(entityType);
+    private ResultSubscribeMediaDto getResultSubscribeMediaDto(){
+        List<MediaItem> mediaItemList = mediaItemService.findSubscribeItemList();
 
-        List<MediaDetail> mediaDetailList = subscribeItems.stream()
-                .map(o -> MediaDetail.builder().mediaName(((Media) o).getName()).mediaImagePath(((Media) o).getImagePath()).build())
+        List<MediaDetail> mediaDetailList = mediaItemList.stream()
+                .map(o -> MediaDetail.builder().mediaName(o.getName()).mediaImagePath(o.getImagePath()).build())
                 .collect(Collectors.toList());
 
         return ResultSubscribeMediaDto.builder().mediaList(mediaDetailList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();

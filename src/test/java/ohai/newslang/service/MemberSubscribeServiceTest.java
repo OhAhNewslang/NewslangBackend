@@ -2,7 +2,6 @@ package ohai.newslang.service;
 
 import ohai.newslang.domain.Member;
 import ohai.newslang.domain.subscribe.item.Keyword;
-import ohai.newslang.domain.subscribe.item.Media;
 import ohai.newslang.repository.subscribe.SubscribeItemRepository;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
 import org.junit.jupiter.api.Test;

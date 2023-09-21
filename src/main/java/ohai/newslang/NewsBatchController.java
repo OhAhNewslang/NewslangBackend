@@ -2,12 +2,17 @@ package ohai.newslang;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import ohai.newslang.domain.News;
+import ohai.newslang.domain.NewsArchive;
 import ohai.newslang.domain.ThumbnailNews;
 import ohai.newslang.domain.subscribe.item.Category;
+import ohai.newslang.domain.subscribe.item.MediaItem;
 import ohai.newslang.domain.subscribe.item.SubscribeItem;
 import ohai.newslang.repository.subscribe.SubscribeItemRepository;
+import ohai.newslang.service.NewsArchiveService;
 import ohai.newslang.service.crawling.MediaCrawlingServiceImpl;
 import ohai.newslang.service.crawling.ThumbnailNewsCrawlingServiceImpl;
+import ohai.newslang.service.subscribe.MediaItemService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +25,8 @@ import java.util.stream.Collectors;
 public class NewsBatchController {
 
     private final ThumbnailNewsCrawlingServiceImpl detailNewsCrawlingService;
-    private final SubscribeItemRepository subscribeItemRepository;
+    private final MediaItemService mediaItemService;
+    private final NewsArchiveService newsArchiveService;
 
     private int displayCount = 100;
     private int startIndex = 1;
@@ -38,24 +44,46 @@ public class NewsBatchController {
         5. NewsArchive 데이터베이스에는 thumbnail news 저장 -> 뉴스 상세보기 클릭시 url 활용하여 단건 크롤링 진행
          */
 
-        int categoryNo = 0;
-        int pageNo = 1;
-        while (true){
-            boolean isNextParameter = crawling("009", "20230921", pageNo);
-            pageNo++;
-        }
+        String date = "20230921";
+        List<MediaItem> mediaItemList = mediaItemService.findSubscribeItemList();
+        mediaItemList.forEach(m -> {
+            String parameterId = m.getParameterId();
+            int pageNo = 1;
+            while (true){
+                try
+                {
+                    crawling(m.getMediaGroup(), parameterId, "20230921", pageNo);
+                }catch (Exception ex){
+                    System.out.println(ex.getMessage());
+                    break;
+                }
+                pageNo++;
+            }
+        });
     }
 
-    private boolean crawling(String category, String date, int page){
+    private void crawling(String categoryName, String category, String date, int page) throws Exception{
         List<ThumbnailNews> thumbnailNewsList = detailNewsCrawlingService.crawlingThumbnailNews("https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + category + "&date=" + date + "&page=" + page);
-
-        return false;
-    }
-
-    private List<String> getCategory(){
-        List<SubscribeItem> subscribeItems = subscribeItemRepository.findAllWithEntityType(Category.class);
-        return subscribeItems.stream()
-                .map(s -> s.getName())
-                .collect(Collectors.toList());
+        if (thumbnailNewsList.size() < 1) throw new Exception("Not exist news");
+//        List<NewsArchive> newsArchiveList = thumbnailNewsList.stream()
+//                .map(t -> {
+//                    return new NewsArchive(News.builder().url(t.getLink())
+//                            .mediaName(t.getMediaName())
+//                            .categoryName(categoryName)
+//                            .title(t.getTitle())
+//                            .contents(t.getSummary())
+//                            .thumbnailImagePath(t.getImagePath()).build());
+//                })
+//                .collect(Collectors.toList());
+//        newsArchiveService.saveAll(newsArchiveList);
+        thumbnailNewsList.forEach(t ->{
+                NewsArchive newsArchive = new NewsArchive(News.builder().url(t.getLink())
+                        .mediaName(t.getMediaName())
+                        .categoryName(categoryName)
+                        .title(t.getTitle())
+                        .contents(t.getSummary())
+                        .thumbnailImagePath(t.getImagePath()).build());
+                newsArchiveService.save(newsArchive);
+        });
     }
 }

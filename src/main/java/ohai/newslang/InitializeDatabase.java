@@ -6,7 +6,7 @@ import ohai.newslang.domain.Member;
 import ohai.newslang.domain.News;
 import ohai.newslang.domain.NewsArchive;
 import ohai.newslang.domain.subscribe.item.Category;
-import ohai.newslang.domain.subscribe.item.Media;
+import ohai.newslang.domain.subscribe.item.MediaItem;
 import ohai.newslang.service.crawling.MediaCrawlingServiceImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -44,26 +45,26 @@ public class InitializeDatabase {
         }
 
         public void initNews(){
-            NewsArchive na1 = new NewsArchive(
-                    News.builder().url("http://www.aaa123.com").mediaName("매일경제").categoryName("경제").writer("박진주").title("이대로 괜찮은가").contents("정말 이대로 괜찮은가").build()
-            );
-            NewsArchive na2 = new NewsArchive(
-                    News.builder().url("http://www.aaa456.com").mediaName("조선일보").categoryName("정치").writer("김수빈").title("정치의 혁신").contents("정치는 어떻게 해야하는가").build()
-            );
-            NewsArchive na3 = new NewsArchive(
-                    News.builder().url("http://www.aaa789.com").mediaName("농민신문").categoryName("경제").writer("박진주").title("이대로 괜찮은가").contents("정말 이대로 괜찮은가").build()
-            );
-            NewsArchive na4 = new NewsArchive(
-                    News.builder().url("http://www.aaa999.com").mediaName("스포츠동아").categoryName("스포츠").writer("김동희").title("손흥민의 질주").contents("정말 빠른 손흥민의 질주").build()
-            );
-            NewsArchive na5 = new NewsArchive(
-                    News.builder().url("http://www.aaa000.com").mediaName("전자신문").categoryName("IT").writer("이상준").title("CHAT GPT의 미래는").contents("CHAT GPT의 기술적 한계").build()
-            );
-            em.persist(na1);
-            em.persist(na2);
-            em.persist(na3);
-            em.persist(na4);
-            em.persist(na5);
+//            NewsArchive na1 = new NewsArchive(
+//                    News.builder().url("http://www.aaa123.com").mediaName("매일경제").categoryName("경제").writer("박진주").title("이대로 괜찮은가").contents("정말 이대로 괜찮은가").build()
+//            );
+//            NewsArchive na2 = new NewsArchive(
+//                    News.builder().url("http://www.aaa456.com").mediaName("조선일보").categoryName("정치").writer("김수빈").title("정치의 혁신").contents("정치는 어떻게 해야하는가").build()
+//            );
+//            NewsArchive na3 = new NewsArchive(
+//                    News.builder().url("http://www.aaa789.com").mediaName("농민신문").categoryName("경제").writer("박진주").title("이대로 괜찮은가").contents("정말 이대로 괜찮은가").build()
+//            );
+//            NewsArchive na4 = new NewsArchive(
+//                    News.builder().url("http://www.aaa999.com").mediaName("스포츠동아").categoryName("스포츠").writer("김동희").title("손흥민의 질주").contents("정말 빠른 손흥민의 질주").build()
+//            );
+//            NewsArchive na5 = new NewsArchive(
+//                    News.builder().url("http://www.aaa000.com").mediaName("전자신문").categoryName("IT").writer("이상준").title("CHAT GPT의 미래는").contents("CHAT GPT의 기술적 한계").build()
+//            );
+//            em.persist(na1);
+//            em.persist(na2);
+//            em.persist(na3);
+//            em.persist(na4);
+//            em.persist(na5);
         }
 
         public void initMember(){
@@ -78,8 +79,17 @@ public class InitializeDatabase {
         }
 
         public void initMedia(){
-            List<Media> mediaList = mediaCrawlingService.crawlingMedia("https://news.naver.com/main/officeList.naver");
-
+            List<MediaItem> mediaList = mediaCrawlingService.crawlingMedia("https://news.naver.com/main/officeList.naver");
+            HashSet<String> categoryList = new HashSet<>();
+            for (MediaItem item: mediaList) {
+                em.persist(item);
+                categoryList.add(item.getMediaGroup());
+            }
+            for (String category: categoryList) {
+                Category c = new Category();
+                c.setName(category);
+                em.persist(c);
+            }
 //            Media media1 = createMedia("매일경제", "Path1");
 //            em.persist(media1);
 //            Media media2 = createMedia("조선일보", "Path2");
@@ -133,12 +143,12 @@ public class InitializeDatabase {
             return member;
         }
 
-        private static Media createMedia(String name, String imagePath){
-            Media media = new Media();
-            media.setName(name);
-            media.setImagePath(imagePath);
-            return media;
-        }
+//        private static Media createMedia(String name, String imagePath){
+//            Media media = new Media();
+//            media.setName(name);
+//            media.setImagePath(imagePath);
+//            return media;
+//        }
 
         private static Category createCategory(String name){
             Category category = new Category();

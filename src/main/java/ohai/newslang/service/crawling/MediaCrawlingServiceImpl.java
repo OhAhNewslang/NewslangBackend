@@ -1,14 +1,13 @@
 package ohai.newslang.service.crawling;
 
 import ohai.newslang.domain.ThumbnailNews;
-import ohai.newslang.domain.subscribe.item.Media;
+import ohai.newslang.domain.subscribe.item.MediaItem;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -23,8 +22,8 @@ public class MediaCrawlingServiceImpl implements CrawlingService{
     }
 
     @Override
-    public List<Media> crawlingMedia(String url) {
-        List<Media> mediaList = new ArrayList<>();
+    public List<MediaItem> crawlingMedia(String url) {
+        List<MediaItem> mediaList = new ArrayList<>();
         Document doc = null;
         Connection conn = Jsoup.connect(url);
         try {
@@ -48,10 +47,10 @@ public class MediaCrawlingServiceImpl implements CrawlingService{
                 }catch (Exception ex){
                     continue;
                 }
-                Media m = new Media();
+                MediaItem m = new MediaItem();
                 m.setName(mediaName);
                 m.setMediaGroup(mediaGroup);
-                m.setMediaParamId(mediaParamId);
+                m.setParameterId(mediaParamId);
                 mediaList.add(m);
                 System.out.println("a");
             }
