@@ -17,7 +17,7 @@ public class MemberSubscribeMediaItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "media_item_id")
+    @JoinColumn(name = "media_id")
     private Media media;
 
     @ManyToOne(fetch = FetchType.LAZY)
