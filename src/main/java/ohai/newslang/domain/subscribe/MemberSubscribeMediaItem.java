@@ -2,8 +2,7 @@ package ohai.newslang.domain.subscribe;
 
 import lombok.Getter;
 import lombok.Setter;
-import ohai.newslang.domain.Member;
-import ohai.newslang.domain.subscribe.item.MediaItem;
+import ohai.newslang.domain.subscribe.reference.Media;
 
 import javax.persistence.*;
 
@@ -19,7 +18,7 @@ public class MemberSubscribeMediaItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "media_item_id")
-    private MediaItem mediaItem;
+    private Media media;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_subscribe_item_id")

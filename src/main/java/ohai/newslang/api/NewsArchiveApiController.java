@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.News;
 import ohai.newslang.domain.NewsArchive;
 import ohai.newslang.domain.subscribe.SubscribeSimpleNews;
-import ohai.newslang.domain.subscribe.item.Category;
-import ohai.newslang.domain.subscribe.item.Keyword;
+import ohai.newslang.domain.subscribe.SubscribeCategory;
+import ohai.newslang.domain.subscribe.SubscribeKeyword;
 import ohai.newslang.dto.news.ResultSubscribeNewsDetailDto;
 import ohai.newslang.dto.news.ResultSubscribeNewsDto;
 import ohai.newslang.service.NewsArchiveService;
@@ -25,8 +25,8 @@ public class NewsArchiveApiController {
     @GetMapping("/api/news/subscribe/{id}")
     public ResultSubscribeNewsDto getSubscribeNews(@PathVariable("id") Long id) {
         List<String> mediaNameList = this.memberSubscribeItemService.findSubscribeMediaNameList(id);
-        List<String> categoryNameList = this.memberSubscribeItemService.findSubscribeNameList(id, Category.class);
-        List<String> keywordNameList = this.memberSubscribeItemService.findSubscribeNameList(id, Keyword.class);
+        List<String> categoryNameList = this.memberSubscribeItemService.findCategoryNameList(id);
+        List<String> keywordNameList = this.memberSubscribeItemService.findKeywordNameList(id);
         List<NewsArchive> newsArchiveList = newsArchiveService.findByNameList(mediaNameList, categoryNameList, keywordNameList);
 
         List<SubscribeSimpleNews> collect = newsArchiveList.stream()

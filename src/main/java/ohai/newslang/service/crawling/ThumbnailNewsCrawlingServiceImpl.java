@@ -1,7 +1,7 @@
 package ohai.newslang.service.crawling;
 
 import ohai.newslang.domain.ThumbnailNews;
-import ohai.newslang.domain.subscribe.item.MediaItem;
+import ohai.newslang.domain.subscribe.reference.Media;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,7 +36,7 @@ public class ThumbnailNewsCrawlingServiceImpl implements CrawlingService{
     }
 
     @Override
-    public List<MediaItem> crawlingMedia(String url) {
+    public List<Media> crawlingMedia(String url) {
         return null;
     }
 

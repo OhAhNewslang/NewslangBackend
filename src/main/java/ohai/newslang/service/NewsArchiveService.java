@@ -30,11 +30,16 @@ public class NewsArchiveService {
     }
 
     public List<NewsArchive> findByNameList(List<String> mediaNameList, List<String> categoryNameList, List<String> keywordNameList) {
+        /*
+        keyword 정보가 없을 때 : media 와 category 해당되는 정보 보여주기
+         */
         List<NewsArchive> newsArchiveList = newsArchiveRepository.findAllWithNameList(mediaNameList, categoryNameList);
-        newsArchiveList = newsArchiveList.stream()
-                .filter(item -> keywordNameList.stream()
-                        .anyMatch(keyword -> item.getNews().getContents().contains(keyword)))
-                .collect(Collectors.toList());
+        if (keywordNameList.size() > 0) {
+            newsArchiveList = newsArchiveList.stream()
+                    .filter(item -> keywordNameList.stream()
+                            .anyMatch(keyword -> item.getNews().getContents().contains(keyword)))
+                    .collect(Collectors.toList());
+        }
         return newsArchiveList;
     }
 }
