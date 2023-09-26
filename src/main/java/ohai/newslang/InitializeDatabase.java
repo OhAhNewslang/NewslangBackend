@@ -64,14 +64,14 @@ public class InitializeDatabase {
         }
 
         public void initMember(){
-            Member member1 = createMember("김경민", "Path1", LocalDateTime.now());
-            em.persist(member1);
-            Member member2 = createMember("이진호","Path2", LocalDateTime.now());
-            em.persist(member2);
-            Member member3 = createMember("김수진","Path3", LocalDateTime.now());
-            em.persist(member3);
-            Member member4 = createMember("박수빈","Path4", LocalDateTime.now());
-            em.persist(member4);
+//            Member member1 = createMember("김경민", "Path1", LocalDateTime.now());
+//            em.persist(member1);
+//            Member member2 = createMember("이진호","Path2", LocalDateTime.now());
+//            em.persist(member2);
+//            Member member3 = createMember("김수진","Path3", LocalDateTime.now());
+//            em.persist(member3);
+//            Member member4 = createMember("박수빈","Path4", LocalDateTime.now());
+//            em.persist(member4);
         }
 
         public void initMedia(){
@@ -120,13 +120,13 @@ public class InitializeDatabase {
             em.persist(category7);
         }
 
-        private static Member createMember(String name, String imagePath, LocalDateTime joinTime){
-            Member member = new Member();
-            member.setName(name);
-            member.setImagePath(imagePath);
-            member.setJoinDate(joinTime);
-            return member;
-        }
+//        private static Member createMember(String name, String imagePath, LocalDateTime joinTime){
+//            Member member = new Member();
+//            member.setName(name);
+//            member.setImagePath(imagePath);
+//            member.setJoinDate(joinTime);
+//            return member;
+//        }
 
         private static Media createMedia(String name, String imagePath){
             Media media = new Media();

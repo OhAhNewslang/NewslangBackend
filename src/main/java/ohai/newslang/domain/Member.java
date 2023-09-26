@@ -12,10 +12,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Getter
-@Setter
+//@Setter
 public class Member {
 
     @Id @GeneratedValue
@@ -25,8 +29,19 @@ public class Member {
     @Column(length = 100, nullable = false)
     private String name;
 
+    private String password;
+
+    private String roles;
+
     private String imagePath;
 
     @Column(nullable = false)
     private LocalDateTime joinDate;
+
+    public List<String> getRoleList(){
+        if (this.roles.length() > 0){
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
+    }
 }

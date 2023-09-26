@@ -33,14 +33,19 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-//	//JUnit4 추가
+	//JUnit4 추가
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
 
+	//crawling
 	implementation 'org.jsoup:jsoup:1.15.3'
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+
+	//security
+	implementation "io.jsonwebtoken:jjwt:0.9.1"
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
