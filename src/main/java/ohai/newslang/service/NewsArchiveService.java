@@ -22,6 +22,10 @@ public class NewsArchiveService {
         return newsArchive.getId();
     }
 
+    public boolean isExistUrl(String url){
+        return newsArchiveRepository.isExistNewsUrl(url);
+    }
+
     public NewsArchive findOne(Long newsArchiveId){
         return newsArchiveRepository.findOne(newsArchiveId);
     }

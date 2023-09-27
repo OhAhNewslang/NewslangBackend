@@ -30,6 +30,10 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
+
 //    /**
 //     * 회원 수정
 //     */

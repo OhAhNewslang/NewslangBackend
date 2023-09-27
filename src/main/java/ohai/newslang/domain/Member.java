@@ -38,6 +38,19 @@ public class Member {
     @Column(nullable = false)
     private LocalDateTime joinDate;
 
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public void setRoles(String roles){
+        if (this.roles != "") this.roles += ",";
+        this.roles += roles;
+    }
+
     public List<String> getRoleList(){
         if (this.roles.length() > 0){
             return Arrays.asList(this.roles.split(","));

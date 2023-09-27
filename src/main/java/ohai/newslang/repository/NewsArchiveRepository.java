@@ -17,6 +17,13 @@ public class NewsArchiveRepository {
         em.persist(item);
     }
 
+    public boolean isExistNewsUrl(String url){
+        Long result = (Long)em.createQuery("select count(na.id) from NewsArchive na where na.news.url = :url")
+                .setParameter("url", url)
+                .getSingleResult();
+        return ((result.equals(0L)) ? false : true);
+    }
+
     public NewsArchive findOne(Long id){
         return em.find(NewsArchive.class, id);
     }

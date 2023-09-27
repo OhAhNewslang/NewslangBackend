@@ -1,19 +1,31 @@
 package ohai.newslang.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import ohai.newslang.domain.Member;
+import ohai.newslang.service.MemberService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("api/v1")
+@RequiredArgsConstructor
 public class RestApiController {
 
-    @GetMapping("home")
-    public String home(){
-        return "<h1>home</h1>";
+    private final MemberService memberService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @GetMapping("admin/users")
+    public List<Member> users(){
+        return memberService.findAll();
     }
 
-    @PostMapping("token")
-    public String token(){
-        return "<h1>token</h1>";
+    @PostMapping("join")
+    public String join(@RequestBody Member member) {
+        member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
+        member.setRoles("ROLE_USER");
+        memberService.join(member);
+        return "회원가입완료";
     }
 }
