@@ -1,7 +1,6 @@
 package ohai.newslang.service.crawling;
 
 import ohai.newslang.domain.ThumbnailNews;
-import ohai.newslang.domain.subscribe.reference.Media;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,7 +16,7 @@ import java.util.List;
 public class ThumbnailNewsCrawlingServiceImpl implements CrawlingService{
 
     @Override
-    public List<ThumbnailNews> crawlingThumbnailNews(String url) {
+    public List<ThumbnailNews> crawling(String url) {
         List<ThumbnailNews> thumbnailNewsList = new ArrayList<>();
         Document doc = null;
         Connection conn = Jsoup.connect(url);
@@ -35,35 +34,19 @@ public class ThumbnailNewsCrawlingServiceImpl implements CrawlingService{
         return thumbnailNewsList;
     }
 
-    @Override
-    public List<Media> crawlingMedia(String url) {
-        return null;
-    }
-
     private List<ThumbnailNews> getThumbnailNewsList(Elements root){
         List<ThumbnailNews> thumbnailNewsList = new ArrayList<>();
-        try {
-            for (Element item : root) {
-                Elements lis = item.select("li");
-                for (Element innerItem : lis) {
-                    Elements photo = innerItem.getElementsByClass("photo");
-                    int dtIdx = 0;
-                    String imagePath = "";
-                    if (photo != null && photo.size() > 0) {
-                        imagePath = photo.select("img").attr("src");
-                        dtIdx = 1;
-                    }
-                    Elements dt2 = innerItem.select("dt").get(dtIdx).select("a");
-                    String title = dt2.html();
-                    String link = dt2.select("a").attr("href");
-                    Elements dd = innerItem.select("dd");
-                    String summary = dd.select("span").get(0).html();
-                    String mediaName = dd.select("span").get(1).html();
-                    thumbnailNewsList.add(ThumbnailNews.builder().link(link).title(title).summary(summary).imagePath(imagePath).mediaName(mediaName).build());
-                }
+        for (Element item: root) {
+            Elements lis = item.select("li");
+            for (Element innerItem: lis) {
+                Elements el = innerItem.select("dt").get(1).select("a");
+                String title = el.html();
+                String link = el.attr("href");
+                String imagePath = innerItem.select("img").attr("src");
+                String summary = innerItem.getElementsByClass("lede").html();
+                String mediaName = innerItem.getElementsByClass("writing").html();
+                thumbnailNewsList.add(ThumbnailNews.builder().link(link).title(title).summary(summary).imagePath(imagePath).mediaName(mediaName).build());
             }
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
         }
         return thumbnailNewsList;
     }

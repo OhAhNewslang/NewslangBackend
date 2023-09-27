@@ -1,4 +1,4 @@
-package ohai.newslang.dto.subscribe;
+package ohai.newslang.domain.subscribe;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MediaDto {
+public class MediaDetail {
     private String mediaName;
     private String mediaImagePath;
 
     @Builder
-    public MediaDto(String mediaName, String mediaImagePath) {
+    public MediaDetail(String mediaName, String mediaImagePath) {
         this.mediaName = mediaName;
         this.mediaImagePath = mediaImagePath;
     }

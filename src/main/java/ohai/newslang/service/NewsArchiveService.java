@@ -17,8 +17,9 @@ public class NewsArchiveService {
     private final NewsArchiveRepository newsArchiveRepository;
 
     @Transactional
-    public void save(NewsArchive newsArchive){
+    public Long save(NewsArchive newsArchive){
         newsArchiveRepository.save(newsArchive);
+        return newsArchive.getId();
     }
 
     public NewsArchive findOne(Long newsArchiveId){
@@ -30,16 +31,19 @@ public class NewsArchiveService {
     }
 
     public List<NewsArchive> findByNameList(List<String> mediaNameList, List<String> categoryNameList, List<String> keywordNameList) {
-        /*
-        keyword 정보가 없을 때 : media 와 category 해당되는 정보 보여주기
-         */
         List<NewsArchive> newsArchiveList = newsArchiveRepository.findAllWithNameList(mediaNameList, categoryNameList);
-        if (keywordNameList.size() > 0) {
-            newsArchiveList = newsArchiveList.stream()
-                    .filter(item -> keywordNameList.stream()
-                            .anyMatch(keyword -> item.getNews().getContents().contains(keyword)))
-                    .collect(Collectors.toList());
-        }
+//            List<NewsArchive> newNewsArchiveList = new ArrayList<>();
+//            for (String keyword: keywordNameList) {
+//                for (NewsArchive item: newsArchiveList) {
+//                    if (item.getNews().getContents().contains(keyword)){
+//                        newNewsArchiveList.add(item);
+//                    }
+//                }
+//            }
+        newsArchiveList = newsArchiveList.stream()
+                .filter(item -> keywordNameList.stream()
+                        .anyMatch(keyword -> item.getNews().getContents().contains(keyword)))
+                .collect(Collectors.toList());
         return newsArchiveList;
     }
 }

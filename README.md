@@ -1,15 +1,12 @@
 # Branching
 
-## private branch push
-### 개인 브랜치 수정 사항 반영
+### private branch push
 private branch -> pull -> 작업 -> add -> commit -> push
 
-## main branch merge, push
-### 개인 브랜치 수정 사항 메인 브랜치에 반영, 메인 브랜치 pull 반드시 진행(메인 브랜치 변경 사항 있을 수 있음)
+### main branch merge, push
 -> checkout main -> pull -> merge private branch -> push
 
-## merge private branch
-### 메인 브랜치를 개인 브랜치에 반영 
+### merge private branch
 -> checkout private branch -> merge main branch -> push
 
 # Git

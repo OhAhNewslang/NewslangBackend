@@ -17,10 +17,6 @@ public class NewsArchiveRepository {
         em.persist(item);
     }
 
-    public void saveAll(List<NewsArchive> newsArchiveList){
-
-    }
-
     public NewsArchive findOne(Long id){
         return em.find(NewsArchive.class, id);
     }
