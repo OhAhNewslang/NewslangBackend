@@ -69,7 +69,7 @@ public class ScrapNewsApiController {
                                 .builder()
                                 .url(n.getUrl())
                                 .mediaName(n.getMediaName())
-                                .writer(n.getWriter())
+                                .writer("")
                                 .title(n.getTitle())
                                 .contents(n.getContents())
                                 .scrapDate(o.getScrapDate())

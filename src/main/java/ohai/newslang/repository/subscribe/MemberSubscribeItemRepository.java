@@ -24,7 +24,7 @@ public class MemberSubscribeItemRepository {
                 .getSingleResult();
         return ((result.equals(0L)) ? false : true);
     }
-//
+    //
     public MemberSubscribeItem findOne(Long memberId){
         return em.createQuery("select msi from MemberSubscribeItem msi where msi.member.id = :memberId", MemberSubscribeItem.class)
                 .setParameter("memberId", memberId)

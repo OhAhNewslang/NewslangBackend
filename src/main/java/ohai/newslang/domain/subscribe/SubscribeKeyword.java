@@ -1,24 +1,17 @@
-package ohai.newslang.domain.subscribe.item;
+package ohai.newslang.domain.subscribe;
 
-
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import ohai.newslang.domain.subscribe.MemberSubscribeItem;
 
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype")
 @Getter
-@NoArgsConstructor
-public abstract class SubscribeItem {
+public class SubscribeKeyword {
 
     @Id
     @GeneratedValue
-    @Column(name = "subscribe_item_id")
+    @Column(name = "subscribe_keyword_id")
     private Long id;
 
     @Column(nullable = false)

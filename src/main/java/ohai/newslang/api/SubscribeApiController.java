@@ -2,32 +2,25 @@ package ohai.newslang.api;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.RequestResult;
-import ohai.newslang.domain.subscribe.item.Category;
-import ohai.newslang.domain.subscribe.item.Keyword;
-import ohai.newslang.domain.subscribe.item.Media;
-import ohai.newslang.domain.subscribe.item.SubscribeItem;
 import ohai.newslang.dto.subscribe.RequestSubscribeDto;
 import ohai.newslang.dto.subscribe.ResultDto;
 import ohai.newslang.dto.subscribe.ResultSubscribeDto;
-import ohai.newslang.service.subscribe.SubscribeItemService;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class SubscribeApiController {
 
     private final MemberSubscribeItemService memberSubscribeItemService;
-    private final SubscribeItemService subscribeItemService;
 
     @PostMapping("/api/media/{id}")
     public ResultDto subscribeMedia(@PathVariable("id") Long id, @RequestBody @Valid RequestSubscribeDto request){
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribe(id, request.getNameList(), Media.class);
+            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeMedias(id, request.getNameList());
             return ResultDto.builder().isSuccess(true).failCode("").build();
         } catch (Exception e) {
             // to do list finder
@@ -41,7 +34,7 @@ public class SubscribeApiController {
     @GetMapping("/api/media/{id}")
     public ResultSubscribeDto getMedias(@PathVariable("id") Long id){
         try {
-            List<String> subscribeNameList = this.memberSubscribeItemService.findSubscribeNameList(id, Media.class);
+            List<String> subscribeNameList = this.memberSubscribeItemService.findSubscribeMediaNameList(id);
             return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
         } catch (Exception e){
             // to do list finder
@@ -55,7 +48,7 @@ public class SubscribeApiController {
     @PostMapping("/api/category/{id}")
     public ResultDto subscribeCategory(@PathVariable("id") Long id, @RequestBody @Valid RequestSubscribeDto request){
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribe(id, request.getNameList(), Category.class);
+            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeCategory(id, request.getNameList());
             return ResultDto.builder().isSuccess(true).failCode("").build();
         } catch (Exception e) {
             // to do list finder
@@ -69,7 +62,7 @@ public class SubscribeApiController {
     @GetMapping("/api/category/{id}")
     public ResultSubscribeDto getCategory(@PathVariable("id") Long id){
         try {
-            List<String> subscribeNameList = this.memberSubscribeItemService.findSubscribeNameList(id, Category.class);
+            List<String> subscribeNameList = this.memberSubscribeItemService.findCategoryNameList(id);
             return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
         } catch (Exception e){
             // to do list finder
@@ -83,7 +76,7 @@ public class SubscribeApiController {
     @PostMapping("/api/keyword/{id}")
     public ResultDto subscribeKeyword(@PathVariable("id") Long id, @RequestBody @Valid RequestSubscribeDto request){
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribe(id, request.getNameList(), Keyword.class);
+            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeKeyword(id, request.getNameList());
             return ResultDto.builder().isSuccess(true).failCode("").build();
         } catch (Exception e) {
             // to do list finder
@@ -97,7 +90,7 @@ public class SubscribeApiController {
     @GetMapping("/api/keyword/{id}")
     public ResultSubscribeDto getKeywords(@PathVariable("id") Long id){
         try {
-            List<String> subscribeNameList = this.memberSubscribeItemService.findSubscribeNameList(id, Keyword.class);
+            List<String> subscribeNameList = this.memberSubscribeItemService.findKeywordNameList(id);
             return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
         } catch (Exception e){
             // to do list finder
