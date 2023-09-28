@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.filter.MyFilter1;
 import ohai.newslang.filter.MyFilter3;
 import ohai.newslang.jwt.JwtAuthenticationFilter;
+import ohai.newslang.jwt.JwtAuthorizationFilter;
+import ohai.newslang.repository.MemberRepository;
+import ohai.newslang.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +24,12 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsConfig corsConfig;
+    private final MemberRepository memberRepository;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -32,18 +41,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable() // 까지 거의 고정
                 .httpBasic().disable() // 토큰 방식인 bearer 방식을 쓰겠음
                 .addFilter(new JwtAuthenticationFilter(authenticationManager())) // AuthenticationManager
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository))
                 .authorizeRequests()
                 .antMatchers("/api/v1/user/**")
-                .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+                .hasAnyRole("ROLE_USER", "ROLE_MANAGER", "ROLE_ADMIN")
                 .antMatchers("/api/v1/manager/**")
-                .access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+                .hasAnyRole("ROLE_MANAGER", "ROLE_ADMIN")
                 .antMatchers("/api/v1/admin/**")
-                .access("hasRole('ROLE_ADMIN')")
+                .hasAnyRole("ROLE_ADMIN")
                 .anyRequest().permitAll();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

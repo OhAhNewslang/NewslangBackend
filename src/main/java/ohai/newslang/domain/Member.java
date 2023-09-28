@@ -35,7 +35,6 @@ public class Member {
 
     private String imagePath;
 
-    @Column(nullable = false)
     private LocalDateTime joinDate;
 
     public void setName(String name){
@@ -47,8 +46,13 @@ public class Member {
     }
 
     public void setRoles(String roles){
+        if (this.roles == null) this.roles = "";
         if (this.roles != "") this.roles += ",";
         this.roles += roles;
+    }
+
+    public void setJoinDate(LocalDateTime joinDate){
+        this.joinDate = joinDate;
     }
 
     public List<String> getRoleList(){
