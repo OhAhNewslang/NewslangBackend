@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/newslang
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        # 사이즈 만큼 in 쿼리의 아이템 개수가 적용됨 (ex 아이템 1000개의 경우 10번 명령이 실행됨)
+        # 사이즈 : 100~1000개 권장
+        default_batch_fetch_size: 1000
+#    show-sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+#    org.hibernate.type: trace
