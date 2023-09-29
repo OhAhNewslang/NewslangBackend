@@ -1,8 +1,7 @@
 package ohai.newslang.repository.subscribe;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.subscribe.reference.Category;
-import ohai.newslang.domain.subscribe.reference.Media;
+import ohai.newslang.domain.entity.subscribeReference.Category;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,6 +9,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+//Cartegory
 public class CategoryRepository {
 
     private final EntityManager em;

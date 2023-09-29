@@ -1,20 +1,13 @@
 package ohai.newslang;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.CrawlerProperties;
-import ohai.newslang.domain.Member;
-import ohai.newslang.domain.subscribe.SubscribeCategory;
-import ohai.newslang.domain.subscribe.reference.Category;
-import ohai.newslang.domain.subscribe.reference.Media;
-import ohai.newslang.service.crawling.MediaCrawlingServiceImpl;
+import ohai.newslang.domain.entity.CrawlerProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

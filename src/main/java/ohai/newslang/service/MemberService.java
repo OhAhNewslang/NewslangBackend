@@ -1,7 +1,7 @@
 package ohai.newslang.service;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.Member;
+import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

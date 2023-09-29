@@ -1,7 +1,7 @@
 package ohai.newslang.service.crawling;
 
-import ohai.newslang.domain.ThumbnailNews;
-import ohai.newslang.domain.subscribe.reference.Media;
+import ohai.newslang.domain.dto.ThumbnailNews;
+import ohai.newslang.domain.entity.subscribeReference.Media;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

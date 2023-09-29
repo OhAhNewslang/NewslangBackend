@@ -1,10 +1,10 @@
 package ohai.newslang.service.scrap;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.Member;
-import ohai.newslang.domain.NewsArchive;
-import ohai.newslang.domain.scrap.MemberScrapNews;
-import ohai.newslang.domain.scrap.MemberScrapNewsArchive;
+import ohai.newslang.domain.entity.member.Member;
+import ohai.newslang.domain.entity.news.NewsArchive;
+import ohai.newslang.domain.entity.scrap.MemberScrapNews;
+import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.repository.MemberRepository;
 import ohai.newslang.repository.scrap.MemberScrapNewsArchiveRepository;
 import ohai.newslang.repository.scrap.MemberScrapNewsRepository;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)

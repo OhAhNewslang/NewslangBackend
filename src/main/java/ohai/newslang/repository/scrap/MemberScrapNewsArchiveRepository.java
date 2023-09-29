@@ -1,7 +1,7 @@
 package ohai.newslang.repository.scrap;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.scrap.MemberScrapNewsArchive;
+import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,7 +16,7 @@ public class MemberScrapNewsArchiveRepository {
 
     public List<MemberScrapNewsArchive> findAllWithMemberScrapNewsId(Long memberScrapNewsId){
         return em.createQuery("select msna from MemberScrapNewsArchive msna" +
-                        " where msna.memberScrapNews.id = :memberScrapNewsId")
+                        " where msna.memberScrapNews.id = :memberScrapNewsId",MemberScrapNewsArchive.class)
                 .setParameter("memberScrapNewsId", memberScrapNewsId)
                 .getResultList();
     }

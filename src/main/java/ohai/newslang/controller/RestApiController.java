@@ -1,7 +1,7 @@
 package ohai.newslang.controller;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.Member;
+import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.service.MemberService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;

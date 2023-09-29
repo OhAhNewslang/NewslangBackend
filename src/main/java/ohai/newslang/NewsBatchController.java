@@ -1,9 +1,9 @@
 //package ohai.newslang.controller;
 //
 //import lombok.RequiredArgsConstructor;
-//import ohai.newslang.domain.News;
-//import ohai.newslang.domain.NewsArchive;
-//import ohai.newslang.domain.ThumbnailNews;
+//import ohai.newslang.domain.Entity.news.News;
+//import ohai.newslang.domain.Entity.news.NewsArchive;
+//import ohai.newslang.dto.ThumbnailNews;
 //import ohai.newslang.domain.subscribe.reference.Category;
 //import ohai.newslang.domain.subscribe.reference.Media;
 //import ohai.newslang.service.NewsArchiveService;

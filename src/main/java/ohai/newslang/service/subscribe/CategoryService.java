@@ -1,10 +1,8 @@
 package ohai.newslang.service.subscribe;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.subscribe.reference.Category;
-import ohai.newslang.domain.subscribe.reference.Media;
+import ohai.newslang.domain.entity.subscribeReference.Category;
 import ohai.newslang.repository.subscribe.CategoryRepository;
-import ohai.newslang.repository.subscribe.SubscribeCategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

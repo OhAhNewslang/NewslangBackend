@@ -1,7 +1,7 @@
 package ohai.newslang.repository.scrap;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.scrap.MemberScrapNews;
+import ohai.newslang.domain.entity.scrap.MemberScrapNews;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -24,7 +24,7 @@ public class MemberScrapNewsRepository {
         Long result = (Long)em.createQuery("select count(msn.id) from MemberScrapNews msn where msn.member.id = :memberId")
                 .setParameter("memberId", memberId)
                 .getSingleResult();
-        return ((result.equals(0L)) ? false : true);
+        return (!result.equals(0L));
     }
 
     public MemberScrapNews findOne(Long memberId){

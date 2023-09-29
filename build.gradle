@@ -39,9 +39,9 @@ dependencies {
 	}
 
 	//crawling
-	implementation 'org.jsoup:jsoup:1.15.3'
+	implementation 'org.jsoup:jsoup:1.16.1'
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
 
 	//security
 //	implementation "io.jsonwebtoken:jjwt:0.9.1"

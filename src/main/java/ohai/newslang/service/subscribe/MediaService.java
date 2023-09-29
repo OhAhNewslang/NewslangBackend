@@ -1,7 +1,7 @@
 package ohai.newslang.service.subscribe;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.subscribe.reference.Media;
+import ohai.newslang.domain.entity.subscribeReference.Media;
 import ohai.newslang.repository.subscribe.MediaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

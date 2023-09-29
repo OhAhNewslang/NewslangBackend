@@ -1,10 +1,10 @@
 package ohai.newslang.service.subscribe;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.Member;
-import ohai.newslang.domain.subscribe.MemberSubscribeItem;
-import ohai.newslang.domain.subscribe.MemberSubscribeMediaItem;
-import ohai.newslang.domain.subscribe.reference.Media;
+import ohai.newslang.domain.entity.member.Member;
+import ohai.newslang.domain.entity.member.MemberSubscribeItem;
+import ohai.newslang.domain.entity.member.MemberSubscribeMediaItem;
+import ohai.newslang.domain.entity.subscribeReference.Media;
 import ohai.newslang.repository.MemberRepository;
 import ohai.newslang.repository.subscribe.MediaRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeMediaItemRepository;
