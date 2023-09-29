@@ -1,6 +1,6 @@
 package ohai.newslang.configure.filter;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 import java.io.IOException;
 
 public class MyFilter1 implements Filter {

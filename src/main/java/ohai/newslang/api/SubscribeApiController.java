@@ -8,7 +8,7 @@ import ohai.newslang.domain.dto.subscribe.ResultSubscribeDto;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController

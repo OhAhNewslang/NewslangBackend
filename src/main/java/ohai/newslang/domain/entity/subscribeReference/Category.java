@@ -2,7 +2,7 @@ package ohai.newslang.domain.entity.subscribeReference;
 
 import lombok.Getter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter

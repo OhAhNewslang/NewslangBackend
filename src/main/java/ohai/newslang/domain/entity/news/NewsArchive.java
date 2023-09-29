@@ -3,7 +3,7 @@ package ohai.newslang.domain.entity.news;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter

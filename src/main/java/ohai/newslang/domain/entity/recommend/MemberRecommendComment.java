@@ -4,7 +4,7 @@ import lombok.Getter;
 import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.enumulate.RecommendStatus;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter

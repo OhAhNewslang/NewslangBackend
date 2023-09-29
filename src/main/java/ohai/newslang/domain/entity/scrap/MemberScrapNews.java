@@ -4,7 +4,7 @@ import lombok.Getter;
 import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.news.NewsArchive;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

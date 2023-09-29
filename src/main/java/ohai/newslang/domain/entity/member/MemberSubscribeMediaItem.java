@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ohai.newslang.domain.entity.subscribeReference.Media;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter

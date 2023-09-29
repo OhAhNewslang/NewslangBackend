@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import java.util.List;
 
 @Repository

@@ -3,7 +3,7 @@ package ohai.newslang.domain.entity.member;
 import lombok.Getter;
 import ohai.newslang.domain.entity.subscribeReference.Media;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
