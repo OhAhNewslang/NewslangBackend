@@ -5,7 +5,7 @@ import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.entity.scrap.MemberScrapNews;
 import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
-import ohai.newslang.repository.member.MemberRepository;
+import ohai.newslang.repository.member.JpaMemberRepository;
 import ohai.newslang.repository.scrap.MemberScrapNewsArchiveRepository;
 import ohai.newslang.repository.scrap.MemberScrapNewsRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class MemberScrapNewsService {
 
     private final MemberScrapNewsRepository memberScrapNewsRepository;
     private final MemberScrapNewsArchiveRepository memberScrapNewsArchiveRepository;
-    private final MemberRepository memberRepository;
+    private final JpaMemberRepository jpaMemberRepository;
 
     public List<MemberScrapNewsArchive> findNewsArchiveList(Long memberId) throws Exception {
         if (memberScrapNewsRepository.isExistMemberScrapNews(memberId)){
@@ -52,7 +52,7 @@ public class MemberScrapNewsService {
                 return memberScrapNewsId;
             }
         }
-        Member member = memberRepository.findOne(memberId);
+        Member member = jpaMemberRepository.findOne(memberId);
         memberScrapNews = MemberScrapNews.newMemberScrapNews(memberScrapNews, member, newsArchive);
         memberScrapNewsRepository.save(memberScrapNews);
         return memberScrapNews.getId();

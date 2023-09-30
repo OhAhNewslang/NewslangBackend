@@ -1,4 +1,4 @@
-package ohai.newslang.domain.dto.subscribe;
+package ohai.newslang.domain.dto.subscribe.subscribeReference;
 
 import lombok.Builder;
 import lombok.Getter;

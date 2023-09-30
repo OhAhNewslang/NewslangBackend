@@ -1,9 +1,8 @@
-package ohai.newslang.domain.dto.subscribe;
+package ohai.newslang.domain.dto.request;
 
 
 import lombok.Builder;
 import lombok.Getter;
-import ohai.newslang.domain.dto.RequestResult;
 
 @Getter
 public class ResultDto {

@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity  // 스프링 시큐리티 필터가 스프링 체인필터에 등록
 public class SecurityConfiguration {
     private final JwtTokenDecoder td;
-    // 로직을 타지않는 페이지들을 보안 로직에서 권한 검사를 하지않게 하는 시큐리티 메서드
+    // 로직을 타지않는 페이지들을 보안 로직에서 권한 검사하지 않게 하는 시큐리티 메서드
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         // Spring Security를 적용하지 않을 리소스 설정

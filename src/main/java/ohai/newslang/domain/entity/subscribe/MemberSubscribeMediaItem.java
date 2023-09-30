@@ -2,7 +2,6 @@ package ohai.newslang.domain.entity.subscribe;
 
 import lombok.Getter;
 import lombok.Setter;
-import ohai.newslang.domain.entity.member.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 
 import jakarta.persistence.*;

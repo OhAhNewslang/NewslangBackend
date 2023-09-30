@@ -1,4 +1,4 @@
-package ohai.newslang.domain.dto;
+package ohai.newslang.domain.dto.subscribe;
 
 
 import lombok.Builder;

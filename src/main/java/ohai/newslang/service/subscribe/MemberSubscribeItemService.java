@@ -2,10 +2,10 @@ package ohai.newslang.service.subscribe;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.entity.member.MemberSubscribeItem;
+import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeMediaItem;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
-import ohai.newslang.repository.member.MemberRepository;
+import ohai.newslang.repository.member.JpaMemberRepository;
 import ohai.newslang.repository.subscribe.subscribeReference.MediaRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeMediaItemRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberSubscribeItemService {
 
-    private final MemberRepository memberRepository;
+    private final JpaMemberRepository jpaMemberRepository;
     private final MemberSubscribeItemRepository memberSubscribeItemRepository;
 
     private final MemberSubscribeMediaItemRepository memberSubscribeMediaItemRepository;
@@ -62,7 +62,7 @@ public class MemberSubscribeItemService {
     @Transactional
     public Long updateSubscribeCategory(Long memberId, List<String> categoryNameList) {
         // 엔티티 조회
-        Member member = memberRepository.findOne(memberId);
+        Member member = jpaMemberRepository.findOne(memberId);
         MemberSubscribeItem memberSubscribeItem = null;
         if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
             memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
@@ -81,7 +81,7 @@ public class MemberSubscribeItemService {
     @Transactional
     public Long updateSubscribeKeyword(Long memberId, List<String> keywordNameList) {
         // 엔티티 조회
-        Member member = memberRepository.findOne(memberId);
+        Member member = jpaMemberRepository.findOne(memberId);
         MemberSubscribeItem memberSubscribeItem = null;
         if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
             memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
@@ -100,7 +100,7 @@ public class MemberSubscribeItemService {
     @Transactional
     public Long updateSubscribeMedias(Long memberId, List<String> subscribeItemNameList) throws Exception{
         // 엔티티 조회
-        Member member = memberRepository.findOne(memberId);
+        Member member = jpaMemberRepository.findOne(memberId);
         MemberSubscribeItem memberSubscribeItem = null;
         if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
             memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
