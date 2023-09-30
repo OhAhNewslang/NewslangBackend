@@ -1,10 +1,10 @@
 package ohai.newslang.repository.subscribe;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.subscribe.SubscribeCategory;
+import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 @Repository

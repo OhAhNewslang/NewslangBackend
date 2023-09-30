@@ -1,14 +1,14 @@
 package ohai.newslang.api;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.subscribe.reference.Category;
-import ohai.newslang.dto.subscribe.MediaDto;
-import ohai.newslang.domain.RequestResult;
-import ohai.newslang.domain.subscribe.reference.Media;
-import ohai.newslang.dto.subscribe.ResultSubscribeCategoryDto;
-import ohai.newslang.dto.subscribe.ResultSubscribeMediaDto;
-import ohai.newslang.service.subscribe.CategoryService;
-import ohai.newslang.service.subscribe.MediaService;
+import ohai.newslang.domain.entity.subscribe.subscribeReference.Category;
+import ohai.newslang.domain.dto.subscribe.MediaDto;
+import ohai.newslang.domain.dto.RequestResult;
+import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
+import ohai.newslang.domain.dto.subscribe.ResultSubscribeCategoryDto;
+import ohai.newslang.domain.dto.subscribe.ResultSubscribeMediaDto;
+import ohai.newslang.service.subscribe.subscribeReference.CategoryService;
+import ohai.newslang.service.subscribe.subscribeReference.MediaService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

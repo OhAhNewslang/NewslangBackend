@@ -1,19 +1,19 @@
 package ohai.newslang.api;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.News;
-import ohai.newslang.domain.NewsArchive;
-import ohai.newslang.domain.RequestResult;
-import ohai.newslang.domain.scrap.ScrapNews;
-import ohai.newslang.domain.scrap.MemberScrapNewsArchive;
-import ohai.newslang.dto.scrap.RequestScrapNewsDto;
-import ohai.newslang.dto.scrap.ResultScrapNewsDto;
-import ohai.newslang.dto.subscribe.ResultDto;
-import ohai.newslang.service.NewsArchiveService;
+import ohai.newslang.domain.entity.news.News;
+import ohai.newslang.domain.entity.news.NewsArchive;
+import ohai.newslang.domain.dto.RequestResult;
+import ohai.newslang.domain.dto.ScrapNews;
+import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
+import ohai.newslang.domain.dto.scrap.RequestScrapNewsDto;
+import ohai.newslang.domain.dto.scrap.ResultScrapNewsDto;
+import ohai.newslang.domain.dto.subscribe.ResultDto;
+import ohai.newslang.service.crawling.NewsArchiveService;
 import ohai.newslang.service.scrap.MemberScrapNewsService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,7 +65,7 @@ public class ScrapNewsApiController {
             List<ScrapNews> findScrapNewsList = memberScrapNewsArchiveList.stream()
                     .map(o -> {
                         News n = o.getNewsArchive().getNews();
-                        ScrapNews sn = ScrapNews
+                        return ScrapNews
                                 .builder()
                                 .url(n.getUrl())
                                 .mediaName(n.getMediaName())
@@ -74,7 +74,6 @@ public class ScrapNewsApiController {
                                 .contents(n.getContents())
                                 .scrapDate(o.getScrapDate())
                                 .build();
-                        return sn;
                     })
                     .collect(Collectors.toList());
             scrapNewsList.addAll(findScrapNewsList);

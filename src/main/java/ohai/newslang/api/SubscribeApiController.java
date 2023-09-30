@@ -1,14 +1,14 @@
 package ohai.newslang.api;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.RequestResult;
-import ohai.newslang.dto.subscribe.RequestSubscribeDto;
-import ohai.newslang.dto.subscribe.ResultDto;
-import ohai.newslang.dto.subscribe.ResultSubscribeDto;
+import ohai.newslang.domain.dto.RequestResult;
+import ohai.newslang.domain.dto.subscribe.RequestSubscribeDto;
+import ohai.newslang.domain.dto.subscribe.ResultDto;
+import ohai.newslang.domain.dto.subscribe.ResultSubscribeDto;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController

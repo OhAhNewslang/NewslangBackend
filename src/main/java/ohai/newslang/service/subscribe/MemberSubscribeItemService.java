@@ -1,12 +1,12 @@
 package ohai.newslang.service.subscribe;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.Member;
-import ohai.newslang.domain.subscribe.MemberSubscribeItem;
-import ohai.newslang.domain.subscribe.MemberSubscribeMediaItem;
-import ohai.newslang.domain.subscribe.reference.Media;
-import ohai.newslang.repository.MemberRepository;
-import ohai.newslang.repository.subscribe.MediaRepository;
+import ohai.newslang.domain.entity.member.Member;
+import ohai.newslang.domain.entity.member.MemberSubscribeItem;
+import ohai.newslang.domain.entity.subscribe.MemberSubscribeMediaItem;
+import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
+import ohai.newslang.repository.member.MemberRepository;
+import ohai.newslang.repository.subscribe.subscribeReference.MediaRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeMediaItemRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
 import org.springframework.stereotype.Service;
