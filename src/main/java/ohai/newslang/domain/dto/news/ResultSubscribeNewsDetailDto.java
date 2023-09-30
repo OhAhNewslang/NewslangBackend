@@ -3,7 +3,7 @@ package ohai.newslang.domain.dto.news;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ohai.newslang.domain.dto.SubscribeSimpleNews;
+import ohai.newslang.domain.dto.subscribe.SubscribeSimpleNews;
 
 @Getter
 @Setter

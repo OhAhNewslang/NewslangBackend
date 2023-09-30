@@ -2,8 +2,8 @@ package ohai.newslang.api;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Category;
-import ohai.newslang.domain.dto.subscribe.MediaDto;
-import ohai.newslang.domain.dto.RequestResult;
+import ohai.newslang.domain.dto.subscribe.subscribeReference.MediaDto;
+import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 import ohai.newslang.domain.dto.subscribe.ResultSubscribeCategoryDto;
 import ohai.newslang.domain.dto.subscribe.ResultSubscribeMediaDto;

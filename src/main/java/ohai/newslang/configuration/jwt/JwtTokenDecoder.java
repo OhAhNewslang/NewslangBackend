@@ -78,17 +78,17 @@ public class JwtTokenDecoder implements TokenDecoder{
         // User A가 게시판1에서는 관리자이지만 게시판2에서는 그냥 user일 수 있음.
         Member principal = memberRepository.findById(tokenToId(token)).get();
         // 다중 ROLE 방식
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(principal.getRoles().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+//        Collection<? extends GrantedAuthority> authorities =
+//                Arrays.stream(principal.getRoles().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         // 단일 ROLE 방식
-//        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
-//        setAuths.add(new SimpleGrantedAuthority(principal.getRoles()));
+        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
+        setAuths.add(new SimpleGrantedAuthority(principal.getRoles()));
 
         // Filter단계에서는 매개변수값이 principal(우리로 치면 회원), 인증정보확인(값이 들어만 있으면 됨)으로
         // 권한 확인 전의 Authentication 객체를 생성하고 현재 메소드를 대기하고 있다가
         // 아래 UsernamePassword~~의 매개변수에 authorities(역할)이 포함되어 생성자가 실행되면
         // 권한을 인가받고 SecurityContextHolder에 저장되어 우리가 사용한다.
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, "", setAuths);
     }
 
     @Override

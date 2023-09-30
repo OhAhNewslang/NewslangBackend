@@ -1,6 +1,7 @@
-package ohai.newslang.domain.entity.member;
+package ohai.newslang.domain.entity.subscribe;
 
 import lombok.Getter;
+import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeMediaItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;

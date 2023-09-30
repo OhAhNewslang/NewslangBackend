@@ -3,7 +3,7 @@ package ohai.newslang.api;
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.news.News;
 import ohai.newslang.domain.entity.news.NewsArchive;
-import ohai.newslang.domain.dto.SubscribeSimpleNews;
+import ohai.newslang.domain.dto.subscribe.SubscribeSimpleNews;
 import ohai.newslang.domain.dto.news.ResultSubscribeNewsDetailDto;
 import ohai.newslang.domain.dto.news.ResultSubscribeNewsDto;
 import ohai.newslang.service.crawling.NewsArchiveService;

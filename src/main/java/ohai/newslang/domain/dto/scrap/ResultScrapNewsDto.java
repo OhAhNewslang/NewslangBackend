@@ -1,8 +1,7 @@
 package ohai.newslang.domain.dto.scrap;
 
 import lombok.*;
-import ohai.newslang.domain.dto.RequestResult;
-import ohai.newslang.domain.dto.ScrapNews;
+import ohai.newslang.domain.dto.request.RequestResult;
 
 import java.util.List;
 

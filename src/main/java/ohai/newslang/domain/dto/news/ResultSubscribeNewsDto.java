@@ -1,7 +1,7 @@
 package ohai.newslang.domain.dto.news;
 
 import lombok.*;
-import ohai.newslang.domain.dto.SubscribeSimpleNews;
+import ohai.newslang.domain.dto.subscribe.SubscribeSimpleNews;
 
 import java.util.List;
 
