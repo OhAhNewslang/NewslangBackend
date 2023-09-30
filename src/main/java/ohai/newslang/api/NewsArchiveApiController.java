@@ -6,7 +6,7 @@ import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.dto.SubscribeSimpleNews;
 import ohai.newslang.domain.dto.news.ResultSubscribeNewsDetailDto;
 import ohai.newslang.domain.dto.news.ResultSubscribeNewsDto;
-import ohai.newslang.service.NewsArchiveService;
+import ohai.newslang.service.crawling.NewsArchiveService;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
 import org.springframework.web.bind.annotation.*;
 

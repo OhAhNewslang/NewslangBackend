@@ -1,7 +1,7 @@
 package ohai.newslang.service.crawling;
 
 import ohai.newslang.domain.dto.ThumbnailNews;
-import ohai.newslang.domain.entity.subscribeReference.Media;
+import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 
 import java.util.List;
 

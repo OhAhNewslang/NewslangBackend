@@ -9,7 +9,7 @@ import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.domain.dto.scrap.RequestScrapNewsDto;
 import ohai.newslang.domain.dto.scrap.ResultScrapNewsDto;
 import ohai.newslang.domain.dto.subscribe.ResultDto;
-import ohai.newslang.service.NewsArchiveService;
+import ohai.newslang.service.crawling.NewsArchiveService;
 import ohai.newslang.service.scrap.MemberScrapNewsService;
 import org.springframework.web.bind.annotation.*;
 

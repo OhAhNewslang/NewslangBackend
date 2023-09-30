@@ -1,7 +1,10 @@
 package ohai.newslang.domain.entity.member;
 
 import lombok.Getter;
-import ohai.newslang.domain.entity.subscribeReference.Media;
+import ohai.newslang.domain.entity.subscribe.MemberSubscribeMediaItem;
+import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
+import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
+import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package ohai.newslang.repository.subscribe;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.entity.member.MemberSubscribeMediaItem;
+import ohai.newslang.domain.entity.subscribe.MemberSubscribeMediaItem;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;

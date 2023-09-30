@@ -5,7 +5,7 @@ import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.entity.scrap.MemberScrapNews;
 import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
-import ohai.newslang.repository.MemberRepository;
+import ohai.newslang.repository.member.MemberRepository;
 import ohai.newslang.repository.scrap.MemberScrapNewsArchiveRepository;
 import ohai.newslang.repository.scrap.MemberScrapNewsRepository;
 import org.springframework.stereotype.Service;
