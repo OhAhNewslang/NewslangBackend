@@ -76,13 +76,13 @@ public class JwtTokenDecoder implements TokenDecoder{
         // 토큰에서 추출한 Role을 기반으로 시큐리티 메소드에 들어갈 Authority Collection 생성
         // List형태로 생성하는 이유는, 한 User마다 여러 역할을 가질 수 있기 때문이다
         // User A가 게시판1에서는 관리자이지만 게시판2에서는 그냥 user일 수 있음.
-        Member principal = memberRepository.findById(tokenToId(token)).get();
+        Long principal = tokenToId(token);
         // 다중 ROLE 방식
 //        Collection<? extends GrantedAuthority> authorities =
 //                Arrays.stream(principal.getRoles().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         // 단일 ROLE 방식
         Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
-        setAuths.add(new SimpleGrantedAuthority(principal.getRoles()));
+        setAuths.add(new SimpleGrantedAuthority(memberRepository.findById(principal).get().getRoles()));
 
         // Filter단계에서는 매개변수값이 principal(우리로 치면 회원), 인증정보확인(값이 들어만 있으면 됨)으로
         // 권한 확인 전의 Authentication 객체를 생성하고 현재 메소드를 대기하고 있다가
@@ -130,20 +130,20 @@ public class JwtTokenDecoder implements TokenDecoder{
             System.out.println("로그인 먼저 해주세요.");
 //            logger.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
-            System.out.println("########만료된 JWT 토큰입니다.");
+            System.out.println("만료된 JWT 토큰입니다.");
 //            logger.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
-            System.out.println("$$$$$$$$$지원되지 않는 JWT 토큰입니다.");
+            System.out.println("지원되지 않는 JWT 토큰입니다.");
 //            logger.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
-            System.out.println("%%%%%%%%%%%%JWT 토큰이 잘못되었습니다.");
+            System.out.println("JWT 토큰이 잘못되었습니다.");
 //            logger.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
     }
 
     @Override
-    public Member currentUser() {
+    public Long currentUserId() {
         // 현재 유저 정보는 SecurityContextHolder에
         //    Authentication객체에 (principal, 유효한지, 역할)로 저장해놓은 상태이므로
         //          Authentication 가져오기
@@ -155,8 +155,8 @@ public class JwtTokenDecoder implements TokenDecoder{
         }
 
         // principal객체로 저장된 user를 받기 위한 코드
-        if (authentication.getPrincipal() instanceof Member) {
-            return (Member) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof Long) {
+            return (Long) authentication.getPrincipal();
         } else {
             throw new NullPointerException("로그인 먼저 시도해주세요.");
         }

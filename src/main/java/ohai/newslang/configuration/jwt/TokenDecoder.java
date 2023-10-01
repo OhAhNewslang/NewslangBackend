@@ -19,5 +19,5 @@ public interface TokenDecoder {
     // 토큰 유효기간 검사
     boolean expiredToken(String token);
     // 현재 로그인한 사용자 정보 가져오기
-    Member currentUser();
+    Long currentUserId();
 }
