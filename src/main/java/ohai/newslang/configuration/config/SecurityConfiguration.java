@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,11 +24,18 @@ public class SecurityConfiguration {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         // Spring Security를 적용하지 않을 리소스 설정
-        return (web) -> web.ignoring().requestMatchers("/", "/user/in", "/user/new", "/favicon.ico");
+//        return (web) -> web.ignoring().requestMatchers("/", "/user/in", "/user/new", "/favicon.ico");
+        return (web) -> web.ignoring().
+                requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
+                .requestMatchers(new AntPathRequestMatcher("/user/in"))
+                .requestMatchers(new AntPathRequestMatcher("/user/new"))
+                .requestMatchers(new AntPathRequestMatcher("/favicon.ico"));
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(IntrospectorUtil.getIntrospector(http)).servletPath("/path");
+
         http.csrf(AbstractHttpConfigurer::disable).exceptionHandling(AbstractHttpConfigurer::disable)
                 //  Spring Security를 사용하는 경우, HTTP 기본 인증을 비활성화하고 다른 인증 메커니즘을 사용하기 위해서
                 // http 기본 인증을 꺼놓음.
@@ -34,10 +43,11 @@ public class SecurityConfiguration {
                 // 세션을 유지하여 SessionId를 확인할 필요없이 요청 시에 토큰을 받아서 사용하면 되므로 세션을 유지할 이유가 없다.
                 .authorizeHttpRequests(
                         (authorize) -> authorize
-                                .requestMatchers("/host", "/host/**")
-                                .hasRole("HOST")
-                                .requestMatchers("/user", "/user/**", "/reservation/**")
-                                .hasAnyRole("HOST", "USER")
+                                .requestMatchers(mvcMatcherBuilder.pattern("/host")).hasRole("HOST")
+                                .requestMatchers(mvcMatcherBuilder.pattern("/host/**")).hasRole("HOST")
+                                .requestMatchers(mvcMatcherBuilder.pattern("/user")).hasAnyRole("HOST", "USER")
+                                .requestMatchers(mvcMatcherBuilder.pattern("/user/**")).hasAnyRole("HOST", "USER")
+                                .requestMatchers(mvcMatcherBuilder.pattern("/reservation/**")).hasAnyRole("HOST", "USER")
                                 .anyRequest().authenticated()   // 그 외 인증없이 접근 X
                 ).formLogin((login) ->
                                 login.loginPage("/user/in")

@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService{
                 .email(currentMember.getEmail())
                 .name(currentMember.getName())
                 .imagePath(currentMember
-                        .getImagePath().isBlank() ? currentMember.getImagePath() : "기본이미지링크")
+                        .getImagePath().isBlank() ? currentMember.getImagePath() : "Default Image Link")
                 .password(currentMember.getPassword())
                 .build();
     }
@@ -63,7 +63,7 @@ public class MemberServiceImpl implements MemberService{
                 .email(currentMember.getEmail())
                 .name(currentMember.getName())
                 .imagePath(currentMember
-                        .getImagePath().isBlank() ? currentMember.getImagePath() : "기본이미지링크")
+                        .getImagePath().isBlank() ? currentMember.getImagePath() : "Default Image Link")
                 .password(currentMember.getPassword())
                 .build();
     }
