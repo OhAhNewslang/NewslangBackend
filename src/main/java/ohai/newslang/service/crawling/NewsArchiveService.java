@@ -23,19 +23,17 @@ public class NewsArchiveService {
     }
 
     public boolean isExistUrl(String url){
-        return newsArchiveRepository.isExistNewsUrl(url);
+        return newsArchiveRepository.countByUrl(url) > 0;
     }
 
-    public NewsArchive findOne(Long newsArchiveId){
-        return newsArchiveRepository.findOne(newsArchiveId);
-    }
+    public NewsArchive findOne(Long newsArchiveId){ return newsArchiveRepository.findById(newsArchiveId).get(); }
 
     public NewsArchive findByUrl(String url){
         return newsArchiveRepository.findByUrl(url);
     }
 
     public List<NewsArchive> findByNameList(List<String> mediaNameList, List<String> categoryNameList, List<String> keywordNameList) {
-        List<NewsArchive> newsArchiveList = newsArchiveRepository.findAllWithNameList(mediaNameList, categoryNameList);
+        List<NewsArchive> newsArchiveList = newsArchiveRepository.findByMediaNamesAndCategoryNames(mediaNameList, categoryNameList);
 //            List<NewsArchive> newNewsArchiveList = new ArrayList<>();
 //            for (String keyword: keywordNameList) {
 //                for (NewsArchive item: newsArchiveList) {

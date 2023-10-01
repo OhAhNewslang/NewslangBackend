@@ -2,6 +2,7 @@ package ohai.newslang.init;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.CrawlerProperties;
+import ohai.newslang.domain.entity.member.Member;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +18,7 @@ public class InitializeDatabase {
 
     @PostConstruct
     public void start(){
-//        initService.initMember();
+        initService.initMember();
         initService.initCrawlerProperties();
     }
 
@@ -32,17 +33,14 @@ public class InitializeDatabase {
             em.persist(cp);
         }
 
-//        public void initMember(){
-//            Member member1 = createMember("김경민", "Path1", LocalDateTime.now());
-//            em.persist(member1);
-//        }
-//
-//        private static Member createMember(String name, String imagePath, LocalDateTime joinTime){
-//            Member member = new Member();
-//            member.setName(name);
-//            member.setImagePath(imagePath);
-//            member.setJoinDate(joinTime);
-//            return member;
-//        }
+        public void initMember(){
+            Member member1 = createMember("김경민", "ABCD@gmail.com", "1234", "USER", "AAAA");
+            em.persist(member1);
+        }
+
+        private static Member createMember(String name, String email, String password, String roles, String imagePath){
+            Member member = new Member(name, email, password, roles, imagePath);
+            return member;
+        }
     }
 }

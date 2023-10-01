@@ -16,29 +16,31 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberScrapNewsService {
+public class MemberScrapNewsService implements MemberScrapNewsServiceImpl{
 
     private final MemberScrapNewsRepository memberScrapNewsRepository;
     private final MemberScrapNewsArchiveRepository memberScrapNewsArchiveRepository;
     private final MemberRepository memberRepository;
 
-    public List<MemberScrapNewsArchive> findNewsArchiveList(Long memberId) throws Exception {
-        if (memberScrapNewsRepository.isExistMemberScrapNews(memberId)){
-            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findOne(memberId);
+    @Override
+    public List<MemberScrapNewsArchive> findNewsArchiveList(Long memberId) {
+        if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
+            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
             Long memberScrapNewsId = memberScrapNews.getId();
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findAllWithMemberScrapNewsId(memberScrapNewsId);
+            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberScrapNewsId(memberScrapNewsId);
             return memberScrapNewsArchiveList;
         }
         return null;
     }
 
+    @Override
     @Transactional
-    public Long addNewsArchive(Long memberId, NewsArchive newsArchive) throws Exception {
+    public Long addNewsArchive(Long memberId, NewsArchive newsArchive) {
         MemberScrapNews memberScrapNews = null;
-        if (memberScrapNewsRepository.isExistMemberScrapNews(memberId)){
-            memberScrapNews = memberScrapNewsRepository.findOne(memberId);
+        if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
+            memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
             Long memberScrapNewsId = memberScrapNews.getId();
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findAllWithMemberScrapNewsId(memberScrapNewsId);
+            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberScrapNewsId(memberScrapNewsId);
             String newUrl = newsArchive.getNews().getUrl();
             boolean isAlreadyUrl = false;
             for (MemberScrapNewsArchive item : memberScrapNewsArchiveList) {
@@ -59,17 +61,18 @@ public class MemberScrapNewsService {
         return memberScrapNews.getId();
     }
 
+    @Override
     @Transactional
-    public void removeNewsArchive(Long memberId, String url) throws Exception {
-        if (memberScrapNewsRepository.isExistMemberScrapNews(memberId)){
-            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findOne(memberId);
+    public void removeNewsArchive(Long memberId, String url) {
+        if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
+            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
             Long memberScrapNewsId = memberScrapNews.getId();
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findAllWithMemberScrapNewsId(memberScrapNewsId);
+            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberScrapNewsId(memberScrapNewsId);
             boolean isAlreadyUrl = false;
             for (MemberScrapNewsArchive item : memberScrapNewsArchiveList) {
                 if (item.getNewsArchive().getNews().getUrl() == url){
                     // 삭제
-                    memberScrapNewsArchiveRepository.delete(memberScrapNewsId, url);
+                    memberScrapNewsArchiveRepository.deleteByMemberScrapNewsIdAndUrl(memberScrapNewsId, url);
                     break;
                 }
             }

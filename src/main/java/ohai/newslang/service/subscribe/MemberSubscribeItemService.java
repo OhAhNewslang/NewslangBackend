@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,8 +28,8 @@ public class MemberSubscribeItemService {
     private final MediaRepository mediaRepository;
 
     public List<String> findCategoryNameList(Long memberId) {
-        if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
-            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
+        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
+            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
             return memberSubscribeItem.getSubscribeCategoryList().stream()
                     .map(c -> c.getName())
                     .collect(Collectors.toList());
@@ -37,8 +38,8 @@ public class MemberSubscribeItemService {
     }
 
     public List<String> findKeywordNameList(Long memberId) {
-        if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
-            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
+        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
+            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
             return memberSubscribeItem.getSubscribeKeywordList().stream()
                     .map(c -> c.getName())
                     .collect(Collectors.toList());
@@ -47,11 +48,11 @@ public class MemberSubscribeItemService {
     }
 
     public List<String> findSubscribeMediaNameList(Long memberId) {
-        if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
-            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
+        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
+            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
             Long memberSubscribeItemId = memberSubscribeItem.getId();
             // 아이템 전체 조회
-            List<MemberSubscribeMediaItem> memberSubscribeMediaItems = memberSubscribeMediaItemRepository.findAllWithMemberSubscribeItemId(memberSubscribeItemId);
+            List<MemberSubscribeMediaItem> memberSubscribeMediaItems = memberSubscribeMediaItemRepository.findByMemberSubscribeItemId(memberSubscribeItemId);
             return  memberSubscribeMediaItems.stream()
                     .map(o -> o.getMedia().getName())
                     .collect(Collectors.toList());
@@ -65,8 +66,8 @@ public class MemberSubscribeItemService {
         Member member = memberRepository.findById(memberId).get();
         // findOne -> findById + get() 메서드(Optional개봉)
         MemberSubscribeItem memberSubscribeItem = null;
-        if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
-            memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
+        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
+            memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
             memberSubscribeItem.clearCategory();
         }
         else {
@@ -85,8 +86,8 @@ public class MemberSubscribeItemService {
         Member member = memberRepository.findById(memberId).get();
         // findOne -> findById + get() 메서드(Optional개봉)
         MemberSubscribeItem memberSubscribeItem = null;
-        if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
-            memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
+        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
+            memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
             memberSubscribeItem.clearKeyword();
         }
         else {
@@ -105,11 +106,11 @@ public class MemberSubscribeItemService {
         Member member = memberRepository.findById(memberId).get();
         // findOne -> findById + get() 메서드(Optional개봉)
         MemberSubscribeItem memberSubscribeItem = null;
-        if (memberSubscribeItemRepository.isExistMemberSubscribeItem(memberId)) {
-            memberSubscribeItem = memberSubscribeItemRepository.findOne(memberId);
+        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
+            memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
             // 기존 데이터 조회
             Long memberSubscribeItemId = memberSubscribeItem.getId();
-            List<MemberSubscribeMediaItem> memberSubscribeMediaItems = memberSubscribeMediaItemRepository.findAllWithMemberSubscribeItemId(memberSubscribeItemId);
+            List<MemberSubscribeMediaItem> memberSubscribeMediaItems = memberSubscribeMediaItemRepository.findByMemberSubscribeItemId(memberSubscribeItemId);
             // 기존 데이터 삭제 진행
             List<Long> ids = memberSubscribeMediaItems.stream()
                     .map(s -> s.getId())
@@ -123,7 +124,7 @@ public class MemberSubscribeItemService {
             memberSubscribeItemRepository.save(memberSubscribeItem);
         }
 
-        List<Media> mediaList = mediaRepository.findAllWithNameList(subscribeItemNameList);
+        List<Media> mediaList = mediaRepository.findByNameIn(subscribeItemNameList);
         memberSubscribeItem.addMemberSubscribeMediaItems(mediaList);
         return memberSubscribeItem.getId();
     }
