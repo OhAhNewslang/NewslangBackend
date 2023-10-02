@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByEmail(String email);
+    Optional<Member> findByLoginId(String loginId);
     @Query("SELECT m FROM Member m WHERE m.id =:id")
     Member findByTokenId(@Param("id") Long id);
 

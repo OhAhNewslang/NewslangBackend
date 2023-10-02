@@ -1,7 +1,12 @@
 package ohai.newslang.controller;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.dto.member.*;
+import ohai.newslang.domain.dto.member.request.JoinMemberDto;
+import ohai.newslang.domain.dto.member.request.LoginMemberDto;
+import ohai.newslang.domain.dto.member.request.UpdateMemberDto;
+import ohai.newslang.domain.dto.member.request.UpdatePasswordDto;
+import ohai.newslang.domain.dto.member.response.MemberInfoDto;
+import ohai.newslang.domain.dto.member.response.TokenDto;
 import ohai.newslang.domain.dto.request.ResponseDto;
 import ohai.newslang.service.memeber.MemberService;
 import org.springframework.web.bind.annotation.*;
@@ -32,18 +37,12 @@ public class MemberApiController {
         return memberService.updateMemberInfo(updateMemberDto);
     }
 
-    // 패스워드 변경, 이메일 변경, 권한 변경 추가 예정
-    // DTO를 구성하려고 하니까 프론트쪽 설계가 좀 미흡한 것 같아서 일단 넘겼습니다.
     @PatchMapping("/password")
-    public String updatePassword(@RequestParam("password") String password) {
-        return password;
+    public MemberInfoDto updatePassword(@RequestBody UpdatePasswordDto updatePasswordDto) {
+        return memberService.updateMemberPassword(updatePasswordDto);
     }
 
-    @PatchMapping("/email")
-    public String updateEmail(@RequestParam("email") String email) {
-        return email;
-    }
-
+    // 권한부여는 나중에
     @PatchMapping("/role")
     public String updateRole(@RequestParam("role") String role) {
         return role;

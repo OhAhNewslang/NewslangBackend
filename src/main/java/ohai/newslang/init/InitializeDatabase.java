@@ -36,14 +36,14 @@ public class InitializeDatabase {
         }
 
         public void initMember(){
-            Member member1 = createMember("김경민", "ABCD@gmail.com", pe.encode("1234"));
-            Member member2 = createMember("오진석", "EFGH@gmail.com", pe.encode("1234"));
+            Member member1 = createMember("김경민","kkm" ,"ABCD@gmail.com", pe.encode("1234"));
+            Member member2 = createMember("오진석","ojs" ,"EFGH@gmail.com", pe.encode("1234"));
             em.persist(member1);
             em.persist(member2);
         }
 
-        private static Member createMember(String name, String email, String password){
-            Member member = new Member(name, email, password);
+        private static Member createMember(String name, String loginId, String email, String password){
+            Member member = new Member(name, loginId, email, password);
             return member;
         }
     }

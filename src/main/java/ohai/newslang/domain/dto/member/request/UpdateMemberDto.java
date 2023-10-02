@@ -1,4 +1,4 @@
-package ohai.newslang.domain.dto.member;
+package ohai.newslang.domain.dto.member.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

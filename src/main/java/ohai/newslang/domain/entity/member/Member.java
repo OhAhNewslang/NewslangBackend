@@ -22,6 +22,8 @@ public class Member extends TimeStamp {
     @Column(length = 100, nullable = false)
     private String name;
 
+    private String loginId;
+
     @Column(length = 100, nullable = false)
     private String email;
 
@@ -33,8 +35,9 @@ public class Member extends TimeStamp {
 
     private String imagePath;
     @Builder
-    public Member(String name, String email, String password) {
+    public Member(String name, String loginId, String email, String password) {
         this.name = name;
+        this.loginId = loginId;
         this.email = email;
         this.password = password;
         // 회원 가입시 기본은 유저 권한
@@ -45,14 +48,6 @@ public class Member extends TimeStamp {
 
     //연관 관계 메서드
 
-    public Member(String name, String email, String password, UserRole role, String imagePath) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.imagePath = imagePath;
-    }
-
     //비즈니스 로직
     public void updateName(String newName) {
         name = newName;
@@ -62,6 +57,9 @@ public class Member extends TimeStamp {
         password = newPassword;
     }
 
+    public void updateEmail(String newEmail){
+        email = newEmail;
+    }
     public void updateRoles(UserRole newRole){
         role = newRole;
     }
