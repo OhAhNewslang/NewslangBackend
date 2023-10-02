@@ -29,6 +29,9 @@ public interface NewsArchiveRepository extends JpaRepository<NewsArchive, Long> 
     @Query("select count(na.id) from NewsArchive na where na.news.url = :url")
     Long countByUrl(@Param("url") String url);
 
+    @Query("select na.news.url from NewsArchive na where na.news.url in :urlList")
+    List<String> alreadyExistByUrl(@Param("urlList") List<String> urlList);
+
     @Query("select na from NewsArchive na where na.news.url = :url")
     NewsArchive findByUrl(@Param("url") String url);
 

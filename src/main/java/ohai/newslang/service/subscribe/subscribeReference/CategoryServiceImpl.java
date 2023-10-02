@@ -22,6 +22,17 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    @Transactional
+    public void saveAll(List<Category> categoryList){
+        categoryRepository.saveAll(categoryList);
+    }
+
+    @Override
+    public boolean isExistCategoryName(String categoryName){
+        return categoryRepository.countByName(categoryName) > 0;
+    }
+
+    @Override
     public List<Category> findAll(){
         return  categoryRepository.findAll();
     }

@@ -6,5 +6,10 @@ import java.util.List;
 
 public interface CategoryService {
     void save(Category category);
+
+    void saveAll(List<Category> categoryList);
+
+    boolean isExistCategoryName(String categoryName);
+
     List<Category> findAll();
 }

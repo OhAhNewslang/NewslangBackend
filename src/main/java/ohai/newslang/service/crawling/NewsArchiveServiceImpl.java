@@ -24,8 +24,19 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
     }
 
     @Override
+    @Transactional
+    public void saveAll(List<NewsArchive> newsArchiveList){
+        newsArchiveRepository.saveAll(newsArchiveList);
+    }
+
+    @Override
     public boolean isExistUrl(String url){
         return newsArchiveRepository.countByUrl(url) > 0;
+    }
+
+    @Override
+    public List<String> isAlreadyExistUrl(List<String> urlList){
+        return newsArchiveRepository.alreadyExistByUrl(urlList);
     }
 
     @Override

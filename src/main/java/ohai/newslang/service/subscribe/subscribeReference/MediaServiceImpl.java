@@ -22,6 +22,17 @@ public class MediaServiceImpl implements MediaService{
     }
 
     @Override
+    @Transactional
+    public void saveAll(List<Media> mediaList){
+        mediaRepository.saveAll(mediaList);
+    }
+
+    @Override
+    public boolean isExistMediaName(String mediaName){
+        return mediaRepository.countByName(mediaName) > 0;
+    }
+
+    @Override
     public List<Media> findAll(){
         return  mediaRepository.findAll();
     }
