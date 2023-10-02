@@ -1,4 +1,7 @@
 package ohai.newslang.repository.crawling;
 
-public class CrawlerPropertiesRepository {
+import ohai.newslang.domain.entity.CrawlerProperties;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CrawlerPropertiesRepository extends JpaRepository<CrawlerProperties, Long> {
 }

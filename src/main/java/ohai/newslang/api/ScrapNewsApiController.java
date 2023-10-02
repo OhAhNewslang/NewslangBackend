@@ -61,7 +61,7 @@ public class ScrapNewsApiController {
     private ResultScrapNewsDto getScrapNewsDto(Long id){
         List<ScrapNews> scrapNewsList = new ArrayList<>();
         try {
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsService.findNewsArchiveList(id);
+            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsService.getNewsArchiveList(id);
             List<ScrapNews> findScrapNewsList = memberScrapNewsArchiveList.stream()
                     .map(o -> {
                         News n = o.getNewsArchive().getNews();

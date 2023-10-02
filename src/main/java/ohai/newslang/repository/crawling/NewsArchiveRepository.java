@@ -2,54 +2,59 @@ package ohai.newslang.repository.crawling;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.news.NewsArchive;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 
-@Repository
-@RequiredArgsConstructor
-public class NewsArchiveRepository {
+//@Repository
+//@RequiredArgsConstructor
+public interface NewsArchiveRepository extends JpaRepository<NewsArchive, Long> {
 
-    private final EntityManager em;
+//    private final EntityManager em;
+//
+//    public void save(NewsArchive item){
+//        em.persist(item);
+//    }
 
-    public void save(NewsArchive item){
-        em.persist(item);
-    }
+//    public boolean isExistNewsUrl(String url){
+//        Long result = (Long)em.createQuery("select count(na.id) from NewsArchive na where na.news.url = :url")
+//                .setParameter("url", url)
+//                .getSingleResult();
+//        return ((result.equals(0L)) ? false : true);
+//    }
 
-    public boolean isExistNewsUrl(String url){
-        Long result = (Long)em.createQuery("select count(na.id) from NewsArchive na where na.news.url = :url")
-                .setParameter("url", url)
-                .getSingleResult();
-        return ((result.equals(0L)) ? false : true);
-    }
+    @Query("select count(na.id) from NewsArchive na where na.news.url = :url")
+    Long countByUrl(@Param("url") String url);
 
-    public NewsArchive findOne(Long id){
-        return em.find(NewsArchive.class, id);
-    }
+    @Query("select na from NewsArchive na where na.news.url = :url")
+    NewsArchive findByUrl(@Param("url") String url);
 
-    public NewsArchive findByUrl(String url){
-        return em.createQuery(
-                        "select na from NewsArchive na" +
-                                " where na.news.url = :url", NewsArchive.class)
-                .setParameter("url", url)
-                .getSingleResult();
-    }
+    @Query("select na from NewsArchive na where na.news.mediaName in :mediaNameList and na.news.categoryName in :categoryNameList")
+    List<NewsArchive> findByMediaNamesAndCategoryNames(@Param("mediaNameList") List<String> mediaNameList,
+                                                       @Param("categoryNameList") List<String> categoryNameList);
 
-    public List<NewsArchive> findAllWithUrls(List<String> urlList){
-        return em.createQuery(
-                        "select na from NewsArchive na" +
-                                " where na.news.url in :urlList", NewsArchive.class)
-                .setParameter("urlList", urlList)
-                .getResultList();
-    }
+//    public NewsArchive findOne(Long id){
+//        return em.find(NewsArchive.class, id);
+//    }
 
-    public List<NewsArchive> findAllWithNameList(List<String> mediaNameList, List<String> categoryNameList){
-        return em.createQuery(
-                        "select na from NewsArchive na" +
-                                " where na.news.mediaName in :mediaNameList" +
-                                " and na.news.categoryName in :categoryNameList", NewsArchive.class)
-                .setParameter("mediaNameList", mediaNameList)
-                .setParameter("categoryNameList", categoryNameList)
-                .getResultList();
-    }
+//    public NewsArchive findByUrl(String url){
+//        return em.createQuery(
+//                        "select na from NewsArchive na" +
+//                                " where na.news.url = :url", NewsArchive.class)
+//                .setParameter("url", url)
+//                .getSingleResult();
+//    }
+
+//    public List<NewsArchive> findAllWithNameList(List<String> mediaNameList, List<String> categoryNameList){
+//        return em.createQuery(
+//                        "select na from NewsArchive na" +
+//                                " where na.news.mediaName in :mediaNameList" +
+//                                " and na.news.categoryName in :categoryNameList", NewsArchive.class)
+//                .setParameter("mediaNameList", mediaNameList)
+//                .setParameter("categoryNameList", categoryNameList)
+//                .getResultList();
+//    }
 }

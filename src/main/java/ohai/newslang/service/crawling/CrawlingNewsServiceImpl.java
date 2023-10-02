@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ThumbnailNewsCrawlingServiceImpl implements CrawlingService{
+public class CrawlingNewsServiceImpl implements CrawlingNewsService{
 
     @Override
-    public List<ThumbnailNews> crawlingThumbnailNews(String url) {
+    public List<ThumbnailNews> getNewsList(String url) {
         List<ThumbnailNews> thumbnailNewsList = new ArrayList<>();
         Document doc = null;
         Connection conn = Jsoup.connect(url);
@@ -33,11 +33,6 @@ public class ThumbnailNewsCrawlingServiceImpl implements CrawlingService{
         thumbnailNewsList.addAll(getThumbnailNewsList(type06));
 
         return thumbnailNewsList;
-    }
-
-    @Override
-    public List<Media> crawlingMedia(String url) {
-        return null;
     }
 
     private List<ThumbnailNews> getThumbnailNewsList(Elements root){

@@ -6,9 +6,9 @@ import ohai.newslang.domain.entity.news.News;
 import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Category;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
+import ohai.newslang.service.crawling.CrawlingMediaService;
+import ohai.newslang.service.crawling.CrawlingNewsService;
 import ohai.newslang.service.crawling.NewsArchiveService;
-import ohai.newslang.service.crawling.MediaCrawlingServiceImpl;
-import ohai.newslang.service.crawling.ThumbnailNewsCrawlingServiceImpl;
 import ohai.newslang.service.subscribe.subscribeReference.CategoryService;
 import ohai.newslang.service.subscribe.subscribeReference.MediaService;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,13 +20,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class NewsBatchController {
 
-    private final ThumbnailNewsCrawlingServiceImpl detailNewsCrawlingService;
+    private final CrawlingNewsService crawlingNewsService;
+    private final CrawlingMediaService crawlingMediaService;
     private final NewsArchiveService newsArchiveService;
-    private final MediaCrawlingServiceImpl mediaCrawlingService;
     private final MediaService mediaService;
     private final CategoryService categoryService;
 
@@ -50,7 +50,7 @@ public class NewsBatchController {
         String startDate = "20230901";
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
         String date = LocalDate.now().format(dateFormat);
-        List<Media> mediaList = mediaService.findSubscribeItemList();
+        List<Media> mediaList = mediaService.findAll();
 
         mediaList.forEach(m -> {
             String parameterId = m.getParameterId();
@@ -73,7 +73,7 @@ public class NewsBatchController {
         5. NewsArchive 데이터베이스에는 thumbnail news 저장 -> 뉴스 상세보기 클릭시 url 활용하여 단건 크롤링 진행
          */
         AtomicBoolean isNextMedia = new AtomicBoolean(false);
-        List<ThumbnailNews> thumbnailNewsList = detailNewsCrawlingService.crawlingThumbnailNews("https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + category + "&date=" + date + "&page=" + page);
+        List<ThumbnailNews> thumbnailNewsList = crawlingNewsService.getNewsList("https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + category + "&date=" + date + "&page=" + page);
         if (thumbnailNewsList.size() < 1) isNextMedia.set(true);
 
         thumbnailNewsList.forEach(t ->{
@@ -94,7 +94,7 @@ public class NewsBatchController {
     }
 
     private void initializeMedia(){
-        List<Media> mediaList = mediaCrawlingService.crawlingMedia("https://news.naver.com/main/officeList.naver");
+        List<Media> mediaList = crawlingMediaService.getMediaList("https://news.naver.com/main/officeList.naver");
         HashSet<String> categoryList = new HashSet<>();
         for (Media media : mediaList) {
             try {
