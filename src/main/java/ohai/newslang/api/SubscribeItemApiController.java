@@ -42,7 +42,7 @@ public class SubscribeItemApiController {
 //    }
 
     private ResultSubscribeMediaDto getResultSubscribeMediaDto(){
-        List<Media> mediaList = mediaService.findSubscribeItemList();
+        List<Media> mediaList = mediaService.findAll();
 
         List<MediaDto> mediaDtoList = mediaList.stream()
                 .map(o -> MediaDto.builder().mediaName(o.getName()).mediaImagePath(o.getImagePath()).build())
@@ -52,7 +52,7 @@ public class SubscribeItemApiController {
     }
 
     private List<String> getSubscribeItemNameList(){
-        List<Category> subscribeItems = categoryService.findSubscribeItemList();
+        List<Category> subscribeItems = categoryService.findAll();
         return subscribeItems.stream()
                 .map(o -> o.getName())
                 .collect(Collectors.toList());

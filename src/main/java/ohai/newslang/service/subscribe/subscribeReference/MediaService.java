@@ -1,26 +1,15 @@
 package ohai.newslang.service.subscribe.subscribeReference;
 
-import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
-import ohai.newslang.repository.subscribe.subscribeReference.MediaRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class MediaService {
+public interface MediaService {
+    void save(Media media);
 
-    private final MediaRepository mediaRepository;
+    void saveAll(List<Media> mediaList);
 
-    @Transactional
-    public void save(Media media){
-        mediaRepository.save(media);
-    }
+    boolean isExistMediaName(String mediaName);
 
-    public List<Media> findSubscribeItemList(){
-        return  mediaRepository.findAll();
-    }
+    List<Media> findAll();
 }

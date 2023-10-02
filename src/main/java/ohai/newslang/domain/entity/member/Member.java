@@ -45,6 +45,14 @@ public class Member extends TimeStamp {
 
     //연관 관계 메서드
 
+    public Member(String name, String email, String password, UserRole role, String imagePath) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.imagePath = imagePath;
+    }
+
     //비즈니스 로직
     public void updateName(String newName) {
         name = newName;
@@ -61,5 +69,4 @@ public class Member extends TimeStamp {
     public void updateImagePath(String newImagePath) {
         imagePath = newImagePath;
     }
-
 }

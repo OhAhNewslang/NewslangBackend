@@ -2,6 +2,8 @@ package ohai.newslang.init;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.CrawlerProperties;
+import ohai.newslang.domain.entity.member.Member;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +19,7 @@ public class InitializeDatabase {
 
     @PostConstruct
     public void start(){
-//        initService.initMember();
+        initService.initMember();
         initService.initCrawlerProperties();
     }
 
@@ -26,23 +28,23 @@ public class InitializeDatabase {
     @RequiredArgsConstructor
     static class InitService{
         private final EntityManager em;
+        private final PasswordEncoder pe;
 
         public void initCrawlerProperties(){
             CrawlerProperties cp = CrawlerProperties.builder().crawlingDate(LocalDateTime.MIN).crawlingPeriodSecond(600).build();
             em.persist(cp);
         }
 
-//        public void initMember(){
-//            Member member1 = createMember("김경민", "Path1", LocalDateTime.now());
-//            em.persist(member1);
-//        }
-//
-//        private static Member createMember(String name, String imagePath, LocalDateTime joinTime){
-//            Member member = new Member();
-//            member.setName(name);
-//            member.setImagePath(imagePath);
-//            member.setJoinDate(joinTime);
-//            return member;
-//        }
+        public void initMember(){
+            Member member1 = createMember("김경민", "ABCD@gmail.com", pe.encode("1234"));
+            Member member2 = createMember("오진석", "EFGH@gmail.com", pe.encode("1234"));
+            em.persist(member1);
+            em.persist(member2);
+        }
+
+        private static Member createMember(String name, String email, String password){
+            Member member = new Member(name, email, password);
+            return member;
+        }
     }
 }
