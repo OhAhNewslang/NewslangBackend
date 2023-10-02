@@ -1,19 +1,19 @@
 package ohai.newslang.api;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.entity.news.News;
-import ohai.newslang.domain.entity.news.NewsArchive;
+import ohai.newslang.domain.dto.request.ResultDto;
 import ohai.newslang.domain.dto.request.RequestResult;
-import ohai.newslang.domain.dto.scrap.ScrapNews;
-import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.domain.dto.scrap.RequestScrapNewsDto;
 import ohai.newslang.domain.dto.scrap.ResultScrapNewsDto;
-import ohai.newslang.domain.dto.request.ResultDto;
+import ohai.newslang.domain.dto.scrap.ScrapNews;
+import ohai.newslang.domain.entity.news.News;
+import ohai.newslang.domain.entity.news.NewsArchive;
+import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.service.crawling.NewsArchiveService;
 import ohai.newslang.service.scrap.MemberScrapNewsService;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

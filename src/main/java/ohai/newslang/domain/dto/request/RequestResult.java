@@ -3,14 +3,10 @@ package ohai.newslang.domain.dto.request;
 import lombok.*;
 
 @Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class RequestResult {
     private boolean isSuccess;
     private String failCode;
-
-    @Builder
-    public RequestResult(boolean isSuccess, String failCode) {
-        this.isSuccess = isSuccess;
-        this.failCode = failCode;
-    }
 }

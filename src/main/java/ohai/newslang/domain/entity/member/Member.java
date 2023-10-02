@@ -1,17 +1,14 @@
 package ohai.newslang.domain.entity.member;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import ohai.newslang.domain.entity.TimeStamp;
+import ohai.newslang.domain.enumulate.UserRole;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,24 +22,31 @@ public class Member extends TimeStamp {
     @Column(length = 100, nullable = false)
     private String name;
 
+    private String loginId;
+
     @Column(length = 100, nullable = false)
     private String email;
 
     @Column(length = 100, nullable = false)
     private String password;
 
-    private String roles;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     private String imagePath;
-    //연관 관계 메서드
-
-    public Member(String name, String email, String password, String roles, String imagePath) {
+    @Builder
+    public Member(String name, String loginId, String email, String password) {
         this.name = name;
+        this.loginId = loginId;
         this.email = email;
         this.password = password;
-        this.roles = roles;
-        this.imagePath = imagePath;
+        // 회원 가입시 기본은 유저 권한
+        role = UserRole.ROLE_USER;
+        // 회원 가입시 기본 이미지
+        imagePath = "DefaultImagePath";
     }
+
+    //연관 관계 메서드
 
     //비즈니스 로직
     public void updateName(String newName) {
@@ -53,18 +57,14 @@ public class Member extends TimeStamp {
         password = newPassword;
     }
 
-    public void updateRoles(String newRoles){
-        if (roles == null) roles = "";
-        if (!roles.isEmpty()) roles += ",";
-        roles += newRoles;
+    public void updateEmail(String newEmail){
+        email = newEmail;
+    }
+    public void updateRoles(UserRole newRole){
+        role = newRole;
     }
 
     public void updateImagePath(String newImagePath) {
         imagePath = newImagePath;
-    }
-
-    public List<String> getRoleList(){
-        if (!this.roles.isEmpty()) return Arrays.asList(roles.split(","));
-        return new ArrayList<>();
     }
 }

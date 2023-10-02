@@ -2,14 +2,21 @@ package ohai.newslang.domain.dto.request;
 
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
+@NoArgsConstructor
 public class ResultDto {
     private RequestResult result;
+    private String resultMessage;
 
     @Builder
-    public ResultDto(boolean isSuccess, String failCode) {
-        this.result = new RequestResult(isSuccess, failCode);
+    public ResultDto(boolean isSuccess, String failCode, String resultMessage) {
+        this.result = RequestResult.builder()
+                .isSuccess(isSuccess)
+                .failCode(failCode)
+                .build();
+        this.resultMessage = resultMessage;
     }
 }

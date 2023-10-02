@@ -1,4 +1,4 @@
-package ohai.newslang.domain.dto.member;
+package ohai.newslang.domain.dto.member.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberInfoDto {
-
-    private String name;
-
-    private String email;
+public class LoginMemberDto {
+    private String loginId;
 
     private String password;
-
-    private String imagePath;
 }
