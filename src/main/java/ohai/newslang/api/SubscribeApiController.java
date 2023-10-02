@@ -1,9 +1,9 @@
 package ohai.newslang.api;
 
 import lombok.RequiredArgsConstructor;
+import ohai.newslang.domain.dto.request.ResultDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.dto.subscribe.RequestSubscribeDto;
-import ohai.newslang.domain.dto.request.ResultDto;
 import ohai.newslang.domain.dto.subscribe.ResultSubscribeDto;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
 import org.springframework.web.bind.annotation.*;

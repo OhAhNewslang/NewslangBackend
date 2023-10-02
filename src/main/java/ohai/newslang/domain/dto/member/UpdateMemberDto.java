@@ -4,15 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ohai.newslang.domain.dto.request.ResponseDto;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class LoginMemberDto {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UpdateMemberDto {
+    private String name;
     private String email;
-
-    private String password;
-
-    private String token;
+    private String imagePath;
 }
