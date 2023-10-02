@@ -22,10 +22,10 @@ public class NewsArchiveApiController {
 
     @GetMapping("/api/news/subscribe/{id}")
     public ResultSubscribeNewsDto getSubscribeNews(@PathVariable("id") Long id) {
-        List<String> mediaNameList = this.memberSubscribeItemService.findSubscribeMediaNameList(id);
-        List<String> categoryNameList = this.memberSubscribeItemService.findCategoryNameList(id);
-        List<String> keywordNameList = this.memberSubscribeItemService.findKeywordNameList(id);
-        List<NewsArchive> newsArchiveList = newsArchiveService.findByNameList(mediaNameList, categoryNameList, keywordNameList);
+        List<String> mediaNameList = this.memberSubscribeItemService.getSubscribeMediaNameList(id);
+        List<String> categoryNameList = this.memberSubscribeItemService.getCategoryNameList(id);
+        List<String> keywordNameList = this.memberSubscribeItemService.getKeywordNameList(id);
+        List<NewsArchive> newsArchiveList = newsArchiveService.getNewsArchiveList(mediaNameList, categoryNameList, keywordNameList);
 
         List<SubscribeSimpleNews> collect = newsArchiveList.stream()
                 .map(n -> {
