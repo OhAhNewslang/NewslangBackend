@@ -1,16 +1,18 @@
 package ohai.newslang.service.memeber;
 
-import ohai.newslang.domain.dto.member.JoinMemberDto;
-import ohai.newslang.domain.dto.member.LoginMemberDto;
-import ohai.newslang.domain.dto.member.MemberInfoDto;
-import ohai.newslang.domain.entity.member.Member;
+import ohai.newslang.domain.dto.member.request.JoinMemberDto;
+import ohai.newslang.domain.dto.member.request.LoginMemberDto;
+import ohai.newslang.domain.dto.member.request.UpdateMemberDto;
+import ohai.newslang.domain.dto.member.request.UpdatePasswordDto;
+import ohai.newslang.domain.dto.member.response.MemberInfoDto;
+import ohai.newslang.domain.dto.member.response.TokenDto;
+import ohai.newslang.domain.dto.request.ResponseDto;
 
 public interface MemberService {
-    void createByUser(JoinMemberDto joinMemberDto);
-    Boolean checkDuplicate(Member member);
-    void logIn(LoginMemberDto loginMemberDto);
-    MemberInfoDto readByUserInfo();
-    public MemberInfoDto updateByUserInfo(MemberInfoDto memberInfoDto);
-    void deleteByUser(String password);
-    Member loadMemberByMemberId(Long id);
+    ResponseDto createMember(JoinMemberDto joinMemberDto);
+    TokenDto logIn(LoginMemberDto loginMemberDto);
+    MemberInfoDto readMemberInfo();
+    MemberInfoDto updateMemberInfo(UpdateMemberDto memberInfoDto);
+    MemberInfoDto updateMemberPassword(UpdatePasswordDto updatePasswordDto);
+    ResponseDto deleteMember(String password);
 }
