@@ -21,13 +21,13 @@ public class SubscribeApiController {
     public ResultDto subscribeMedia(@PathVariable("id") Long id, @RequestBody @Valid RequestSubscribeDto request){
         try {
             Long memberSubscribeId = memberSubscribeItemService.updateSubscribeMediaItems(id, request.getNameList());
-            return ResultDto.builder().isSuccess(true).failCode("").build();
+            return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder
             // 1. fail 코드 정의 필요
             // 2. Exception 재정의 필요
             // 3. Exception 종류에 따라(기존 데이터 삭제 후 Exception 등), 문제 발생시 롤백 처리 필요
-            return ResultDto.builder().isSuccess(false).failCode("").build();
+            return ResultDto.builder().resultCode("401").resultMessage(e.getMessage()).build();
         }
     }
 
@@ -35,13 +35,13 @@ public class SubscribeApiController {
     public ResultSubscribeDto getMedias(@PathVariable("id") Long id){
         try {
             List<String> subscribeNameList = this.memberSubscribeItemService.getSubscribeMediaNameList(id);
-            return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
+            return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
         } catch (Exception e){
             // to do list finder
             // 1. fail 코드 정의 필요
             // 2. Exception 재정의 필요
             // 3. Exception 종류에 따라(기존 데이터 삭제 후 Exception 등), 문제 발생시 롤백 처리 필요
-            return ResultSubscribeDto.builder().memberId(id).subscribeList(null).result(RequestResult.builder().isSuccess(false).failCode("").build()).build();
+            return ResultSubscribeDto.builder().memberId(id).subscribeList(null).result(RequestResult.builder().resultCode("401").resultMessage(e.getMessage()).build()).build();
         }
     }
 
@@ -49,13 +49,13 @@ public class SubscribeApiController {
     public ResultDto subscribeCategory(@PathVariable("id") Long id, @RequestBody @Valid RequestSubscribeDto request){
         try {
             Long memberSubscribeId = memberSubscribeItemService.updateSubscribeCategory(id, request.getNameList());
-            return ResultDto.builder().isSuccess(true).failCode("").build();
+            return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder
             // 1. fail 코드 정의 필요
             // 2. Exception 재정의 필요
             // 3. Exception 종류에 따라(기존 데이터 삭제 후 Exception 등), 문제 발생시 롤백 처리 필요
-            return ResultDto.builder().isSuccess(false).failCode("").build();
+            return ResultDto.builder().resultCode("401").resultMessage(e.getMessage()).build();
         }
     }
 
@@ -63,13 +63,13 @@ public class SubscribeApiController {
     public ResultSubscribeDto getCategory(@PathVariable("id") Long id){
         try {
             List<String> subscribeNameList = this.memberSubscribeItemService.getCategoryNameList(id);
-            return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
+            return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
         } catch (Exception e){
             // to do list finder
             // 1. fail 코드 정의 필요
             // 2. Exception 재정의 필요
             // 3. Exception 종류에 따라(기존 데이터 삭제 후 Exception 등), 문제 발생시 롤백 처리 필요
-            return ResultSubscribeDto.builder().memberId(id).subscribeList(null).result(RequestResult.builder().isSuccess(false).failCode("").build()).build();
+            return ResultSubscribeDto.builder().memberId(id).subscribeList(null).result(RequestResult.builder().resultCode("401").resultMessage(e.getMessage()).build()).build();
         }
     }
 
@@ -77,13 +77,13 @@ public class SubscribeApiController {
     public ResultDto subscribeKeyword(@PathVariable("id") Long id, @RequestBody @Valid RequestSubscribeDto request){
         try {
             Long memberSubscribeId = memberSubscribeItemService.updateSubscribeKeyword(id, request.getNameList());
-            return ResultDto.builder().isSuccess(true).failCode("").build();
+            return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder
             // 1. fail 코드 정의 필요
             // 2. Exception 재정의 필요
             // 3. Exception 종류에 따라(기존 데이터 삭제 후 Exception 등), 문제 발생시 롤백 처리 필요
-            return ResultDto.builder().isSuccess(false).failCode("").build();
+            return ResultDto.builder().resultCode("401").resultMessage(e.getMessage()).build();
         }
     }
 
@@ -91,13 +91,13 @@ public class SubscribeApiController {
     public ResultSubscribeDto getKeywords(@PathVariable("id") Long id){
         try {
             List<String> subscribeNameList = this.memberSubscribeItemService.getKeywordNameList(id);
-            return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
+            return ResultSubscribeDto.builder().memberId(id).subscribeList(subscribeNameList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
         } catch (Exception e){
             // to do list finder
             // 1. fail 코드 정의 필요
             // 2. Exception 재정의 필요
             // 3. Exception 종류에 따라(기존 데이터 삭제 후 Exception 등), 문제 발생시 롤백 처리 필요
-            return ResultSubscribeDto.builder().memberId(id).subscribeList(null).result(RequestResult.builder().isSuccess(false).failCode("").build()).build();
+            return ResultSubscribeDto.builder().memberId(id).subscribeList(null).result(RequestResult.builder().resultCode("400").resultMessage(e.getMessage()).build()).build();
         }
     }
 }

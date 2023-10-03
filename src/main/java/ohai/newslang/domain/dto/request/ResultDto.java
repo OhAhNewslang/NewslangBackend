@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResultDto {
     private RequestResult result;
-    private String resultMessage;
 
     @Builder
-    public ResultDto(boolean isSuccess, String failCode, String resultMessage) {
+    public ResultDto(String resultCode, String resultMessage) {
         this.result = RequestResult.builder()
-                .isSuccess(isSuccess)
-                .failCode(failCode)
+                .resultCode(resultCode)
+                .resultMessage(resultMessage)
                 .build();
-        this.resultMessage = resultMessage;
     }
 }

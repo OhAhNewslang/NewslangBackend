@@ -6,13 +6,13 @@ import ohai.newslang.domain.dto.member.request.UpdateMemberDto;
 import ohai.newslang.domain.dto.member.request.UpdatePasswordDto;
 import ohai.newslang.domain.dto.member.response.MemberInfoDto;
 import ohai.newslang.domain.dto.member.response.TokenDto;
-import ohai.newslang.domain.dto.request.ResponseDto;
+import ohai.newslang.domain.dto.request.RequestResult;
 
 public interface MemberService {
-    ResponseDto createMember(JoinMemberDto joinMemberDto);
+    RequestResult createMember(JoinMemberDto joinMemberDto);
     TokenDto logIn(LoginMemberDto loginMemberDto);
     MemberInfoDto readMemberInfo();
     MemberInfoDto updateMemberInfo(UpdateMemberDto memberInfoDto);
     MemberInfoDto updateMemberPassword(UpdatePasswordDto updatePasswordDto);
-    ResponseDto deleteMember(String password);
+    RequestResult deleteMember(String password);
 }

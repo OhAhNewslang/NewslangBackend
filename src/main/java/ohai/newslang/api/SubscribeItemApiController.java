@@ -32,7 +32,7 @@ public class SubscribeItemApiController {
     @GetMapping("/api/category")
     public ResultSubscribeCategoryDto getAllCategories() {
         List<String> nameList = getSubscribeItemNameList();
-        return ResultSubscribeCategoryDto.builder().nameList(nameList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
+        return ResultSubscribeCategoryDto.builder().nameList(nameList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
     }
 
 //    @GetMapping("/api/keyword")
@@ -48,7 +48,7 @@ public class SubscribeItemApiController {
                 .map(o -> MediaDto.builder().mediaName(o.getName()).mediaImagePath(o.getImagePath()).build())
                 .collect(Collectors.toList());
 
-        return ResultSubscribeMediaDto.builder().mediaList(mediaDtoList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
+        return ResultSubscribeMediaDto.builder().mediaList(mediaDtoList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
     }
 
     private List<String> getSubscribeItemNameList(){

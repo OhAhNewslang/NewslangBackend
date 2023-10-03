@@ -7,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestResult {
-    private boolean isSuccess;
-    private String failCode;
+    private String resultCode;
+    private String resultMessage;
 }

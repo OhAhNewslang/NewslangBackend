@@ -1,4 +1,4 @@
-package ohai.newslang.controller;
+package ohai.newslang.api;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.dto.member.request.JoinMemberDto;
@@ -7,18 +7,18 @@ import ohai.newslang.domain.dto.member.request.UpdateMemberDto;
 import ohai.newslang.domain.dto.member.request.UpdatePasswordDto;
 import ohai.newslang.domain.dto.member.response.MemberInfoDto;
 import ohai.newslang.domain.dto.member.response.TokenDto;
-import ohai.newslang.domain.dto.request.ResponseDto;
+import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.service.memeber.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/member")
+@RequestMapping("/api/member")
 public class MemberApiController {
 
     private final MemberService memberService;
     @PostMapping("/new")
-    public ResponseDto join(@RequestBody JoinMemberDto joinMemberDto) {
+    public RequestResult join(@RequestBody JoinMemberDto joinMemberDto) {
         return memberService.createMember(joinMemberDto);
     }
 
@@ -49,7 +49,7 @@ public class MemberApiController {
     }
 
     @DeleteMapping("")
-    public ResponseDto withdraw(@RequestParam("password") String password) {
+    public RequestResult withdraw(@RequestParam("password") String password) {
         return memberService.deleteMember(password);
     }
 }

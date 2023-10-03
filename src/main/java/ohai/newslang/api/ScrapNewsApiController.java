@@ -53,9 +53,9 @@ public class ScrapNewsApiController {
             // 1. fail 코드 정의 필요
             // 2. Exception 재정의 필요
             // 3. Exception 종류에 따라(기존 데이터 삭제 후 Exception 등), 문제 발생시 롤백 처리 필요
-            return ResultDto.builder().isSuccess(false).failCode("").build();
+            return ResultDto.builder().resultCode("301").resultMessage(e.getMessage()).build();
         }
-        return ResultDto.builder().isSuccess(true).failCode("").build();
+        return ResultDto.builder().resultCode("200").resultMessage("").build();
     }
 
     private ResultScrapNewsDto getScrapNewsDto(Long id){
@@ -82,8 +82,8 @@ public class ScrapNewsApiController {
             // 1. fail 코드 정의 필요
             // 2. Exception 재정의 필요
             // 3. Exception 종류에 따라(기존 데이터 삭제 후 Exception 등), 문제 발생시 롤백 처리 필요
-            return ResultScrapNewsDto.builder().memberId(id).scrapNewsList(null).result(RequestResult.builder().isSuccess(false).failCode("").build()).build();
+            return ResultScrapNewsDto.builder().memberId(id).scrapNewsList(null).result(RequestResult.builder().resultCode("301").resultMessage(e.getMessage()).build()).build();
         }
-        return ResultScrapNewsDto.builder().memberId(id).scrapNewsList(scrapNewsList).result(RequestResult.builder().isSuccess(true).failCode("").build()).build();
+        return ResultScrapNewsDto.builder().memberId(id).scrapNewsList(scrapNewsList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
     }
 }

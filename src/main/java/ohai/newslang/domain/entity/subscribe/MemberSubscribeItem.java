@@ -81,18 +81,22 @@ public class MemberSubscribeItem {
     }
 
     public void removeMemberSubscribeMediaItems(List<Long> memberSubscribeMediaItemIdList) {
-        List<MemberSubscribeMediaItem> memberSubscribeMediaItems = this.memberSubscribeMediaItemList
-                .stream()
-                .filter(item -> {
-                    item.setMedia(null);
-                    item.setMemberSubscribeItem(null);
-                    return memberSubscribeMediaItemIdList.contains(item.getId());
-                })
-                .collect(Collectors.toList());
-
-//        for (MemberSubscribeMediaItem item : memberSubscribeMediaItems) {
-//            this.memberSubscribeMediaItemList.remove(item);
-//        }
-        this.memberSubscribeMediaItemList.removeAll(memberSubscribeMediaItems);
+        this.memberSubscribeMediaItemList.removeIf(m ->{
+            if (memberSubscribeMediaItemIdList.contains(m.getId())){
+                m.setMedia(null);
+                m.setMemberSubscribeItem(null);
+                return true;
+            }
+            return false;
+        });
+//        List<MemberSubscribeMediaItem> memberSubscribeMediaItems = this.memberSubscribeMediaItemList
+//                .stream()
+//                .filter(item -> {
+//                    item.setMedia(null);
+//                    item.setMemberSubscribeItem(null);
+//                    return memberSubscribeMediaItemIdList.contains(item.getId());
+//                })
+//                .collect(Collectors.toList());
+//        this.memberSubscribeMediaItemList.removeAll(memberSubscribeMediaItems);
     }
 }
