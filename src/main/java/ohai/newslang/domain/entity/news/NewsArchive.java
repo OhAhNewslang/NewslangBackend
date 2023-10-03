@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 public class NewsArchive {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "news_archive_id")
     private Long id;
 

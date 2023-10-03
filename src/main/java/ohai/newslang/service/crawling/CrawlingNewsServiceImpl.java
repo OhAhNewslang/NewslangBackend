@@ -26,12 +26,12 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Elements type06_headline = doc.getElementsByClass("type06_headline");
-        Elements type06 = doc.getElementsByClass("type06");
-        thumbnailNewsList.addAll(getThumbnailNewsList(type06_headline));
-        thumbnailNewsList.addAll(getThumbnailNewsList(type06));
-
+        if (doc != null) {
+            Elements type06_headline = doc.getElementsByClass("type06_headline");
+            Elements type06 = doc.getElementsByClass("type06");
+            thumbnailNewsList.addAll(getThumbnailNewsList(type06_headline));
+            thumbnailNewsList.addAll(getThumbnailNewsList(type06));
+        }
         return thumbnailNewsList;
     }
 

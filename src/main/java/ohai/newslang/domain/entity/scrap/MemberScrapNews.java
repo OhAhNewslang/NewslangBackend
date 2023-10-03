@@ -34,6 +34,19 @@ public class MemberScrapNews {
         memberScrapNewsArchive.setMemberScrapNews(this);
     }
 
+    public void removeMemberScrapNewsArchive(List<String> urlList){
+        List<MemberScrapNewsArchive> removeList = new ArrayList<>();
+        this.memberScrapNewsArchiveList.forEach(n ->{
+            String newsUrl = n.getNewsArchive().getNews().getUrl();
+            if (urlList.contains(newsUrl)){
+                n.setMemberScrapNews(null);
+                n.setNewsArchive(null);
+                removeList.add(n);
+            }
+        });
+        this.memberScrapNewsArchiveList.removeAll(removeList);
+    }
+
     public static MemberScrapNews newMemberScrapNews(MemberScrapNews memberScrapNews, Member member, NewsArchive newsArchive){
         if (memberScrapNews == null) {
             memberScrapNews = new MemberScrapNews();

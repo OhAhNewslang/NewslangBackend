@@ -2,6 +2,7 @@ package ohai.newslang.service.scrap;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.member.Member;
+import ohai.newslang.domain.entity.news.News;
 import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.entity.scrap.MemberScrapNews;
 import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -68,14 +70,10 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
             MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
             Long memberScrapNewsId = memberScrapNews.getId();
             List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberScrapNewsId(memberScrapNewsId);
-            boolean isAlreadyUrl = false;
-            for (MemberScrapNewsArchive item : memberScrapNewsArchiveList) {
-                if (item.getNewsArchive().getNews().getUrl() == url){
-                    // 삭제
-                    memberScrapNewsArchiveRepository.deleteByMemberScrapNewsIdAndUrl(memberScrapNewsId, url);
-                    break;
-                }
-            }
+            List<String> urlList = memberScrapNewsArchiveList.stream()
+                    .map(n -> n.getNewsArchive().getNews().getUrl())
+                    .collect(Collectors.toList());
+            memberScrapNews.removeMemberScrapNewsArchive(urlList);
         }
     }
 }
