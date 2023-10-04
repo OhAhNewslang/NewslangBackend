@@ -48,6 +48,8 @@ public class SecurityConfiguration {
                 requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/member/in"))
                 .requestMatchers(new AntPathRequestMatcher("/api/member/new"))
+                .requestMatchers(new AntPathRequestMatcher("/api/member/id"))
+                .requestMatchers(new AntPathRequestMatcher("/api/member/password","POST"))
                 .requestMatchers(new AntPathRequestMatcher("/api/news/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/media/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/category/**"))

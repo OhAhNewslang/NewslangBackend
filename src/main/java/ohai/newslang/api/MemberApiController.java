@@ -8,6 +8,7 @@ import ohai.newslang.domain.dto.member.request.UpdatePasswordDto;
 import ohai.newslang.domain.dto.member.response.MemberInfoDto;
 import ohai.newslang.domain.dto.member.response.TokenDto;
 import ohai.newslang.domain.dto.request.RequestResult;
+import ohai.newslang.service.memeber.MailService;
 import ohai.newslang.service.memeber.MemberService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final MailService mailService;
     @PostMapping("/new")
     public RequestResult join(@RequestBody JoinMemberDto joinMemberDto) {
         return memberService.createMember(joinMemberDto);
@@ -46,6 +48,16 @@ public class MemberApiController {
     @PatchMapping("/role")
     public String updateRole(@RequestParam("role") String role) {
         return role;
+    }
+
+    @PostMapping("/id")
+    public String findId(@RequestParam("mail") String mail) {
+        return mailService.sendMail(mail);
+    }
+
+    @PostMapping("/password")
+    public String findPassword(@RequestParam("mail") String mail) {
+        return mailService.sendMail(mail);
     }
 
     @DeleteMapping("")
