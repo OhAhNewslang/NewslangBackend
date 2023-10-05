@@ -39,7 +39,7 @@ public class MemberServiceImpl implements MemberService{
                     .email(joinMemberDto.getEmail())
                     .password(passwordEncoder.encode(joinMemberDto.getPassword()))
                     .build();
-            //HOST가 가입하는 경우
+            //HOST가 가입하는 경우 -> 어드민 가입의 경우를 만들지 않는다면 삭제
 //            if(joinMemberDto.getRole() == UserRole.ROLE_HOST) {
 //                Hotel hotel = hotelRepository.findByHotelName(joinMemberDto.getName());
 //                newUser.foreignHotel(hotel);
