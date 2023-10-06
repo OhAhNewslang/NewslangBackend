@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MailServiceImpl implements MailService{
     private final MemberRepository memberRepository;
     private final JavaMailSender jms;
-    private final PasswordEncoder passwordEncoder;
+
     private String certificatedNumber = "";
 
     @Override
@@ -33,7 +33,7 @@ public class MailServiceImpl implements MailService{
                     .resultMessage("인증번호가 발급되었습니다.").build();
         } else {
             return RequestResult.builder()
-                    .resultCode("201")
+                    .resultCode("202")
                     .resultMessage("미가입 이메일 입니다.").build();
         }
 
@@ -64,8 +64,9 @@ public class MailServiceImpl implements MailService{
     }
 
     @Override
-    public FindIdDto checkCodeForId(CertifyDto certifyDto) {
+    public FindIdDto checkNumberForId(CertifyDto certifyDto) {
         if (certificatedNumber.equals(certifyDto.getCertifyNumber())){
+            certificatedNumber = "";
             return FindIdDto.builder()
                     .loginId(memberRepository.findLoginIdByEmail(certifyDto.getEmail()))
                     .result(RequestResult.builder()
@@ -75,7 +76,7 @@ public class MailServiceImpl implements MailService{
         } else {
             return FindIdDto.builder()
                     .result(RequestResult.builder()
-                            .resultCode("201")
+                            .resultCode("202")
                             .resultMessage("인증번호가 틀렸습니다.").build()
                     ).build();
         }
@@ -83,13 +84,14 @@ public class MailServiceImpl implements MailService{
     }
 
     @Override
-    public RequestResult checkCodeForPassword(CertifyDto certifyDto) {
+    public RequestResult checkNumberForPassword(CertifyDto certifyDto) {
         if (certificatedNumber.equals(certifyDto.getCertifyNumber())) {
+            certificatedNumber = "";
             return RequestResult.builder()
                     .resultCode("200")
                     .resultMessage("인증 성공 비밀번호를 재설정 해주십시오.").build();
         } else {
-            return RequestResult.builder().resultCode("201")
+            return RequestResult.builder().resultCode("202")
                     .resultMessage("인증번호가 틀렸습니다.")
                     .build();
         }
@@ -106,7 +108,7 @@ public class MailServiceImpl implements MailService{
                     .resultMessage("비밀번호 변경에 성공하였습니다.").build();
         } else {
             return RequestResult.builder()
-                    .resultCode("201")
+                    .resultCode("202")
                     .resultMessage("비밀번호가 서로 다릅니다.").build();
         }
     }

@@ -7,7 +7,7 @@ import ohai.newslang.domain.dto.request.RequestResult;
 
 public interface MailService {
     RequestResult sendMail(String mail);
-    FindIdDto checkCodeForId(CertifyDto certifyDto);
-    RequestResult checkCodeForPassword(CertifyDto certifyDto);
+    FindIdDto checkNumberForId(CertifyDto certifyDto);
+    RequestResult checkNumberForPassword(CertifyDto certifyDto);
     RequestResult updatePassword(NewPasswordDto newPasswordDto);
 }
