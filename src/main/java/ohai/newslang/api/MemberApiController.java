@@ -63,12 +63,12 @@ public class MemberApiController {
 
     @PostMapping("/id")
     public FindIdDto certifyForId(@RequestBody CertifyDto certifyDto){
-        return mailService.checkCodeForId(certifyDto);
+        return mailService.checkNumberForId(certifyDto);
     }
 
     @PostMapping("/password")
     public RequestResult certifyForPassword(@RequestBody CertifyDto certifyDto){
-        return mailService.checkCodeForPassword(certifyDto);
+        return mailService.checkNumberForPassword(certifyDto);
     }
 
     @PatchMapping("/newPassword")
