@@ -1,9 +1,13 @@
 package ohai.newslang.service.memeber;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import org.springframework.mail.javamail.MimeMailMessage;
+import ohai.newslang.domain.dto.member.request.CertifyDto;
+import ohai.newslang.domain.dto.member.request.NewPasswordDto;
+import ohai.newslang.domain.dto.member.response.FindIdDto;
+import ohai.newslang.domain.dto.request.RequestResult;
 
 public interface MailService {
-    String sendMail(String mail);
+    RequestResult sendMail(String mail);
+    FindIdDto checkCodeForId(CertifyDto certifyDto);
+    RequestResult checkCodeForPassword(CertifyDto certifyDto);
+    RequestResult updatePassword(NewPasswordDto newPasswordDto);
 }

@@ -48,8 +48,10 @@ public class SecurityConfiguration {
                 requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/member/in"))
                 .requestMatchers(new AntPathRequestMatcher("/api/member/new"))
+                .requestMatchers(new AntPathRequestMatcher("/api/member/certify"))
                 .requestMatchers(new AntPathRequestMatcher("/api/member/id"))
                 .requestMatchers(new AntPathRequestMatcher("/api/member/password","POST"))
+                .requestMatchers(new AntPathRequestMatcher("/api/member/newPassword"))
                 .requestMatchers(new AntPathRequestMatcher("/api/news/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/media/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/category/**"))
@@ -58,24 +60,27 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(IntrospectorUtil.getIntrospector(http)).servletPath("/path");
+        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher
+                                                            .Builder(IntrospectorUtil
+                                                            .getIntrospector(http))
+                                                            .servletPath("/path");
 
         http.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .exceptionHandling(AbstractHttpConfigurer::disable)
-                // Spring Security를 사용하는 경우, HTTP 기본 인증을 비활성화하고 다른 인증 메커니즘을 사용하기 위해서
-                // http 기본 인증을 꺼놓음.
-                .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 세션을 유지하여 SessionId를 확인할 필요없이 요청 시에 토큰을 받아서 사용하면 되므로 세션을 유지할 이유가 없다.
-                .authorizeHttpRequests(
-                        (authorize) -> authorize
-                                .requestMatchers(mvcMatcherBuilder.pattern("/api/member/**")).hasRole("USER")
-                                .anyRequest().authenticated()   // 그 외 인증없이 접근 X
-                        // whiteList 방식
-                )
-                // 커스텀 필터 추가 : 요청이 시작되기 전에 만들어놓은 JwtTokenFilter를 사용할 필터로 설정
-                .addFilterBefore(new JwtTokenFilter(td), UsernamePasswordAuthenticationFilter.class);
+            .cors(AbstractHttpConfigurer::disable)
+            .exceptionHandling(AbstractHttpConfigurer::disable)
+            // Spring Security를 사용하는 경우, HTTP 기본 인증을 비활성화하고 다른 인증 메커니즘을 사용하기 위해서
+            // http 기본 인증을 꺼놓음.
+            .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // 세션을 유지하여 SessionId를 확인할 필요없이 요청 시에 토큰을 받아서 사용하면 되므로 세션을 유지할 이유가 없다.
+            .authorizeHttpRequests(
+                    (authorize) -> authorize
+                            .requestMatchers(mvcMatcherBuilder.pattern("/api/member/**")).hasRole("USER")
+                            .anyRequest().authenticated()   // 그 외 인증없이 접근 X
+                    // whiteList 방식
+            )
+            // 커스텀 필터 추가 : 요청이 시작되기 전에 만들어놓은 JwtTokenFilter를 사용할 필터로 설정
+            .addFilterBefore(new JwtTokenFilter(td), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();    // 설정한 http를 생성
     }
-
 }
