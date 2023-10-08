@@ -45,8 +45,7 @@ public class MemberServiceImpl implements MemberService{
 //                newUser.foreignHotel(hotel);
 //            }
              memberRepository.save(newUser);
-            // 201 -> 정상적으로 리소스(회원)가 생성됨.
-             return RequestResult.builder().resultCode("200").resultMessage("회원가입이 정상적으로 처리되었습니다.").build();
+             return RequestResult.builder().resultCode("201").resultMessage("회원가입이 정상적으로 처리되었습니다.").build();
         } else {
             // 재가입 방지
             // 202 -> Request는 수신하였지만 요구사항을 수행 할 수 없음
@@ -66,12 +65,12 @@ public class MemberServiceImpl implements MemberService{
                         .build();
             } else {
                 return TokenDto.builder()
-                        .result(RequestResult.builder().resultCode("201").resultMessage("비밀번호가 틀렸습니다.").build())
+                        .result(RequestResult.builder().resultCode("202").resultMessage("비밀번호가 틀렸습니다.").build())
                         .build();
             }
         } else {
             return TokenDto.builder()
-                    .result(RequestResult.builder().resultCode("201").resultMessage("해당 아이디로 가입된 회원이 없습니다.").build())
+                    .result(RequestResult.builder().resultCode("202").resultMessage("해당 아이디로 가입된 회원이 없습니다.").build())
                     .build();
         }
     }
@@ -97,7 +96,7 @@ public class MemberServiceImpl implements MemberService{
         if (currentMember.getName().equals(updateMemberDto.getName())
                 && currentMember.getImagePath().equals(updateMemberDto.getImagePath())
                 && currentMember.getEmail().equals(updateMemberDto.getEmail())) {
-            result = RequestResult.builder().resultCode("201").resultMessage("수정된 회원정보가 없습니다.").build();
+            result = RequestResult.builder().resultCode("202").resultMessage("수정된 회원정보가 없습니다.").build();
         }
 
         // 이름이 수정 되었을 때
@@ -143,7 +142,7 @@ public class MemberServiceImpl implements MemberService{
                     .name(currentMember.getName())
                     .email(currentMember.getEmail())
                     .imagePath(currentMember.getImagePath())
-                    .result(RequestResult.builder().resultCode("201").resultMessage("현재 비밀번호가 일치 하지 않습니다.").build())
+                    .result(RequestResult.builder().resultCode("202").resultMessage("현재 비밀번호가 일치 하지 않습니다.").build())
                     .build();
         }
     }
@@ -157,7 +156,7 @@ public class MemberServiceImpl implements MemberService{
             return RequestResult.builder().resultCode("200").resultMessage("탈퇴가 정상적으로 처리되었습니다.").build();
 
         } else {
-            return RequestResult.builder().resultCode("201").resultMessage("이미 탈퇴된 회원 입니다.").build();
+            return RequestResult.builder().resultCode("202").resultMessage("이미 탈퇴된 회원 입니다.").build();
         }
     }
 }

@@ -8,19 +8,18 @@ import jakarta.persistence.*;
 
 @Entity
 @Getter
-public class MemberRecommendNews {
+public class OpinionRecommend {
 
     @Id
     @GeneratedValue
-    @Column(name = "member_recommend_news_id")
+    @Column(name = "member_recommend_opinion_id")
     private Long id;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String url;
+    private Long opinionId;
 
     @Enumerated(EnumType.STRING)
     private RecommendStatus status;
