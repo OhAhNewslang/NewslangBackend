@@ -3,6 +3,10 @@ package ohai.newslang.domain.entity.member;
 import jakarta.persistence.*;
 import lombok.*;
 import ohai.newslang.domain.entity.TimeStamp;
+import ohai.newslang.domain.entity.opinion.Opinion;
+import ohai.newslang.domain.entity.recommend.MemberRecommend;
+import ohai.newslang.domain.entity.recommend.NewsRecommend;
+import ohai.newslang.domain.entity.recommend.OpinionRecommend;
 import ohai.newslang.domain.enumulate.UserRole;
 
 import java.util.ArrayList;
@@ -34,6 +38,13 @@ public class Member extends TimeStamp {
     private UserRole role;
 
     private String imagePath;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private MemberRecommend memberRecommend;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JoinColumn(name = "opinion_id")
+    private List<Opinion> opinions = new ArrayList<>();
     @Builder
     public Member(String name, String loginId, String email, String password) {
         this.name = name;
@@ -47,6 +58,9 @@ public class Member extends TimeStamp {
     }
 
     //연관 관계 메서드
+    public void foreignMemberRecommend(MemberRecommend newMemberRecommend) {
+        memberRecommend = newMemberRecommend;
+    }
 
     //비즈니스 로직
     public void updateName(String newName) {
