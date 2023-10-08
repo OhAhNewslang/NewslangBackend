@@ -8,11 +8,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Getter
-public class MemberRecommendComment {
+public class NewsRecommend {
 
     @Id
     @GeneratedValue
-    @Column(name = "member_recommend_comment_id")
+    @Column(name = "member_recommend_news_id")
     private Long id;
 
 
@@ -20,7 +20,7 @@ public class MemberRecommendComment {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Long commentId;
+    private String url;
 
     @Enumerated(EnumType.STRING)
     private RecommendStatus status;
