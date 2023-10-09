@@ -16,7 +16,7 @@ public interface OpinionRecommendRepository extends JpaRepository<OpinionRecomme
     @Query("SELECT ord FROM OpinionRecommend ord " +
             "JOIN Member m " +
             "JOIN Opinion o " +
-            "WHERE m.id =:mId AND o.id=: oId")
+            "WHERE m.id =:mId AND o.id =:oId")
     Optional<OpinionRecommend> findOpinionRecommend(@Param("mId") Long mRId,
                                               @Param("oId") Long oId);
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.configuration.jwt.TokenDecoder;
 import ohai.newslang.domain.dto.recommend.newsRecommend.NewsRecommendDto;
 import ohai.newslang.domain.dto.request.RequestResult;
-import ohai.newslang.domain.entity.recommend.NewsRecommend;
+import ohai.newslang.domain.entity.recommend.DetailNewsRecommend;
 import ohai.newslang.domain.enumulate.RecommendStatus;
 import ohai.newslang.repository.news.DetailNewsArchiveRepository;
 import ohai.newslang.repository.recommand.MemberRecommendRepository;
@@ -39,22 +39,14 @@ public class NewsRecommendServiceImpl implements NewsRecommendService {
 
     @Override
     @Transactional
-    public NewsRecommend createRecommendInfo(NewsRecommendDto newsRecommendDto) {
+    public DetailNewsRecommend createRecommendInfo(NewsRecommendDto newsRecommendDto) {
         // 뉴스 추천정보 만들기 도메인 로직 호출
-        NewsRecommend newsRecommend = NewsRecommend.createNewsRecommend(
+        DetailNewsRecommend detailNewsRecommend = DetailNewsRecommend.createNewsRecommend(
                 // 멤버 추천 정보, 디테일 뉴스 영속성 부여
                 memberRecommendRepository.findByMember_Id(td.currentUserId()),
                 detailNewsArchiveRepository.findNoOptionalById(newsRecommendDto.getDetailNewsId()),
                 RecommendStatus.NONE);
-        newsRecommendRepository.save(newsRecommend);
-        return newsRecommend;
-    }
-
-    @Override
-    public Long countRecommend(NewsRecommendDto newsRecommendDto) {
-        return newsRecommendRepository
-                .countAllByDetailNewArchive_IdAndStatus(
-                    newsRecommendDto.getDetailNewsId(),
-                    newsRecommendDto.getStatus());
+        newsRecommendRepository.save(detailNewsRecommend);
+        return detailNewsRecommend;
     }
 }

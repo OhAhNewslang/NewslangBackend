@@ -44,8 +44,8 @@ public class MemberServiceImpl implements MemberService{
 //                Hotel hotel = hotelRepository.findByHotelName(joinMemberDto.getName());
 //                newUser.foreignHotel(hotel);
 //            }
-             memberRepository.save(newUser);
-             return RequestResult.builder().resultCode("201").resultMessage("회원가입이 정상적으로 처리되었습니다.").build();
+            memberRepository.save(newUser);
+            return RequestResult.builder().resultCode("201").resultMessage("회원가입이 정상적으로 처리되었습니다.").build();
         } else {
             // 재가입 방지
             // 202 -> Request는 수신하였지만 요구사항을 수행 할 수 없음

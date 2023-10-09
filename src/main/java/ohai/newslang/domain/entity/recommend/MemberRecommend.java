@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ohai.newslang.domain.entity.TimeStamp;
 import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.enumulate.RecommendStatus;
 
 import jakarta.persistence.*;
 
@@ -26,18 +25,15 @@ public class MemberRecommend extends TimeStamp {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "member_recommend", cascade = CascadeType.ALL)
-    @JoinColumn(name = "opinion_recommend_id")
+    @OneToMany(mappedBy = "memberRecommend", cascade = CascadeType.ALL)
     private List<OpinionRecommend> opinionRecommends = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member_recommend", cascade = CascadeType.ALL)
-    @JoinColumn(name = "news_recommend_id")
-    private List<NewsRecommend> newsRecommends = new ArrayList<>();
+    @OneToMany(mappedBy = "memberRecommend", cascade = CascadeType.ALL)
+    private List<DetailNewsRecommend> detailNewsRecommends = new ArrayList<>();
 
     //연관 관계 메서드
     public void foreignMember(Member newMember) {
         member = newMember;
-        member.foreignMemberRecommend(this);
     }
 
     //비즈니스 로직

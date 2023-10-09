@@ -4,8 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ohai.newslang.domain.entity.TimeStamp;
-import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.entity.news.DetailNewArchive;
 import ohai.newslang.domain.entity.opinion.Opinion;
 import ohai.newslang.domain.enumulate.RecommendStatus;
 

@@ -6,10 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ohai.newslang.domain.entity.TimeStamp;
 import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.entity.news.DetailNewArchive;
-import ohai.newslang.domain.entity.recommend.MemberRecommend;
+import ohai.newslang.domain.entity.news.DetailNewsArchive;
 import ohai.newslang.domain.entity.recommend.OpinionRecommend;
-import org.hibernate.IdentifierLoadAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +25,14 @@ public class Opinion extends TimeStamp {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private DetailNewArchive detailNewArchive;
+    @JoinColumn(name = "detail_news_id")
+    private DetailNewsArchive detailNewsArchive;
 
     @OneToMany(mappedBy = "opinion", cascade = CascadeType.ALL)
-    @JoinColumn(name = "opinion_recommend_id")
     private List<OpinionRecommend> opinionRecommends = new ArrayList<>();
 
     //연관 관계 메서드
@@ -42,25 +41,25 @@ public class Opinion extends TimeStamp {
         member.getOpinions().add(this);
     }
 
-    private void foreignDetailNewArchive(DetailNewArchive newDetailNewArchive) {
-        detailNewArchive = newDetailNewArchive;
-        detailNewArchive.getOpinions().add(this);
+    private void foreignDetailNewArchive(DetailNewsArchive newDetailNewsArchive) {
+        detailNewsArchive = newDetailNewsArchive;
+        detailNewsArchive.getOpinions().add(this);
     }
 
     private void eraseForeignKey() {
         member.getOpinions().remove(this);
-        detailNewArchive.getOpinions().remove(this);
+        detailNewsArchive.getOpinions().remove(this);
         member = null;
-        detailNewArchive = null;
+        detailNewsArchive = null;
     }
 
     //비즈니스 로직
-    public static Opinion createOpinion(String newContent, Member newMember,DetailNewArchive newDetailNewArchive){
+    public static Opinion createOpinion(Member newMember, DetailNewsArchive newDetailNewsArchive, String newContent){
         Opinion opinion = new Opinion();
         opinion.content = newContent;
 
         opinion.foreignMember(newMember);
-        opinion.foreignDetailNewArchive(newDetailNewArchive);
+        opinion.foreignDetailNewArchive(newDetailNewsArchive);
 
         return opinion;
     }
