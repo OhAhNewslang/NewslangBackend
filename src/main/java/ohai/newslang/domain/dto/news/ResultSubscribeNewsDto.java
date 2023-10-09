@@ -1,17 +1,19 @@
 package ohai.newslang.domain.dto.news;
 
 import lombok.*;
-import ohai.newslang.domain.dto.subscribe.SubscribeSimpleNews;
+import ohai.newslang.domain.dto.request.RequestResult;
 
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class ResultSubscribeNewsDto {
-    private List<SubscribeSimpleNews> subscribeNews;
+    private List<ThumbnailNewsDto> thumbnailNewsList;
+    private RequestResult result;
 
-    public ResultSubscribeNewsDto(List<SubscribeSimpleNews> subscribeSimpleNewsList) {
-        this.subscribeNews = subscribeSimpleNewsList;
+    @Builder
+    public ResultSubscribeNewsDto(List<ThumbnailNewsDto> thumbnailNewsList, RequestResult result) {
+        this.thumbnailNewsList = thumbnailNewsList;
+        this.result = result;
     }
 }

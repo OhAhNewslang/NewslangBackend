@@ -2,7 +2,6 @@ package ohai.newslang.domain.entity.scrap;
 
 import lombok.Getter;
 import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.entity.news.NewsArchive;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ public class MemberScrapNews {
     @Column(name = "member_scrap_news_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -36,10 +35,10 @@ public class MemberScrapNews {
 
     public void removeMemberScrapNewsArchive(List<String> urlList){
         this.memberScrapNewsArchiveList.removeIf(n -> {
-            String newsUrl = n.getNewsArchive().getNews().getUrl();
+            String newsUrl = n.getScrapNewsArchive().getNewsUrl();
             if (urlList.contains(newsUrl)) {
                 n.setMemberScrapNews(null);
-                n.setNewsArchive(null);
+                n.setScrapNewsArchive(null);
                 return true;
             }
             return false;
@@ -56,7 +55,7 @@ public class MemberScrapNews {
 //        this.memberScrapNewsArchiveList.removeAll(removeList);
     }
 
-    public static MemberScrapNews newMemberScrapNews(MemberScrapNews memberScrapNews, Member member, NewsArchive newsArchive){
+    public static MemberScrapNews newMemberScrapNews(MemberScrapNews memberScrapNews, Member member, ScrapNewsArchive scrapNewsArchive){
         if (memberScrapNews == null) {
             memberScrapNews = new MemberScrapNews();
             memberScrapNews.setMember(member);
@@ -64,7 +63,7 @@ public class MemberScrapNews {
 
         MemberScrapNewsArchive memberScrapNewsArchive = new MemberScrapNewsArchive();
         memberScrapNewsArchive.setScrapDate(LocalDate.now());
-        memberScrapNewsArchive.setNewsArchive(newsArchive);
+        memberScrapNewsArchive.setScrapNewsArchive(scrapNewsArchive);
 
         memberScrapNews.newMemberScrapNewsArchive(memberScrapNewsArchive);
         return memberScrapNews;

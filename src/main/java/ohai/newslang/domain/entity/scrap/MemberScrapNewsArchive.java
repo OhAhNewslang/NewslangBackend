@@ -2,7 +2,6 @@ package ohai.newslang.domain.entity.scrap;
 
 import lombok.Getter;
 import lombok.Setter;
-import ohai.newslang.domain.entity.news.NewsArchive;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -22,8 +21,8 @@ public class MemberScrapNewsArchive {
     private MemberScrapNews memberScrapNews;
 
     @ManyToOne
-    @JoinColumn(name = "news_archive_id")
-    private NewsArchive newsArchive;
+    @JoinColumn(name = "scrap_news_archive_id")
+    private ScrapNewsArchive scrapNewsArchive;
 
     @Column(nullable = false)
     private LocalDate scrapDate;
