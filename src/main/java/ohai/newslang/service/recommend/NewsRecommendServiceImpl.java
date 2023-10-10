@@ -25,13 +25,14 @@ public class NewsRecommendServiceImpl implements NewsRecommendService {
     @Override
     @Transactional
     public RequestResult updateRecommendStatus(NewsRecommendDto newsRecommendDto) {
-        newsRecommendRepository.findNewsRecommend(
-                td.currentUserId(),
+        newsRecommendRepository.findByMemberRecommend_IdAndDetailNewsArchive_Id(
+                memberRecommendRepository.findByMember_Id(td.currentUserId()).getId(),
                 newsRecommendDto.getDetailNewsId())
                 // 현재 로그인한 멤버와 현제 열람 중인 상세뉴스 간의 추천 정보가 없으면 생성
                 .orElseGet(() -> createRecommendInfo(newsRecommendDto))
                 // 추천 정보가 있으면 변경 내용 적용 OR 생성한 객체에 변경 내용 적용
                 .updateStatus(newsRecommendDto.getStatus());
+
         return RequestResult.builder()
                 .resultCode("200")
                 .resultMessage("변경 완료").build();
@@ -46,7 +47,7 @@ public class NewsRecommendServiceImpl implements NewsRecommendService {
                 memberRecommendRepository.findByMember_Id(td.currentUserId()),
                 detailNewsArchiveRepository.findNoOptionalById(newsRecommendDto.getDetailNewsId()),
                 RecommendStatus.NONE);
-        newsRecommendRepository.save(detailNewsRecommend);
-        return detailNewsRecommend;
+
+        return newsRecommendRepository.save(detailNewsRecommend);
     }
 }

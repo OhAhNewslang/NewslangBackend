@@ -1,8 +1,6 @@
 package ohai.newslang.domain.entity.recommend;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ohai.newslang.domain.entity.TimeStamp;
 import ohai.newslang.domain.entity.member.Member;
 
@@ -37,4 +35,7 @@ public class MemberRecommend extends TimeStamp {
     }
 
     //비즈니스 로직
+    public static MemberRecommend createMemberRecommend() {
+        return new MemberRecommend();
+    }
 }

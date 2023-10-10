@@ -25,9 +25,10 @@ public class OpinionRecommendServiceImpl implements OpinionRecommendService{
     @Override
     @Transactional
     public RequestResult updateRecommendStatus(OpinionRecommendDto opinionRecommendDto) {
-        opinionRecommendRepository.findOpinionRecommend(td.currentUserId(),
-                opinionRecommendDto.getOpinionId())
-                .orElseGet(()->createRecommendInfo(opinionRecommendDto))
+        opinionRecommendRepository.findByMemberRecommend_IdAndOpinion_Id(
+            memberRecommendRepository.findByMember_Id(td.currentUserId()).getId(),
+            opinionRecommendDto.getOpinionId())
+                .orElseGet(() ->  createRecommendInfo(opinionRecommendDto))
                 .updateStatus(opinionRecommendDto.getStatus());
 
         return RequestResult.builder()
@@ -41,7 +42,7 @@ public class OpinionRecommendServiceImpl implements OpinionRecommendService{
                 memberRecommendRepository.findByMember_Id(td.currentUserId()),
                 opinionRepository.findNoOptionalById(opinionRecommendDto.getOpinionId()),
                 RecommendStatus.NONE);
-        opinionRecommendRepository.save(opinionRecommend);
-        return opinionRecommend;
+
+        return opinionRecommendRepository.save(opinionRecommend);
     }
 }

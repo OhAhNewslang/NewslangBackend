@@ -12,6 +12,9 @@ import ohai.newslang.repository.member.MemberRepository;
 import ohai.newslang.repository.news.DetailNewsArchiveRepository;
 import ohai.newslang.repository.opinion.OpinionRepository;
 import ohai.newslang.repository.recommand.OpinionRecommendRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +27,6 @@ import java.util.stream.Collectors;
 public class OpinionServiceImpl implements OpinionService{
     private final MemberRepository memberRepository;
     private final OpinionRepository opinionRepository;
-    private final OpinionRecommendRepository opinionRecommendRepository;
     private final DetailNewsArchiveRepository detailNewsArchiveRepository;
     private final TokenDecoder td;
 
@@ -43,25 +45,37 @@ public class OpinionServiceImpl implements OpinionService{
     }
 
     @Override
-    public List<OpinionResponseDto> opinionListByDetailNews(Long detailNewsId) {
-        return opinionRepository.findOpinionDtosByDetailNewArchiveId(detailNewsId)
-                .stream().map(o -> new OpinionResponseDto(o,
-                    opinionRecommendRepository.countAllByOpinion_IdAndStatus(o.getId(),RecommendStatus.LIKE),
+    public Slice<OpinionResponseDto> opinionListByDetailNews(Long detailNewsId) {
+        //Pageable 인터페이스의 구현체 PageRequest
+        // 최신순 페이징 정렬 조건
+        PageRequest pageRequestByRecentOrder = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC,"createTime"));
+        // 추천수 페이징 정렬 조건
+        PageRequest pageRequestByLikeCountOrder = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC,"likeCount"));
+
+        return opinionRepository.findAllByDetailNewsArchive_Id(detailNewsId, pageRequestByLikeCountOrder)
+                .map(opinion -> new OpinionResponseDto(
+                    opinion,
+                    opinion.getMember(),
                     RequestResult.builder()
                         .resultCode("200")
-                        .resultMessage("뉴스 의견 목록 조회")
-                        .build())).collect(Collectors.toList());
+                        .resultMessage("멤버 댓글 목록 조회 성공").build()));
     }
 
     @Override
-    public List<OpinionResponseDto> opinionListByMember() {
-        return opinionRepository.findOpinionDtosByMemberId(td.currentUserId())
-                .stream().map(o -> new OpinionResponseDto(o,
-                    opinionRecommendRepository.countAllByOpinion_IdAndStatus(o.getId(),RecommendStatus.LIKE),
+    public Slice<OpinionResponseDto> opinionListByMember() {
+        //Pageable 인터페이스의 구현체 PageRequest
+        // 최신순 페이징 정렬 조건
+        PageRequest pageRequestByRecentOrder = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC,"createTime"));
+        // 추천수 페이징 정렬 조건
+        PageRequest pageRequestByLikeCountOrder = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC,"likeCount"));
+
+        return opinionRepository.findAllByMemberId(td.currentUserId(),pageRequestByLikeCountOrder)
+                .map(opinion -> new OpinionResponseDto(
+                    opinion,
+                    opinion.getMember(),
                     RequestResult.builder()
                         .resultCode("200")
-                        .resultMessage("뉴스 의견 목록 조회")
-                        .build())).collect(Collectors.toList());
+                        .resultMessage("멤버 댓글 목록 조회 성공").build()));
     }
 
     @Override
@@ -76,8 +90,8 @@ public class OpinionServiceImpl implements OpinionService{
     @Transactional
     public RequestResult deleteOpinion(Long opinionId) {
         Opinion findOpinion = opinionRepository.findNoOptionalById(opinionId);
-        findOpinion.deleteOpinion();
-        opinionRepository.delete(findOpinion);
+        Opinion eraseForeignKeyOpinion = findOpinion.deleteOpinion();
+        opinionRepository.delete(eraseForeignKeyOpinion);
         return RequestResult.builder()
                 .resultCode("200")
                 .resultMessage("의견 삭제 완료").build();

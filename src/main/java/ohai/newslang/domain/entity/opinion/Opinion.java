@@ -1,9 +1,7 @@
 package ohai.newslang.domain.entity.opinion;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ohai.newslang.domain.entity.TimeStamp;
 import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.news.DetailNewsArchive;
@@ -24,6 +22,8 @@ public class Opinion extends TimeStamp {
     @Column(nullable = false)
     private String content;
 
+    private int likeCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -34,6 +34,15 @@ public class Opinion extends TimeStamp {
 
     @OneToMany(mappedBy = "opinion", cascade = CascadeType.ALL)
     private List<OpinionRecommend> opinionRecommends = new ArrayList<>();
+
+    //생성자
+    @Builder
+    public Opinion(Member member, DetailNewsArchive detailNewsArchive, String content, int likeCount) {
+        this.member = member;
+        this.detailNewsArchive = detailNewsArchive;
+        this.content = content;
+        this.likeCount = likeCount;
+    }
 
     //연관 관계 메서드
     private void foreignMember(Member newMember) {
@@ -57,6 +66,7 @@ public class Opinion extends TimeStamp {
     public static Opinion createOpinion(Member newMember, DetailNewsArchive newDetailNewsArchive, String newContent){
         Opinion opinion = new Opinion();
         opinion.content = newContent;
+        opinion.likeCount = 0;
 
         opinion.foreignMember(newMember);
         opinion.foreignDetailNewArchive(newDetailNewsArchive);
@@ -66,6 +76,16 @@ public class Opinion extends TimeStamp {
 
     public void updateContent(String newContent) {
         content = newContent;
+    }
+
+    public void updateLikeCount(int count) {
+        likeCount += count;
+        checkCount(likeCount);
+    }
+
+    // 추천 수가 0 밑으로 내려가면 0으로 초기화
+    private void checkCount(int newCount) {
+        likeCount = Math.max(newCount, 0);
     }
 
     public Opinion deleteOpinion() {
