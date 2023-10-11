@@ -27,11 +27,11 @@ public interface MemberScrapNewsArchiveRepository extends JpaRepository<MemberSc
     @Query("select msna from MemberScrapNewsArchive msna where msna.memberScrapNews.id = :memberScrapNewsId")
     List<MemberScrapNewsArchive> findByMemberScrapNewsId(@Param("memberScrapNewsId") Long memberScrapNewsId);
 
-    @Query("select msna.id from MemberScrapNewsArchive msna where msna.memberScrapNews.member.id = :memberScrapNewsId and msna.newsArchive.news.url = :url")
+    @Query("select msna.id from MemberScrapNewsArchive msna where msna.memberScrapNews.member.id = :memberScrapNewsId and msna.scrapNewsArchive.newsUrl = :url")
     Long findById(@Param("memberScrapNewsId") Long memberScrapNewsId,
                   @Param("url") String url);
 
-    @Query("delete from MemberScrapNewsArchive msna where msna.memberScrapNews.member.id = :memberScrapNewsId and msna.newsArchive.news.url = :url")
+    @Query("delete from MemberScrapNewsArchive msna where msna.memberScrapNews.member.id = :memberScrapNewsId and msna.scrapNewsArchive.newsUrl = :url")
     Long deleteByMemberScrapNewsIdAndUrl(@Param("memberScrapNewsId") Long memberScrapNewsId,
                                          @Param("url") String url);
 
