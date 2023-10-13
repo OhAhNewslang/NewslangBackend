@@ -48,10 +48,9 @@ public class DetailNewsRecommend extends TimeStamp {
                                                           RecommendStatus newStatus) {
 
         DetailNewsRecommend detailNewsRecommend = new DetailNewsRecommend();
-
         detailNewsRecommend.foreignMemberRecommend(newMemberRecommend);
         detailNewsRecommend.foreignDetailNewArchive(newDetailNewsArchive);
-        detailNewsRecommend.updateStatus(newStatus);
+        detailNewsRecommend.status = newStatus;
 
         return detailNewsRecommend;
     }
@@ -59,6 +58,7 @@ public class DetailNewsRecommend extends TimeStamp {
     public void updateStatus(RecommendStatus newStatus) {
         detailNewsArchive.updateLikeCount(countStatus(status, newStatus));
         status = newStatus;
+
     }
 
     private int countStatus(RecommendStatus status, RecommendStatus newStatus) {

@@ -35,7 +35,7 @@ public class NewsRecommendServiceImpl implements NewsRecommendService {
 
         return RequestResult.builder()
                 .resultCode("200")
-                .resultMessage("변경 완료").build();
+                .resultMessage("추천정보가 등록되었습니다.").build();
     }
 
     @Override

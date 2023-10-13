@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.configuration.jwt.TokenDecoder;
 import ohai.newslang.domain.dto.recommend.opinionRecommend.OpinionRecommendDto;
 import ohai.newslang.domain.dto.request.RequestResult;
+import ohai.newslang.domain.entity.opinion.Opinion;
 import ohai.newslang.domain.entity.recommend.OpinionRecommend;
 import ohai.newslang.domain.enumulate.RecommendStatus;
 import ohai.newslang.repository.opinion.OpinionRepository;
@@ -33,7 +34,7 @@ public class OpinionRecommendServiceImpl implements OpinionRecommendService{
 
         return RequestResult.builder()
                 .resultCode("200")
-                .resultMessage("변경 완료").build();
+                .resultMessage("추천정보가 등록되었습니다.").build();
     }
     @Override
     @Transactional

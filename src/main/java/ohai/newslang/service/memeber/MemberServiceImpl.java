@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService{
         Optional<Member> optionalMember = memberRepository.findByLoginId(joinMemberDto.getLoginId());
         //처음 가입하는 경우
         if(optionalMember.isEmpty()) {
-            Member newMember = Member.createMember(MemberRecommend.createMemberRecommend(null), joinMemberDto);
+            Member newMember = Member.createMember(MemberRecommend.createMemberRecommend(), joinMemberDto);
             memberRepository.save(newMember);
             return RequestResult.builder()
                     .resultCode("201")

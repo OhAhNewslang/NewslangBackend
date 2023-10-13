@@ -25,7 +25,8 @@ public class InitializeDatabase {
 
     @PostConstruct
     public void start(){
-        initService.initMember();
+        initService.initDetailNews();
+        initService.initOpinion();
         initService.initCrawlerProperties();
     }
 
@@ -55,8 +56,11 @@ public class InitializeDatabase {
             DetailNewsArchive news = DetailNewsArchive.builder()
                     .newsUrl("http://dummyUrl1:8080").build();
 
-            em.persist(DetailNewsRecommend
-                    .createNewsRecommend(memberRecommend, news, RecommendStatus.NONE));
+            DetailNewsRecommend
+                    .createNewsRecommend(memberRecommend, news, RecommendStatus.NONE);
+
+            em.persist(news);
+
         }
         public void initOpinion() {
             MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
@@ -73,15 +77,17 @@ public class InitializeDatabase {
             DetailNewsArchive news = DetailNewsArchive.builder()
                     .newsUrl("http://dummyUrl2:8080").build();
 
+            em.persist(news);
+
             Opinion opinion1 = Opinion.createOpinion(member, news, "의견1 의견");
-            em.persist(opinion1);
-            em.persist(OpinionRecommend
-                    .createOpinionRecommend(memberRecommend,opinion1, RecommendStatus.NONE));
+
+            OpinionRecommend
+                    .createOpinionRecommend(memberRecommend,opinion1, RecommendStatus.NONE);
 
             Opinion opinion2 = Opinion.createOpinion(member, news, "의견2 의견");
+
+            em.persist(opinion1);
             em.persist(opinion2);
-            em.persist(OpinionRecommend
-                    .createOpinionRecommend(memberRecommend,opinion2, RecommendStatus.LIKE));
 
         }
     }

@@ -56,7 +56,6 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/api/media/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/category/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/keyword/**"));
-//                .requestMatchers(new AntPathRequestMatcher("/api/opinion/**"));
     }
 
     @Bean
@@ -76,6 +75,8 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(
                     (authorize) -> authorize
                             .requestMatchers(mvcMatcherBuilder.pattern("/api/member/**")).hasRole("USER")
+                            .requestMatchers(new AntPathRequestMatcher("/api/opinions/**")).hasRole("USER")
+                            .requestMatchers(new AntPathRequestMatcher("/api/recommends/**")).hasRole("USER")
                             .anyRequest().authenticated()   // 그 외 인증없이 접근 X
                     // whiteList 방식
             )
