@@ -10,7 +10,9 @@ import ohai.newslang.domain.dto.member.response.MemberInfoDto;
 import ohai.newslang.domain.dto.member.response.TokenDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.member.Member;
+import ohai.newslang.domain.entity.recommend.MemberRecommend;
 import ohai.newslang.repository.member.MemberRepository;
+import ohai.newslang.repository.recommand.MemberRecommendRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
+    private final MemberRecommendRepository memberRecommendRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenDecoder td;
 
@@ -33,24 +36,17 @@ public class MemberServiceImpl implements MemberService{
         Optional<Member> optionalMember = memberRepository.findByLoginId(joinMemberDto.getLoginId());
         //처음 가입하는 경우
         if(optionalMember.isEmpty()) {
-            Member newUser = Member.builder()
-                    .name(joinMemberDto.getName())
-                    .loginId(joinMemberDto.getLoginId())
-                    .email(joinMemberDto.getEmail())
-                    .password(passwordEncoder.encode(joinMemberDto.getPassword()))
-                    .build();
-            //HOST가 가입하는 경우 -> 어드민 가입의 경우를 만들지 않는다면 삭제
-//            if(joinMemberDto.getRole() == UserRole.ROLE_HOST) {
-//                Hotel hotel = hotelRepository.findByHotelName(joinMemberDto.getName());
-//                newUser.foreignHotel(hotel);
-//            }
-             memberRepository.save(newUser);
-             return RequestResult.builder().resultCode("201").resultMessage("회원가입이 정상적으로 처리되었습니다.").build();
-        } else {
-            // 재가입 방지
-            // 202 -> Request는 수신하였지만 요구사항을 수행 할 수 없음
-            return RequestResult.builder().resultCode("202").resultMessage("이미 가입하신 회원 입니다.").build();
+            Member newMember = Member.createMember(MemberRecommend.createMemberRecommend(), joinMemberDto);
+            memberRepository.save(newMember);
+            return RequestResult.builder()
+                    .resultCode("201")
+                    .resultMessage("회원가입이 정상적으로 처리되었습니다.").build();
         }
+        // 재가입 방지
+        // 202 -> Request는 수신하였지만 요구사항을 수행 할 수 없음
+        return RequestResult.builder()
+                .resultCode("202")
+                .resultMessage("이미 가입하신 회원 입니다.").build();
     }
     @Override
     public TokenDto logIn(LoginMemberDto loginMemberDto) {
