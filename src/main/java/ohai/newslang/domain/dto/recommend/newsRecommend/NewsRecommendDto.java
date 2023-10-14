@@ -8,6 +8,6 @@ import ohai.newslang.domain.enumulate.RecommendStatus;
 @Data
 @NoArgsConstructor
 public class NewsRecommendDto {
-    private Long detailNewsId;
+    private String newsUrl;
     private RecommendStatus status;
 }

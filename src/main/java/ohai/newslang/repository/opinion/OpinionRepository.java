@@ -23,9 +23,6 @@ public interface OpinionRepository extends JpaRepository<Opinion, Long> {
     Slice<Opinion> findAllByMemberId(Long id, Pageable pageable);
 
     // 상세 뉴스의 전체 의견 목록 DTO로 조회
-    @EntityGraph(attributePaths = {"member"})
-    Slice<Opinion> findAllByDetailNewsArchive_Id(Long id, Pageable pageable);
-
     @Query("SELECT o " +
             "FROM Opinion o " +
             "JOIN FETCH o.member m " +

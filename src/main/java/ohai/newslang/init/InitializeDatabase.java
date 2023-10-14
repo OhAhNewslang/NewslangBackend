@@ -63,17 +63,16 @@ public class InitializeDatabase {
 
         }
         public void initOpinion() {
-            MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
 
             Member member1 = Member.createMember(
-                    memberRecommend,
+                    MemberRecommend.createMemberRecommend(),
                     "김경민",
                     "kkm",
                     "ABCD@gmail.com",
                     pe.encode("1234"));
 
             Member member2 = Member.createMember(
-                    memberRecommend,
+                    MemberRecommend.createMemberRecommend(),
                     "홍길동",
                     "hjd",
                     "hjd@gmail.com",
@@ -82,7 +81,7 @@ public class InitializeDatabase {
 
 
             Member member3 = Member.createMember(
-                    memberRecommend,
+                    MemberRecommend.createMemberRecommend(),
                     "김이박",
                     "klp",
                     "kip@gmail.com",
@@ -91,7 +90,7 @@ public class InitializeDatabase {
 
 
             Member member4 = Member.createMember(
-                    memberRecommend,
+                    MemberRecommend.createMemberRecommend(),
                     "가나다",
                     "gnd",
                     "gnd@gmail.com",
@@ -100,7 +99,7 @@ public class InitializeDatabase {
 
 
             Member member5 = Member.createMember(
-                    memberRecommend,
+                    MemberRecommend.createMemberRecommend(),
                     "일이삼",
                     "ils",
                     "ils@gmail.com",
