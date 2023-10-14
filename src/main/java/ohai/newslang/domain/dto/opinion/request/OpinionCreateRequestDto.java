@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class OpinionCreateRequestDto {
-    private Long detailNewsId;
+    private String newsUrl;
     private String opinionContent;
 }

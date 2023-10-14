@@ -31,7 +31,7 @@ public class OpinionServiceImpl implements OpinionService{
     public RequestResult resistOpinion(OpinionCreateRequestDto opinionCreateRequestDto) {
         Opinion newOpinion = Opinion.createOpinion(
                 memberRepository.findByTokenId(td.currentUserId()),
-                detailNewsArchiveRepository.findNoOptionalById(opinionCreateRequestDto.getDetailNewsId()),
+                detailNewsArchiveRepository.findNoOptionalByNewsUrl(opinionCreateRequestDto.getNewsUrl()),
                 opinionCreateRequestDto.getOpinionContent()
         );
         opinionRepository.save(newOpinion);
@@ -90,8 +90,8 @@ public class OpinionServiceImpl implements OpinionService{
 
         return OpinionPagingResponseDto.builder()
                 .opinions(
-                    opinionRepository.findAllByDetailNewsArchive_Id(
-                        detailNewsArchiveRepository.findNewsIdByNewsUrl(newsUrl),
+                    opinionRepository.findAllByDetailNewsArchiveUrl(
+                            newsUrl,
                         sortCondition
                     ).map(opinion ->
                         OpinionResponseDto.builder()
@@ -165,12 +165,12 @@ public class OpinionServiceImpl implements OpinionService{
                 .updateContent(opinionModifyRequestDto.getOpinionContent());
         return ModifyOpinionResponseDto.builder()
                 .opinion(opinionRepository.findNoOptionalJoinMemberById(
-                        opinionModifyRequestDto.getOpinionId())
+                    opinionModifyRequestDto.getOpinionId())
                 ).result(RequestResult.builder()
-                        .resultCode("200")
-                        .resultMessage("댓글 수정 완료")
-                        .build())
-                .build();
+                    .resultCode("200")
+                    .resultMessage("댓글 수정 완료")
+                    .build()
+                ).build();
 
     }
 

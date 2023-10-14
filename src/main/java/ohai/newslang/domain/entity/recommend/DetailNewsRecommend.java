@@ -43,9 +43,10 @@ public class DetailNewsRecommend extends TimeStamp {
     }
 
     //비즈니스 로직
-    public static DetailNewsRecommend createNewsRecommend(MemberRecommend newMemberRecommend,
-                                                          DetailNewsArchive newDetailNewsArchive,
-                                                          RecommendStatus newStatus) {
+    public static DetailNewsRecommend createNewsRecommend(
+            MemberRecommend newMemberRecommend,
+            DetailNewsArchive newDetailNewsArchive,
+            RecommendStatus newStatus) {
 
         DetailNewsRecommend detailNewsRecommend = new DetailNewsRecommend();
         detailNewsRecommend.foreignMemberRecommend(newMemberRecommend);

@@ -25,13 +25,12 @@ public class NewsRecommendServiceImpl implements NewsRecommendService {
     @Override
     @Transactional
     public RequestResult updateRecommendStatus(NewsRecommendDto newsRecommendDto) {
-        newsRecommendRepository.findByMemberRecommend_IdAndDetailNewsArchive_Id(
-                memberRecommendRepository.findByMember_Id(td.currentUserId()).getId(),
-                newsRecommendDto.getDetailNewsId())
-                // 현재 로그인한 멤버와 현제 열람 중인 상세뉴스 간의 추천 정보가 없으면 생성
-                .orElseGet(() -> createRecommendInfo(newsRecommendDto))
-                // 추천 정보가 있으면 변경 내용 적용 OR 생성한 객체에 변경 내용 적용
-                .updateStatus(newsRecommendDto.getStatus());
+        newsRecommendRepository.findByMemberRecommend_IdAndDetailNewsArchiveUrl(
+                memberRecommendRepository.findByMember_Id(
+                    td.currentUserId()).getId(),
+                    newsRecommendDto.getNewsUrl()
+                ).orElseGet(() -> createRecommendInfo(newsRecommendDto)
+                ).updateStatus(newsRecommendDto.getStatus());
 
         return RequestResult.builder()
                 .resultCode("200")
@@ -43,10 +42,11 @@ public class NewsRecommendServiceImpl implements NewsRecommendService {
     public DetailNewsRecommend createRecommendInfo(NewsRecommendDto newsRecommendDto) {
         // 뉴스 추천정보 만들기 도메인 로직 호출
         DetailNewsRecommend detailNewsRecommend = DetailNewsRecommend.createNewsRecommend(
-                // 멤버 추천 정보, 디테일 뉴스 영속성 부여
-                memberRecommendRepository.findByMember_Id(td.currentUserId()),
-                detailNewsArchiveRepository.findNoOptionalById(newsRecommendDto.getDetailNewsId()),
-                RecommendStatus.NONE);
+            // 멤버 추천 정보, 디테일 뉴스 영속성 부여
+            memberRecommendRepository.findByMember_Id(td.currentUserId()),
+            detailNewsArchiveRepository.findNoOptionalByNewsUrl(newsRecommendDto.getNewsUrl()),
+            RecommendStatus.NONE
+        );
 
         return newsRecommendRepository.save(detailNewsRecommend);
     }
