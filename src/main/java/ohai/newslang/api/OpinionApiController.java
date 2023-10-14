@@ -24,23 +24,7 @@ public class OpinionApiController {
         return opinionService.resistOpinion(opinionCreateRequestDto);
     }
 
-    // v0 -> 정렬 순서 좋아요 DESC
-    @GetMapping("/news")
-    public OpinionPagingResponseDto opinionListByLikeCountForNews(
-            @RequestParam("newsUrl") String  newsUrl){
-        return opinionService.opinionListByLikeCountOrderForDetailNews(
-                newsUrl,0,3);
-    }
-
-    // v1 정렬 순서 -> 등록 날짜 DESC(최신순)
-    @GetMapping("/v1/news")
-    public OpinionPagingResponseDto opinionListByRecentForNewsV1(
-            @RequestParam("newsUrl") String newsUrl){
-        return opinionService.opinionListByRecentOrderForDetailNews(
-                newsUrl,0,3);
-    }
-
-    // v2 페이징 관련 정보를 JSON으로 받아서 사용, 정렬 순서는 v0를 따름
+    // 상세 뉴스 공감순
     @GetMapping("/v2/news")
     public OpinionPagingResponseDto opinionListByLikeCountForNewsV2(
             @RequestBody OpinionPagingRequestDtoForNews opinionRequestDto){
@@ -50,28 +34,34 @@ public class OpinionApiController {
                 opinionRequestDto.getPageSize());
     }
 
-    // v0 -> 정렬 순서 좋아요 DESC
-    @GetMapping("/members")
-    public OpinionPagingResponseDto opinionListByLikeCountForMember(){
-        return opinionService.opinionListByLikeCountOrderForMember(
-                0,3);
+    // 상세 뉴스 최신순
+    @GetMapping("/v2/news")
+    public OpinionPagingResponseDto opinionListByRecentForNewsV2(
+            @RequestBody OpinionPagingRequestDtoForNews opinionRequestDto){
+        return opinionService.opinionListByRecentOrderForDetailNews(
+                opinionRequestDto.getNewsUrl(),
+                opinionRequestDto.getPageNumber(),
+                opinionRequestDto.getPageSize());
     }
 
-    // v1 정렬 순서 -> 등록 날짜 DESC(최신순)
-    @GetMapping("/v1/members")
-    public OpinionPagingResponseDto opinionListByRecentForMemberV1(){
-        return opinionService.opinionListByRecentOrderForMember(
-                0,3);
-    }
-
-    // v2 페이징 관련 정보를 받아서 사용, 정렬 순서는 v0를 따름
-    @GetMapping("/v2/members")
+    // 마이페이지 공감순
+    @GetMapping("/members/like")
     public OpinionPagingResponseDto opinionListByLikeCountForMemberV2(
             @RequestBody OpinionPagingRequestDto opinionRequestDto){
         return opinionService.opinionListByLikeCountOrderForMember(
                 opinionRequestDto.getPageNumber(),
                 opinionRequestDto.getPageSize());
     }
+
+    // 마이페이지 최신순
+    @GetMapping("/members/recent")
+    public OpinionPagingResponseDto opinionListByRecentForMemberV3(
+            @RequestBody OpinionPagingRequestDto opinionRequestDto){
+        return opinionService.opinionListByRecentOrderForMember(
+                opinionRequestDto.getPageNumber(),
+                opinionRequestDto.getPageSize());
+    }
+
 
     @PutMapping("")
     public ModifyOpinionResponseDto modifyOpinion(
