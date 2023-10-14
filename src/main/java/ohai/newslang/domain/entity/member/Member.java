@@ -7,13 +7,13 @@ import ohai.newslang.domain.entity.TimeStamp;
 import ohai.newslang.domain.entity.opinion.Opinion;
 import ohai.newslang.domain.entity.recommend.MemberRecommend;
 import ohai.newslang.domain.enumulate.UserRole;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends TimeStamp {
 
@@ -43,21 +43,6 @@ public class Member extends TimeStamp {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Opinion> opinions = new ArrayList<>();
 
-    // 생성자
-    @Builder
-    public Member(String name, String loginId, String email, String password, MemberRecommend memberRecommend) {
-        this.name = name;
-        this.loginId = loginId;
-        this.email = email;
-        this.password = password;
-        this.imagePath = "DefaultImagePath";
-        this.role = UserRole.ROLE_USER;
-        foreignMemberRecommend(memberRecommend);
-    }
-
-
-
-
     // 연관 관계 메서드
     public void foreignMemberRecommend(MemberRecommend newMemberRecommend) {
         memberRecommend = newMemberRecommend;
@@ -65,13 +50,19 @@ public class Member extends TimeStamp {
     }
 
     //비즈니스 로직
-    public static Member createMember(MemberRecommend newMemberRecommend, JoinMemberDto joinMemberDto){
+    public static Member createMember(MemberRecommend newMemberRecommend,
+                                      String newName,
+                                      String newLoginId,
+                                      String newEmail,
+                                      String newPassword){
         Member member = new Member();
-        member.name = joinMemberDto.getName();
-        member.loginId = joinMemberDto.getLoginId();
-        member.email = joinMemberDto.getEmail();
-        member.password = joinMemberDto.getPassword();
+
+        member.name = newName;
+        member.loginId =newLoginId;
+        member.email = newEmail;
+        member.password = newPassword;
         member.imagePath = "DefaultImagePath";
+        member.role = UserRole.ROLE_USER;
         member.foreignMemberRecommend(newMemberRecommend);
 
 

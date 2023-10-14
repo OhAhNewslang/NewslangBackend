@@ -45,13 +45,13 @@ public class InitializeDatabase {
         public void initDetailNews() {
             MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
 
-            em.persist(Member.builder()
-                    .name("오진석")
-                    .loginId("ojs")
-                    .email("EFGH@gmail.com")
-                    .password(pe.encode("1234"))
-                    .memberRecommend(memberRecommend)
-                    .build());
+            em.persist(Member.createMember(
+                    memberRecommend,
+                    "오진석",
+                    "ojs",
+                    "EFGH@gmail.com",
+                    pe.encode("1234")
+            ));
 
             DetailNewsArchive news = DetailNewsArchive.builder()
                     .newsUrl("http://dummyUrl1:8080").build();
@@ -65,29 +65,84 @@ public class InitializeDatabase {
         public void initOpinion() {
             MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
 
-            Member member = Member.builder()
-                    .name("김경민")
-                    .loginId("kkm")
-                    .email("ABCD@gmail.com")
-                    .memberRecommend(memberRecommend)
-                    .password(pe.encode("1234")).build();
+            Member member1 = Member.createMember(
+                    memberRecommend,
+                    "김경민",
+                    "kkm",
+                    "ABCD@gmail.com",
+                    pe.encode("1234"));
 
-            em.persist(member);
+            Member member2 = Member.createMember(
+                    memberRecommend,
+                    "홍길동",
+                    "hjd",
+                    "hjd@gmail.com",
+                    pe.encode("1234")
+            );
+
+
+            Member member3 = Member.createMember(
+                    memberRecommend,
+                    "김이박",
+                    "klp",
+                    "kip@gmail.com",
+                    pe.encode("1234")
+            );
+
+
+            Member member4 = Member.createMember(
+                    memberRecommend,
+                    "가나다",
+                    "gnd",
+                    "gnd@gmail.com",
+                    pe.encode("1234")
+            );
+
+
+            Member member5 = Member.createMember(
+                    memberRecommend,
+                    "일이삼",
+                    "ils",
+                    "ils@gmail.com",
+                    pe.encode("1234")
+            );
+
+            em.persist(member1);
+            em.persist(member2);
+            em.persist(member3);
+            em.persist(member4);
+            em.persist(member5);
 
             DetailNewsArchive news = DetailNewsArchive.builder()
                     .newsUrl("http://dummyUrl2:8080").build();
 
             em.persist(news);
 
-            Opinion opinion1 = Opinion.createOpinion(member, news, "의견1 의견");
+            Opinion opinion1 = Opinion.createOpinion(member1, news, "의견1 의견");
 
             OpinionRecommend
-                    .createOpinionRecommend(memberRecommend,opinion1, RecommendStatus.NONE);
+                    .createOpinionRecommend(member2.getMemberRecommend(),opinion1, RecommendStatus.LIKE);
 
-            Opinion opinion2 = Opinion.createOpinion(member, news, "의견2 의견");
+            Opinion opinion2 = Opinion.createOpinion(member1, news, "의견2 의견");
+
+            OpinionRecommend
+                    .createOpinionRecommend(member3.getMemberRecommend(),opinion2, RecommendStatus.LIKE);
+            OpinionRecommend
+                    .createOpinionRecommend(member4.getMemberRecommend(),opinion2, RecommendStatus.LIKE);
+
+            Opinion opinion3 = Opinion.createOpinion(member1, news, "의견3 의견");
+
+            OpinionRecommend
+                    .createOpinionRecommend(member3.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
+            OpinionRecommend
+                    .createOpinionRecommend(member4.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
+            OpinionRecommend
+                    .createOpinionRecommend(member5.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
 
             em.persist(opinion1);
             em.persist(opinion2);
+            em.persist(opinion3);
+
 
         }
     }

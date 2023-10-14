@@ -2,16 +2,28 @@ package ohai.newslang.service.opinion;
 
 import ohai.newslang.domain.dto.opinion.request.OpinionCreateRequestDto;
 import ohai.newslang.domain.dto.opinion.request.OpinionModifyRequestDto;
+import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
+import ohai.newslang.domain.dto.opinion.response.OpinionPagingResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
 import ohai.newslang.domain.dto.request.RequestResult;
-import org.springframework.data.domain.Slice;
-
-import java.util.List;
 
 public interface OpinionService {
     RequestResult resistOpinion(OpinionCreateRequestDto opinionCreateRequestDto);
-    Slice<OpinionResponseDto> opinionListByDetailNews(Long detailNewsId);
-    Slice<OpinionResponseDto> opinionListByMember();
-    OpinionResponseDto modifyContent(OpinionModifyRequestDto opinionModifyRequestDto);
+    OpinionPagingResponseDto opinionListByLikeCountOrderForDetailNews(
+            String newsUrl,
+            int pageNumber,
+            int pageSize);
+
+    OpinionPagingResponseDto opinionListByRecentOrderForDetailNews(
+            String newsUrl,
+            int pageNumber,
+            int pageSize);
+
+    OpinionPagingResponseDto opinionListByLikeCountOrderForMember(int pageNumber,
+                                                 int pageSize);
+
+    OpinionPagingResponseDto opinionListByRecentOrderForMember(int pageNumber,
+                                                 int pageSize);
+    ModifyOpinionResponseDto modifyContent(OpinionModifyRequestDto opinionModifyRequestDto);
     RequestResult deleteOpinion(Long opinionId);
 }

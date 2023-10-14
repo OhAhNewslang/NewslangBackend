@@ -51,7 +51,9 @@ public class OpinionRecommend extends TimeStamp {
 
         opinionRecommend.foreignMemberRecommend(newMemberRecommend);
         opinionRecommend.foreignOpinion(newOpinion);
-        opinionRecommend.status = newStatus;
+        opinionRecommend.status = RecommendStatus.NONE;
+        opinionRecommend.updateStatus(newStatus);
+//        opinionRecommend.status = newStatus;
 
         return opinionRecommend;
     }

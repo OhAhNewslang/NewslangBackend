@@ -74,8 +74,6 @@ public class JwtTokenDecoder implements TokenDecoder{
     // 클레임을 토큰으로 만들고 이를 이용해 authentication 객체 만들어서 리턴
     @Override
     public Authentication getAuthentication(String token) {
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        System.out.println("token = " + token);
         // 토큰에서 추출한 userId를 기반으로 user객체 생성
         // 토큰에서 추출한 Role을 기반으로 시큐리티 메소드에 들어갈 Authority Collection 생성
         // List형태로 생성하는 이유는, 한 User마다 여러 역할을 가질 수 있기 때문이다

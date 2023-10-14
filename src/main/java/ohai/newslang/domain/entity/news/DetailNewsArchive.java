@@ -20,7 +20,7 @@ public class DetailNewsArchive extends TimeStamp {
     private Long id;
 
     @Column(nullable = false)
-    private String newsUrl;
+    private String url;
 
     private int likeCount;
 
@@ -33,7 +33,7 @@ public class DetailNewsArchive extends TimeStamp {
     //생성자
     @Builder
     public DetailNewsArchive(String newsUrl) {
-        this.newsUrl = newsUrl;
+        this.url = newsUrl;
         this.likeCount = 0;
     }
 

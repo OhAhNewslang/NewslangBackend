@@ -9,4 +9,7 @@ public interface DetailNewsArchiveRepository extends JpaRepository<DetailNewsArc
     @Query("SELECT dna FROM DetailNewsArchive dna WHERE dna.id =:dnaId")
     DetailNewsArchive findNoOptionalById(@Param("dnaId") Long dnaId);
 
+    @Query("SELECT dna.id FROM DetailNewsArchive dna WHERE dna.url =:newsUrl")
+    Long findNewsIdByNewsUrl(@Param("newsUrl") String newsUrl);
+
 }
