@@ -2,6 +2,8 @@ package ohai.newslang.repository.scrap;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,15 +27,11 @@ public interface MemberScrapNewsArchiveRepository extends JpaRepository<MemberSc
 //    }
 
     @Query("select msna from MemberScrapNewsArchive msna where msna.memberScrapNews.id = :memberScrapNewsId")
+    Page<MemberScrapNewsArchive> findByMemberScrapNewsId(@Param("memberScrapNewsId") Long memberScrapNewsId,
+                                                         Pageable pageable);
+
+    @Query("select msna from MemberScrapNewsArchive msna where msna.memberScrapNews.id = :memberScrapNewsId")
     List<MemberScrapNewsArchive> findByMemberScrapNewsId(@Param("memberScrapNewsId") Long memberScrapNewsId);
-
-    @Query("select msna.id from MemberScrapNewsArchive msna where msna.memberScrapNews.member.id = :memberScrapNewsId and msna.scrapNewsArchive.newsUrl = :url")
-    Long findById(@Param("memberScrapNewsId") Long memberScrapNewsId,
-                  @Param("url") String url);
-
-    @Query("delete from MemberScrapNewsArchive msna where msna.memberScrapNews.member.id = :memberScrapNewsId and msna.scrapNewsArchive.newsUrl = :url")
-    Long deleteByMemberScrapNewsIdAndUrl(@Param("memberScrapNewsId") Long memberScrapNewsId,
-                                         @Param("url") String url);
 
 //    public void delete(Long memberScrapNewsId, String url){
 //        Query q = em.createQuery(

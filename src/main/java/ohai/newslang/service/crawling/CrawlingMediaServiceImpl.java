@@ -45,7 +45,7 @@ public class CrawlingMediaServiceImpl implements CrawlingMediaService{
                 Media m = new Media();
                 m.setName(mediaName);
                 m.setMediaGroup(mediaGroup);
-                m.setParameterId(mediaParamId);
+                m.setOId(mediaParamId);
                 mediaList.add(m);
             }
         }

@@ -9,22 +9,26 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class DetailNews {
-    private String link;
+public class News {
+    private String url;
     private String title;
+    private String summary;
     private String contents;
+    private String imagePath;
     private String media;
-//    private String category;
+    private String oId;
     private LocalDateTime postDateTime;
     private LocalDateTime modifyDateTime;
 
     @Builder
-    public DetailNews(String link, String title, String contents, String media, LocalDateTime postDateTime, LocalDateTime modifyDateTime) {
-        this.link = link;
+    public News(String url, String title, String summary, String contents, String imagePath, String media, String oId, LocalDateTime postDateTime, LocalDateTime modifyDateTime) {
+        this.url = url;
         this.title = title;
+        this.summary = summary;
         this.contents = contents;
+        this.imagePath = imagePath;
         this.media = media;
-//        this.category = category;
+        this.oId = oId;
         this.postDateTime = postDateTime;
         this.modifyDateTime = modifyDateTime;
     }

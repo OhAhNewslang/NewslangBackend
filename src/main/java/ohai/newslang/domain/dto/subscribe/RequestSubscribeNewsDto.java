@@ -1,20 +1,20 @@
 package ohai.newslang.domain.dto.subscribe;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ohai.newslang.domain.dto.page.RequestPageSourceDto;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestSubscribeNewsDto {
     private String loginId;
-    private String postDate;
-    private int limitPage;
+    private RequestPageSourceDto pageSource;
 
     @Builder
-    public RequestSubscribeNewsDto(String loginId, String postDate, int limitPage) {
+    public RequestSubscribeNewsDto(String loginId, RequestPageSourceDto pageSource) {
         this.loginId = loginId;
-        this.postDate = postDate;
-        this.limitPage = limitPage;
+        this.pageSource = pageSource;
     }
 }

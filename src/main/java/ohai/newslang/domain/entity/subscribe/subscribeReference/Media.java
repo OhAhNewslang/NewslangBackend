@@ -22,7 +22,7 @@ public class Media {
     private String mediaGroup;
 
     @Column
-    private String parameterId;
+    private String oId;
 
     @Column
     private String imagePath;

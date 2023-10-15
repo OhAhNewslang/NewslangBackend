@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+import java.util.List;
+
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestScrapNewsDto {
 
-    private String url;
+    private String loginId;
+    private String newsUrl;
 }

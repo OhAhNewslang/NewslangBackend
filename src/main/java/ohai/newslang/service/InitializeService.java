@@ -1,8 +1,10 @@
-package ohai.newslang.init;
+package ohai.newslang.service;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.CrawlerProperties;
 import ohai.newslang.domain.entity.member.Member;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class InitializeDatabase {
+public class InitializeService {
 
     private final InitService initService;
 
@@ -21,6 +23,13 @@ public class InitializeDatabase {
     public void start(){
         initService.initMember();
         initService.initCrawlerProperties();
+    }
+
+    @Bean
+    public PageableHandlerMethodArgumentResolverCustomizer customize() {
+        return p -> {
+            p.setOneIndexedParameters(true);    // 1 페이지 부터 시작
+        };
     }
 
     @Component

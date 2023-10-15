@@ -4,7 +4,10 @@ import lombok.Getter;
 import ohai.newslang.domain.entity.member.Member;
 
 import jakarta.persistence.*;
+import ohai.newslang.domain.entity.news.NewsArchive;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,36 +38,22 @@ public class MemberScrapNews {
 
     public void removeMemberScrapNewsArchive(List<String> urlList){
         this.memberScrapNewsArchiveList.removeIf(n -> {
-            String newsUrl = n.getScrapNewsArchive().getNewsUrl();
+            String newsUrl = n.getNewsArchive().getUrl();
             if (urlList.contains(newsUrl)) {
                 n.setMemberScrapNews(null);
-                n.setScrapNewsArchive(null);
+                n.setNewsArchive(null);
                 return true;
             }
             return false;
         });
-//        List<MemberScrapNewsArchive> removeList = new ArrayList<>();
-//        this.memberScrapNewsArchiveList.forEach(n ->{
-//            String newsUrl = n.getNewsArchive().getNews().getUrl();
-//            if (urlList.contains(newsUrl)){
-//                n.setMemberScrapNews(null);
-//                n.setNewsArchive(null);
-//                removeList.add(n);
-//            }
-//        });
-//        this.memberScrapNewsArchiveList.removeAll(removeList);
     }
 
-    public static MemberScrapNews newMemberScrapNews(MemberScrapNews memberScrapNews, Member member, ScrapNewsArchive scrapNewsArchive){
+    public static MemberScrapNews newMemberScrapNews(MemberScrapNews memberScrapNews, Member member, NewsArchive newsArchive){
         if (memberScrapNews == null) {
             memberScrapNews = new MemberScrapNews();
             memberScrapNews.setMember(member);
         }
-
-        MemberScrapNewsArchive memberScrapNewsArchive = new MemberScrapNewsArchive();
-        memberScrapNewsArchive.setScrapDate(LocalDate.now());
-        memberScrapNewsArchive.setScrapNewsArchive(scrapNewsArchive);
-
+        MemberScrapNewsArchive memberScrapNewsArchive =MemberScrapNewsArchive.createMemberScrapNews(newsArchive);
         memberScrapNews.newMemberScrapNewsArchive(memberScrapNewsArchive);
         return memberScrapNews;
     }

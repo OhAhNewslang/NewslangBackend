@@ -15,10 +15,9 @@ public class ThumbnailNewsDto {
     private String summary;
     private String imagePath;
     private LocalDateTime postDateTime;
-    private boolean isSubscribeNews;
 
     @Builder
-    public ThumbnailNewsDto(String url, String media, String category, String title, String summary, String imagePath, LocalDateTime postDateTime, boolean isSubscribeNews) {
+    public ThumbnailNewsDto(String url, String media, String category, String title, String summary, String imagePath, LocalDateTime postDateTime) {
         this.url = url;
         this.media = media;
         this.category = category;
@@ -26,6 +25,5 @@ public class ThumbnailNewsDto {
         this.summary = summary;
         this.imagePath = imagePath;
         this.postDateTime = postDateTime;
-        this.isSubscribeNews = isSubscribeNews;
     }
 }
