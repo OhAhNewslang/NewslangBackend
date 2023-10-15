@@ -159,4 +159,9 @@ public class MemberServiceImpl implements MemberService{
             return RequestResult.builder().resultCode("202").resultMessage("이미 탈퇴된 회원 입니다.").build();
         }
     }
+
+    @Override
+    public Long getMemberId(String loginId) {
+        return memberRepository.findByLoginId(loginId).get().getId();
+    }
 }

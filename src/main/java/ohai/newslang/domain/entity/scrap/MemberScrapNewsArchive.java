@@ -2,10 +2,13 @@ package ohai.newslang.domain.entity.scrap;
 
 import lombok.Getter;
 import lombok.Setter;
-import ohai.newslang.domain.entity.news.NewsArchive;
 
 import jakarta.persistence.*;
+import ohai.newslang.domain.entity.news.NewsArchive;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -14,7 +17,7 @@ public class MemberScrapNewsArchive {
 
     @Id
     @GeneratedValue
-    @Column(name = "scrap_news_id")
+    @Column(name = "member_scrap_news_archive_id")
     private Long id;
 
     @ManyToOne
@@ -26,5 +29,12 @@ public class MemberScrapNewsArchive {
     private NewsArchive newsArchive;
 
     @Column(nullable = false)
-    private LocalDate scrapDate;
+    private LocalDateTime scrapDateTime;
+
+    public static MemberScrapNewsArchive createMemberScrapNews(NewsArchive newsArchive){
+        MemberScrapNewsArchive memberScrapNewsArchive = new MemberScrapNewsArchive();
+        memberScrapNewsArchive.setNewsArchive(newsArchive);
+        memberScrapNewsArchive.setScrapDateTime(LocalDateTime.now());
+        return memberScrapNewsArchive;
+    }
 }

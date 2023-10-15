@@ -2,10 +2,12 @@ package ohai.newslang.domain.entity.scrap;
 
 import lombok.Getter;
 import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.entity.news.NewsArchive;
 
 import jakarta.persistence.*;
+import ohai.newslang.domain.entity.news.NewsArchive;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class MemberScrapNews {
     @Column(name = "member_scrap_news_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -36,7 +38,7 @@ public class MemberScrapNews {
 
     public void removeMemberScrapNewsArchive(List<String> urlList){
         this.memberScrapNewsArchiveList.removeIf(n -> {
-            String newsUrl = n.getNewsArchive().getNews().getUrl();
+            String newsUrl = n.getNewsArchive().getUrl();
             if (urlList.contains(newsUrl)) {
                 n.setMemberScrapNews(null);
                 n.setNewsArchive(null);
@@ -44,16 +46,6 @@ public class MemberScrapNews {
             }
             return false;
         });
-//        List<MemberScrapNewsArchive> removeList = new ArrayList<>();
-//        this.memberScrapNewsArchiveList.forEach(n ->{
-//            String newsUrl = n.getNewsArchive().getNews().getUrl();
-//            if (urlList.contains(newsUrl)){
-//                n.setMemberScrapNews(null);
-//                n.setNewsArchive(null);
-//                removeList.add(n);
-//            }
-//        });
-//        this.memberScrapNewsArchiveList.removeAll(removeList);
     }
 
     public static MemberScrapNews newMemberScrapNews(MemberScrapNews memberScrapNews, Member member, NewsArchive newsArchive){
@@ -61,11 +53,7 @@ public class MemberScrapNews {
             memberScrapNews = new MemberScrapNews();
             memberScrapNews.setMember(member);
         }
-
-        MemberScrapNewsArchive memberScrapNewsArchive = new MemberScrapNewsArchive();
-        memberScrapNewsArchive.setScrapDate(LocalDate.now());
-        memberScrapNewsArchive.setNewsArchive(newsArchive);
-
+        MemberScrapNewsArchive memberScrapNewsArchive =MemberScrapNewsArchive.createMemberScrapNews(newsArchive);
         memberScrapNews.newMemberScrapNewsArchive(memberScrapNewsArchive);
         return memberScrapNews;
     }

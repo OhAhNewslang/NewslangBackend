@@ -3,11 +3,13 @@ package ohai.newslang.service.crawling;
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.repository.crawling.NewsArchiveRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -45,12 +47,16 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
     }
 
     @Override
-    public List<NewsArchive> getNewsArchiveList(List<String> mediaNameList, List<String> categoryNameList, List<String> keywordNameList) {
-        List<NewsArchive> newsArchiveList = newsArchiveRepository.findByMediaNamesAndCategoryNames(mediaNameList, categoryNameList);
-        newsArchiveList = newsArchiveList.stream()
-                .filter(item -> keywordNameList.stream()
-                        .anyMatch(keyword -> item.getNews().getContents().contains(keyword)))
-                .collect(Collectors.toList());
-        return newsArchiveList;
+    public Page<NewsArchive> findAll(int page, int limit){
+        PageRequest pageable = PageRequest.of(page - 1, limit, Sort.by("postDateTime").descending()); // jpql 사용
+        Page<NewsArchive> newsArchivePages = newsArchiveRepository.findAll(pageable);
+        return newsArchivePages;
+    }
+
+    @Override
+    public Page<NewsArchive> getNewsArchiveList(List<String> mediaNameList, List<String> categoryNameList, List<String> keywordNameList, int page, int limit) {
+        PageRequest pageable = PageRequest.of(page - 1, limit, Sort.by("post_Date_Time").descending()); // native query 사용
+        String keywords = String.join("|", keywordNameList);
+        return newsArchiveRepository.findByFilters(mediaNameList, categoryNameList, keywords, pageable);
     }
 }

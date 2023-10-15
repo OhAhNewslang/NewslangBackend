@@ -1,6 +1,5 @@
 package ohai.newslang.service.crawling;
 
-import ohai.newslang.domain.dto.ThumbnailNews;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -46,7 +45,7 @@ public class CrawlingMediaServiceImpl implements CrawlingMediaService{
                 Media m = new Media();
                 m.setName(mediaName);
                 m.setMediaGroup(mediaGroup);
-                m.setParameterId(mediaParamId);
+                m.setOId(mediaParamId);
                 mediaList.add(m);
             }
         }
