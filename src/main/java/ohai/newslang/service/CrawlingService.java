@@ -107,6 +107,7 @@ public class CrawlingService {
                                 .title(t.getTitle())
                                 .contents(t.getContents())
                                 .imagePath(t.getImagePath())
+                                .countLike(0L)
                                 .postDateTime(t.getPostDateTime())
                                 .modifyDateTime(t.getModifyDateTime())
                                 .build());

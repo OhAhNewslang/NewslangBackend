@@ -2,11 +2,13 @@ package ohai.newslang.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import ohai.newslang.configuration.jwt.TokenDecoder;
 import ohai.newslang.domain.dto.news.*;
 import ohai.newslang.domain.dto.page.PageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.dto.subscribe.RequestSubscribeNewsDto;
 import ohai.newslang.domain.entity.news.NewsArchive;
+import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.service.crawling.NewsArchiveService;
 import ohai.newslang.service.memeber.MemberService;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
@@ -21,8 +23,8 @@ import java.util.stream.Collectors;
 public class NewsArchiveApiController {
 
     private final MemberSubscribeItemService memberSubscribeItemService;
-    private final MemberService memberService;
     private final NewsArchiveService newsArchiveService;
+    private final TokenDecoder tokenDecoder;
 
     @GetMapping("/api/news/live")
     public ResultThumbnailNewsDto getLiveNews(@RequestParam("page") int page, @RequestParam("limit") int limit){
@@ -40,13 +42,13 @@ public class NewsArchiveApiController {
 
     @GetMapping("/api/news/subscribe")
     public ResultThumbnailNewsDto getSubscribeNews(@RequestBody @Valid RequestSubscribeNewsDto request) {
-        Long memberId = memberService.getMemberId(request.getLoginId());
-        List<String> mediaNameList = this.memberSubscribeItemService.getSubscribeMediaNameList(memberId);
-        List<String> categoryNameList = this.memberSubscribeItemService.getCategoryNameList(memberId);
-        List<String> keywordNameList = this.memberSubscribeItemService.getKeywordNameList(memberId);
+        Long memberId = tokenDecoder.currentUserId();
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemService.getMemberSubscribeItem(memberId);
+        List<String> mediaNameList = memberSubscribeItem.getMemberSubscribeMediaItemList().stream().map(s -> s.getMedia().getName()).collect(Collectors.toList());
+        List<String> categoryNameList = memberSubscribeItem.getSubscribeCategoryList().stream().map(s -> s.getName()).collect(Collectors.toList());
+        List<String> keywordNameList = memberSubscribeItem.getSubscribeKeywordList().stream().map(s -> s.getName()).collect(Collectors.toList());
         Page<NewsArchive> newsArchivePage = newsArchiveService.getNewsArchiveList(mediaNameList, categoryNameList, keywordNameList, request.getPageSource().getPage(), request.getPageSource().getLimit());
         List<ThumbnailNewsDto> collect = getThumbnailNewsDtoList(newsArchivePage);
-
         return ResultThumbnailNewsDto.builder()
                 .thumbnailNewsList(collect)
                 .pageSource(PageSourceDto.builder().page(newsArchivePage.getPageable().getPageNumber()).limit(newsArchivePage.getPageable().getPageSize()).totalPage(newsArchivePage.getTotalPages()).build())
@@ -55,8 +57,8 @@ public class NewsArchiveApiController {
     }
 
     @GetMapping("/api/news/detail")
-    public ResultDetailNewsDto getDetailNews(@RequestParam("url") String url){
-        NewsArchive newsArchive = newsArchiveService.findByUrl(url);
+    public ResultDetailNewsDto getDetailNews(@RequestParam("newsUrl") String newsUrl){
+        NewsArchive newsArchive = newsArchiveService.findByUrl(newsUrl);
         if (newsArchive == null){
             return ResultDetailNewsDto.builder().result(RequestResult.builder().resultMessage("Not found url").resultCode("501").build()).build();
         }
@@ -72,9 +74,7 @@ public class NewsArchiveApiController {
 
     private static List<ThumbnailNewsDto> getThumbnailNewsDtoList(Page<NewsArchive> newsArchivePage) {
         List<ThumbnailNewsDto> thumbnailNewsDtoList = newsArchivePage.stream()
-                .map(n -> {
-                    return ThumbnailNewsDto.builder().url(n.getUrl()).media(n.getMediaName()).category(n.getCategory()).title(n.getTitle()).summary("").imagePath(n.getImagePath()).postDateTime(n.getPostDateTime()).build();
-                }).collect(Collectors.toList());
+                .map(n -> ThumbnailNewsDto.builder().url(n.getUrl()).media(n.getMediaName()).category(n.getCategory()).title(n.getTitle()).summary("").imagePath(n.getImagePath()).postDateTime(n.getPostDateTime()).build()).collect(Collectors.toList());
         return thumbnailNewsDtoList;
     }
 }

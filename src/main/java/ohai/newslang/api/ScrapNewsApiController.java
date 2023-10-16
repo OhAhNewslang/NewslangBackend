@@ -2,6 +2,7 @@ package ohai.newslang.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import ohai.newslang.configuration.jwt.TokenDecoder;
 import ohai.newslang.domain.dto.page.PageSourceDto;
 import ohai.newslang.domain.dto.request.ResultDto;
 import ohai.newslang.domain.dto.request.RequestResult;
@@ -25,10 +26,11 @@ public class ScrapNewsApiController {
     private final MemberScrapNewsService memberScrapNewsService;
     private final NewsArchiveService newsArchiveService;
     private final MemberService memberService;
+    private final TokenDecoder tokenDecoder;
 
     @PostMapping("/api/news/scrap")
     public ResultDto scrapNews(@RequestBody @Valid RequestScrapNewsDto request){
-        Long memberId = memberService.getMemberId(request.getLoginId());
+        Long memberId = tokenDecoder.currentUserId();
         if (memberScrapNewsService.isExistScrapNews(memberId, request.getNewsUrl())){
             return ResultDto.builder().resultMessage("Already exist scrap news").resultCode("301").build();
         }
@@ -39,7 +41,7 @@ public class ScrapNewsApiController {
 
     @GetMapping("/api/news/scrap")
     public ResultScrapNewsDto getScrapNews(@RequestBody @Valid RequestScrapNewsPageDto request){
-        Long memberId = memberService.getMemberId(request.getLoginId());
+        Long memberId = tokenDecoder.currentUserId();
         Page<MemberScrapNewsArchive> memberScrapNewsArchivePageList = memberScrapNewsService.getNewsArchiveList(memberId, request.getPage(), request.getLimit());
         List<ScrapNewsDto> collect = memberScrapNewsArchivePageList.stream()
                 .map(n -> {
@@ -61,7 +63,7 @@ public class ScrapNewsApiController {
 
     @DeleteMapping("/api/news/scrap")
     public ResultDto removeScrapNews(@RequestBody @Valid RequestRemoveScrapNewsDto request){
-        Long memberId = memberService.getMemberId(request.getLoginId());
+        Long memberId = tokenDecoder.currentUserId();
         memberScrapNewsService.removeScrapNews(memberId, request.getNewsUrl());
         return ResultDto.builder().resultMessage("").resultCode("200").build();
     }

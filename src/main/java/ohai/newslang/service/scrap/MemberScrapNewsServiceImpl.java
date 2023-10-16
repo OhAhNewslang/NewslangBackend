@@ -32,10 +32,8 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
     @Override
     public Page<MemberScrapNewsArchive> getNewsArchiveList(Long memberId, int page, int limit) {
         if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
-            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
-            Long memberScrapNewsId = memberScrapNews.getId();
             PageRequest pageable = PageRequest.of(page - 1, limit, Sort.by("scrapDateTime").descending());
-            Page<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberScrapNewsId(memberScrapNewsId, pageable);
+            Page<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberId(memberId, pageable);
             return memberScrapNewsArchiveList;
         }
         return null;
@@ -64,20 +62,20 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
         MemberScrapNews memberScrapNews = null;
         Optional<NewsArchive> newsArchive = newsArchiveRepository.findById(newsArchiveId);
         if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
-            memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
-            Long memberScrapNewsId = memberScrapNews.getId();
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberScrapNewsId(memberScrapNewsId);
+            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberId(memberId);
             String newsUrl = newsArchive.get().getUrl();
             boolean isAlreadyUrl = false;
+            Long alreadyId = 0L;
             for (MemberScrapNewsArchive item : memberScrapNewsArchiveList) {
                 if (item.getNewsArchive().getUrl() == newsUrl){
                     isAlreadyUrl = true;
+                    alreadyId = item.getMemberScrapNews().getId();
                     break;
                 }
             }
             if (isAlreadyUrl)
             {
-                return memberScrapNewsId;
+                return alreadyId;
             }
         }
         Member member = memberRepository.findById(memberId).get();
@@ -92,8 +90,7 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
     public void removeScrapNews(Long memberId, String url) {
         if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
             MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
-            Long memberScrapNewsId = memberScrapNews.getId();
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberScrapNewsId(memberScrapNewsId);
+            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberId(memberId);
             List<String> urlList = memberScrapNewsArchiveList.stream()
                     .map(n -> n.getNewsArchive().getUrl())
                     .collect(Collectors.toList());

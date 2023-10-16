@@ -26,12 +26,25 @@ public interface MemberScrapNewsArchiveRepository extends JpaRepository<MemberSc
 //                .getResultList();
 //    }
 
-    @Query("select msna from MemberScrapNewsArchive msna where msna.memberScrapNews.id = :memberScrapNewsId")
-    Page<MemberScrapNewsArchive> findByMemberScrapNewsId(@Param("memberScrapNewsId") Long memberScrapNewsId,
+//    @Query("select msna from MemberScrapNewsArchive msna where msna.memberScrapNews.id = :memberScrapNewsId")
+//    Page<MemberScrapNewsArchive> findByMemberScrapNewsId(@Param("memberScrapNewsId") Long memberScrapNewsId,
+//                                                         Pageable pageable);
+
+
+    @Query("SELECT msna " +
+            "FROM MemberScrapNewsArchive msna " +
+            "JOIN msna.memberScrapNews msn " +
+            "JOIN FETCH msna.newsArchive na " +
+            "WHERE msn.member.id = :memberId")
+    Page<MemberScrapNewsArchive> findByMemberId(@Param("memberId") Long memberId,
                                                          Pageable pageable);
 
-    @Query("select msna from MemberScrapNewsArchive msna where msna.memberScrapNews.id = :memberScrapNewsId")
-    List<MemberScrapNewsArchive> findByMemberScrapNewsId(@Param("memberScrapNewsId") Long memberScrapNewsId);
+    @Query("SELECT msna " +
+            "FROM MemberScrapNewsArchive msna " +
+            "JOIN msna.memberScrapNews msn " +
+            "JOIN FETCH msna.newsArchive na " +
+            "WHERE msn.member.id = :memberId")
+    List<MemberScrapNewsArchive> findByMemberId(@Param("memberId") Long memberId);
 
 //    public void delete(Long memberScrapNewsId, String url){
 //        Query q = em.createQuery(

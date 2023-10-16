@@ -51,12 +51,16 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     public List<String> getSubscribeMediaNameList(Long memberId) {
         if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
             MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
-            Long memberSubscribeItemId = memberSubscribeItem.getId();
-            // 아이템 전체 조회
-            List<MemberSubscribeMediaItem> memberSubscribeMediaItems = memberSubscribeMediaItemRepository.findByMemberSubscribeItemId(memberSubscribeItemId);
-            return  memberSubscribeMediaItems.stream()
-                    .map(o -> o.getMedia().getName())
-                    .collect(Collectors.toList());
+            List<String> mediaNameList = memberSubscribeItem.getMemberSubscribeMediaItemList()
+                    .stream().map(s -> s.getMedia().getName()).collect(Collectors.toList());
+            return mediaNameList;
+
+//            Long memberSubscribeItemId = memberSubscribeItem.getId();
+//            // 아이템 전체 조회
+//            List<MemberSubscribeMediaItem> memberSubscribeMediaItems = memberSubscribeMediaItemRepository.findByMemberSubscribeItemId(memberSubscribeItemId);
+//            return  memberSubscribeMediaItems.stream()
+//                    .map(o -> o.getMedia().getName())
+//                    .collect(Collectors.toList());
         }
         return null;
     }
@@ -131,5 +135,10 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
         List<Media> mediaList = mediaRepository.findByNameIn(subscribeItemNameList);
         memberSubscribeItem.addMemberSubscribeMediaItems(mediaList);
         return memberSubscribeItem.getId();
+    }
+
+    @Override
+    public MemberSubscribeItem getMemberSubscribeItem(Long memberId) {
+        return memberSubscribeItemRepository.findByMemberId(memberId);
     }
 }
