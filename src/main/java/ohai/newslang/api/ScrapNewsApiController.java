@@ -25,7 +25,6 @@ public class ScrapNewsApiController {
 
     private final MemberScrapNewsService memberScrapNewsService;
     private final NewsArchiveService newsArchiveService;
-    private final MemberService memberService;
     private final TokenDecoder tokenDecoder;
 
     @PostMapping("/api/news/scrap")

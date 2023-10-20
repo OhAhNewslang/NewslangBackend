@@ -19,9 +19,10 @@ public class News {
     private String oId;
     private LocalDateTime postDateTime;
     private LocalDateTime modifyDateTime;
+    private String reporter;
 
     @Builder
-    public News(String url, String title, String summary, String contents, String imagePath, String media, String oId, LocalDateTime postDateTime, LocalDateTime modifyDateTime) {
+    public News(String url, String title, String summary, String contents, String imagePath, String media, String oId, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
         this.url = url;
         this.title = title;
         this.summary = summary;
@@ -31,5 +32,6 @@ public class News {
         this.oId = oId;
         this.postDateTime = postDateTime;
         this.modifyDateTime = modifyDateTime;
+        this.reporter = reporter;
     }
 }
