@@ -25,7 +25,7 @@ public class OpinionApiController {
     }
 
     // 상세 뉴스 공감순
-    @GetMapping("/v2/news")
+    @GetMapping("/news/recent")
     public OpinionPagingResponseDto opinionListByLikeCountForNewsV2(
             @RequestBody OpinionPagingRequestDtoForNews opinionRequestDto){
         return opinionService.opinionListByLikeCountOrderForDetailNews(
@@ -35,7 +35,7 @@ public class OpinionApiController {
     }
 
     // 상세 뉴스 최신순
-    @GetMapping("/v2/news")
+    @GetMapping("/news/like")
     public OpinionPagingResponseDto opinionListByRecentForNewsV2(
             @RequestBody OpinionPagingRequestDtoForNews opinionRequestDto){
         return opinionService.opinionListByRecentOrderForDetailNews(

@@ -8,6 +8,7 @@ import ohai.newslang.domain.dto.member.response.TokenDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.service.memeber.MailService;
 import ohai.newslang.service.memeber.MemberService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,8 +24,8 @@ public class MemberApiController {
     }
 
     @PostMapping("/in")
-    public TokenDto login(@RequestBody LoginMemberDto loginMemberDto) {
-        return memberService.logIn(loginMemberDto);
+    public ResponseEntity<TokenDto> login(@RequestBody LoginMemberDto loginMemberDto) {
+        return ResponseEntity.ok(memberService.logIn(loginMemberDto));
     }
 
     @GetMapping("")

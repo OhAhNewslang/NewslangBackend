@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginMemberDto {
     private String loginId;
-
     private String password;
 }
