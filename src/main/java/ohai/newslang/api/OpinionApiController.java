@@ -1,6 +1,5 @@
 package ohai.newslang.api;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.dto.opinion.request.OpinionCreateRequestDto;
 import ohai.newslang.domain.dto.opinion.request.OpinionModifyRequestDto;
@@ -8,7 +7,6 @@ import ohai.newslang.domain.dto.opinion.request.OpinionPagingRequestDto;
 import ohai.newslang.domain.dto.opinion.request.OpinionPagingRequestDtoForNews;
 import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionPagingResponseDto;
-import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.service.opinion.OpinionService;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +23,7 @@ public class OpinionApiController {
     }
 
     // 상세 뉴스 공감순
-    @GetMapping("/news/recent")
+    @GetMapping("/news/like")
     public OpinionPagingResponseDto opinionListByLikeCountForNewsV2(
             @RequestBody OpinionPagingRequestDtoForNews opinionRequestDto){
         return opinionService.opinionListByLikeCountOrderForDetailNews(
@@ -35,7 +33,7 @@ public class OpinionApiController {
     }
 
     // 상세 뉴스 최신순
-    @GetMapping("/news/like")
+    @GetMapping("/news/recent")
     public OpinionPagingResponseDto opinionListByRecentForNewsV2(
             @RequestBody OpinionPagingRequestDtoForNews opinionRequestDto){
         return opinionService.opinionListByRecentOrderForDetailNews(
@@ -61,7 +59,6 @@ public class OpinionApiController {
                 opinionRequestDto.getPageNumber(),
                 opinionRequestDto.getPageSize());
     }
-
 
     @PutMapping("")
     public ModifyOpinionResponseDto modifyOpinion(

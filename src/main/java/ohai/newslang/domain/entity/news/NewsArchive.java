@@ -35,9 +35,11 @@ public class NewsArchive {
     private LocalDateTime postDateTime;
     @Column
     private LocalDateTime modifyDateTime;
+    @Column
+    private String reporter;
 
     @Builder
-    public NewsArchive(Long id, String url, String mediaName, String category, String title, String contents, String imagePath, Long countLike, LocalDateTime postDateTime, LocalDateTime modifyDateTime) {
+    public NewsArchive(Long id, String url, String mediaName, String category, String title, String contents, String imagePath, Long countLike, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
         this.id = id;
         this.url = url;
         this.mediaName = mediaName;
@@ -47,5 +49,6 @@ public class NewsArchive {
         this.imagePath = imagePath;
         this.postDateTime = postDateTime;
         this.modifyDateTime = modifyDateTime;
+        this.reporter = reporter;
     }
 }

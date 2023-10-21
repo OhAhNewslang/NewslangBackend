@@ -69,6 +69,7 @@ public class NewsArchiveApiController {
                 .media(newsArchive.getMediaName())
                 .postDateTime(newsArchive.getPostDateTime())
                 .modifyDateTime(newsArchive.getModifyDateTime())
+                .reporter(newsArchive.getReporter())
                 .result(RequestResult.builder().resultMessage("").resultCode("200").build()).build();
     }
 

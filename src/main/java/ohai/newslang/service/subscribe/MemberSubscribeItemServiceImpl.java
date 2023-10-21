@@ -110,8 +110,6 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     @Override
     @Transactional
     public Long updateSubscribeMediaItems(Long memberId, List<String> subscribeItemNameList) {
-        // 엔티티 조회
-        Member member = memberRepository.findById(memberId).get();
         // findOne -> findById + get() 메서드(Optional개봉)
         MemberSubscribeItem memberSubscribeItem = null;
         if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
@@ -127,6 +125,7 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
             memberSubscribeItem.removeMemberSubscribeMediaItems(ids);
         }
         else {
+            Member member = memberRepository.findById(memberId).get();
             memberSubscribeItem = new MemberSubscribeItem();
             memberSubscribeItem.setMember(member);
             memberSubscribeItemRepository.save(memberSubscribeItem);

@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MediaDto {
     private String mediaName;
-    private String mediaImagePath;
+    private String imagePath;
 
     @Builder
-    public MediaDto(String mediaName, String mediaImagePath) {
+    public MediaDto(String mediaName, String imagePath) {
         this.mediaName = mediaName;
-        this.mediaImagePath = mediaImagePath;
+        this.imagePath = imagePath;
     }
 }

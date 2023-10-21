@@ -92,6 +92,7 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService{
                         String mediaName = dd.select("span").get(1).html();
 
                         String contents = "";
+                        String reporter = "";
                         LocalDateTime postDateTime = null;
                         LocalDateTime modifyDateTime = null;
                         Document doc = null;
@@ -106,8 +107,19 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService{
                             contents += article.toString();
                             postDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_DATE_TIME", "data-date-time");
                             modifyDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_MODIFY_DATE_TIME", "data-modify-date-time");
+
+                            Elements elementsRepo = doc.getElementsByClass("byline_p");
+                            if (elementsRepo != null) {
+                                Elements elementsRepoSpan = elementsRepo.select("span");
+                                if (elementsRepoSpan != null) {
+                                    for (int i = 0; i < elementsRepoSpan.size(); i++) {
+                                        if (reporter != "") reporter += "\r\n";
+                                        reporter += elementsRepoSpan.get(i).html();
+                                    }
+                                }
+                            }
                         }
-                        newsList.add(News.builder().url(link).title(title).summary(summary).contents(contents).imagePath(imagePath).media(mediaName).oId(oId).postDateTime(postDateTime).modifyDateTime(modifyDateTime).build());
+                        newsList.add(News.builder().url(link).title(title).summary(summary).contents(contents).imagePath(imagePath).media(mediaName).oId(oId).postDateTime(postDateTime).modifyDateTime(modifyDateTime).reporter(reporter).build());
                     }catch (Exception ex){
                         log.error("Parsing Error : " + ex.getMessage());
                     }

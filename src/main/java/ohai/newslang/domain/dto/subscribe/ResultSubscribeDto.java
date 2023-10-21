@@ -11,16 +11,16 @@ import java.util.List;
 @NoArgsConstructor
 public class ResultSubscribeDto {
 
-    private Long memberId;
-    private int subscribeCount;
-    private List<String> subscribeList;
+    private List<String> mediaList;
+    private List<String> categoryList;
+    private List<String> keywordList;
     private RequestResult result;
 
     @Builder
-    public ResultSubscribeDto(Long memberId, List<String> subscribeList, RequestResult result) {
-        this.memberId = memberId;
-        this.subscribeCount = subscribeList.size();
-        this.subscribeList = subscribeList;
+    public ResultSubscribeDto(List<String> mediaList, List<String> categoryList, List<String> keywordList, RequestResult result) {
+        this.mediaList = mediaList;
+        this.categoryList = categoryList;
+        this.keywordList = keywordList;
         this.result = result;
     }
 }
