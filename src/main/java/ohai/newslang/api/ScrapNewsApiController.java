@@ -21,13 +21,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/scrap")
 public class ScrapNewsApiController {
 
     private final MemberScrapNewsService memberScrapNewsService;
     private final NewsArchiveService newsArchiveService;
     private final TokenDecoder tokenDecoder;
 
-    @PostMapping("/api/news/scrap")
+    @PostMapping("/news")
     public ResultDto scrapNews(@RequestBody @Valid RequestScrapNewsDto request){
         Long memberId = tokenDecoder.currentUserId();
         if (memberScrapNewsService.isExistScrapNews(memberId, request.getNewsUrl())){
@@ -38,7 +39,7 @@ public class ScrapNewsApiController {
         return ResultDto.builder().resultMessage("").resultCode("200").build();
     }
 
-    @GetMapping("/api/news/scrap")
+    @GetMapping("/news")
     public ResultScrapNewsDto getScrapNews(@RequestBody @Valid RequestScrapNewsPageDto request){
         Long memberId = tokenDecoder.currentUserId();
         Page<MemberScrapNewsArchive> memberScrapNewsArchivePageList = memberScrapNewsService.getNewsArchiveList(memberId, request.getPage(), request.getLimit());
@@ -60,7 +61,7 @@ public class ScrapNewsApiController {
                 .result(RequestResult.builder().resultMessage("").resultCode("200").build()).build();
     }
 
-    @DeleteMapping("/api/news/scrap")
+    @DeleteMapping("/news")
     public ResultDto removeScrapNews(@RequestBody @Valid RequestRemoveScrapNewsDto request){
         Long memberId = tokenDecoder.currentUserId();
         memberScrapNewsService.removeScrapNews(memberId, request.getNewsUrl());

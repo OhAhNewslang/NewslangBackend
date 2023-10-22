@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/subscribe")
 public class SubscribeApiController {
 
     private final MemberSubscribeItemService memberSubscribeItemService;
@@ -30,7 +31,7 @@ public class SubscribeApiController {
     private final CategoryService categoryService;
     private final TokenDecoder tokenDecoder;
 
-    @GetMapping("/api/media")
+    @GetMapping("/guest/media")
     public ResultSubscribeMediaDto getAllMedias() {
         List<Media> mediaList = mediaService.findAll();
         List<MediaDto> mediaDtoList = mediaList.stream()
@@ -40,7 +41,7 @@ public class SubscribeApiController {
         return ResultSubscribeMediaDto.builder().mediaList(mediaDtoList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
     }
 
-    @GetMapping("/api/category")
+    @GetMapping("/guest/category")
     public ResultSubscribeCategoryDto getAllCategories() {
         List<Category> subscribeItems = categoryService.findAll();
         List<String> nameList =subscribeItems.stream()
@@ -49,7 +50,7 @@ public class SubscribeApiController {
         return ResultSubscribeCategoryDto.builder().nameList(nameList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
     }
 
-    @GetMapping("/api/subscribe")
+    @GetMapping("/all")
     public ResultSubscribeDto getSubscribe(){
         Long memberId = tokenDecoder.currentUserId();
         MemberSubscribeItem memberSubscribeItem = this.memberSubscribeItemService.getMemberSubscribeItem(memberId);
@@ -60,7 +61,7 @@ public class SubscribeApiController {
                 .result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
     }
 
-    @PostMapping("/api/media")
+    @PostMapping("/media")
     public ResultDto subscribeMedia(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
@@ -75,7 +76,7 @@ public class SubscribeApiController {
         }
     }
 
-    @PostMapping("/api/category")
+    @PostMapping("/category")
     public ResultDto subscribeCategory(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
@@ -90,7 +91,7 @@ public class SubscribeApiController {
         }
     }
 
-    @PostMapping("/api/keyword")
+    @PostMapping("/keyword")
     public ResultDto subscribeKeyword(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {

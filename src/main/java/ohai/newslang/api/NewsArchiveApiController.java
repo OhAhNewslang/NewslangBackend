@@ -20,13 +20,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/news")
 public class NewsArchiveApiController {
 
     private final MemberSubscribeItemService memberSubscribeItemService;
     private final NewsArchiveService newsArchiveService;
     private final TokenDecoder tokenDecoder;
 
-    @GetMapping("/api/news/live")
+    @GetMapping("/guest/live")
     public ResultThumbnailNewsDto getLiveNews(@RequestParam("page") int page, @RequestParam("limit") int limit){
         // to do list
         // 예외 처리 필요
@@ -40,7 +41,7 @@ public class NewsArchiveApiController {
                 .build();
     }
 
-    @GetMapping("/api/news/subscribe")
+    @GetMapping("/subscribe")
     public ResultThumbnailNewsDto getSubscribeNews(@RequestBody @Valid RequestSubscribeNewsDto request) {
         Long memberId = tokenDecoder.currentUserId();
         MemberSubscribeItem memberSubscribeItem = memberSubscribeItemService.getMemberSubscribeItem(memberId);
@@ -56,7 +57,7 @@ public class NewsArchiveApiController {
                 .build();
     }
 
-    @GetMapping("/api/news/detail")
+    @GetMapping("/detail")
     public ResultDetailNewsDto getDetailNews(@RequestParam("newsUrl") String newsUrl){
         NewsArchive newsArchive = newsArchiveService.findByUrl(newsUrl);
         if (newsArchive == null){

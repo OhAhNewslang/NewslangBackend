@@ -52,11 +52,8 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/api/member/id"))
                 .requestMatchers(new AntPathRequestMatcher("/api/member/password","POST"))
                 .requestMatchers(new AntPathRequestMatcher("/api/member/newPassword"))
-                .requestMatchers(new AntPathRequestMatcher("/api/news/**"))
-                .requestMatchers(new AntPathRequestMatcher("/api/media/**"))
-                .requestMatchers(new AntPathRequestMatcher("/api/subscribe/**"))
-                .requestMatchers(new AntPathRequestMatcher("/api/category/**"))
-                .requestMatchers(new AntPathRequestMatcher("/api/keyword/**"));
+                .requestMatchers(new AntPathRequestMatcher("/api/subscribe/guest/**"))
+                .requestMatchers(new AntPathRequestMatcher("/api/news/guest/**"));
     }
 
     @Bean
