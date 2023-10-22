@@ -4,20 +4,24 @@ import jakarta.persistence.*;
 import lombok.*;
 import ohai.newslang.domain.entity.TimeStamp;
 import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.entity.news.DetailNewsArchive;
+import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.entity.recommend.OpinionRecommend;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Opinion extends TimeStamp {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "opinion_id")
-    private Long id;
+    private Long  id;
+
+    @Column(updatable = false)
+    private String uuid;
 
     @Column(nullable = false)
     private String content;
@@ -29,17 +33,22 @@ public class Opinion extends TimeStamp {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "detail_news_id")
-    private DetailNewsArchive detailNewsArchive;
+    @JoinColumn(name = "news_archive_id")
+    private NewsArchive newsArchive;
 
     @OneToMany(mappedBy = "opinion", cascade = CascadeType.ALL)
     private List<OpinionRecommend> opinionRecommends = new ArrayList<>();
 
+    @PrePersist
+    private void createUUID(){
+        uuid = String.valueOf(UUID.randomUUID());
+    }
+
     //생성자
     @Builder
-    public Opinion(Member member, DetailNewsArchive detailNewsArchive, String content, int likeCount) {
+    public Opinion(Member member, NewsArchive newsArchive, String content, int likeCount) {
         this.member = member;
-        this.detailNewsArchive = detailNewsArchive;
+        this.newsArchive = newsArchive;
         this.content = content;
         this.likeCount = likeCount;
     }
@@ -50,20 +59,20 @@ public class Opinion extends TimeStamp {
         member.getOpinions().add(this);
     }
 
-    private void foreignDetailNewArchive(DetailNewsArchive newDetailNewsArchive) {
-        detailNewsArchive = newDetailNewsArchive;
-        detailNewsArchive.getOpinions().add(this);
+    private void foreignDetailNewArchive(NewsArchive newDetailNewsArchive) {
+        newsArchive = newDetailNewsArchive;
+        newsArchive.getOpinions().add(this);
     }
 
     private void eraseForeignKey() {
         member.getOpinions().remove(this);
-        detailNewsArchive.getOpinions().remove(this);
+        newsArchive.getOpinions().remove(this);
         member = null;
-        detailNewsArchive = null;
+        newsArchive = null;
     }
 
     //비즈니스 로직
-    public static Opinion createOpinion(Member newMember, DetailNewsArchive newDetailNewsArchive, String newContent){
+    public static Opinion createOpinion(Member newMember, NewsArchive newDetailNewsArchive, String newContent){
         Opinion opinion = new Opinion();
         opinion.content = newContent;
         opinion.likeCount = 0;

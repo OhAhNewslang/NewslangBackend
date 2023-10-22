@@ -1,9 +1,12 @@
 package ohai.newslang.service.subscribe;
 
 import lombok.RequiredArgsConstructor;
+import ohai.newslang.configuration.jwt.TokenDecoder;
 import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeMediaItem;
+import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
+import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 import ohai.newslang.repository.member.MemberRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
@@ -24,53 +27,13 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     private final MemberSubscribeItemRepository memberSubscribeItemRepository;
     private final MemberSubscribeMediaItemRepository memberSubscribeMediaItemRepository;
     private final MediaRepository mediaRepository;
-
-    @Override
-    public List<String> getCategoryNameList(Long memberId) {
-        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
-            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
-            return memberSubscribeItem.getSubscribeCategoryList().stream()
-                    .map(c -> c.getName())
-                    .collect(Collectors.toList());
-        }
-        return null;
-    }
-
-    @Override
-    public List<String> getKeywordNameList(Long memberId) {
-        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
-            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
-            return memberSubscribeItem.getSubscribeKeywordList().stream()
-                    .map(c -> c.getName())
-                    .collect(Collectors.toList());
-        }
-        return null;
-    }
-
-    @Override
-    public List<String> getSubscribeMediaNameList(Long memberId) {
-        if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
-            MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
-            List<String> mediaNameList = memberSubscribeItem.getMemberSubscribeMediaItemList()
-                    .stream().map(s -> s.getMedia().getName()).collect(Collectors.toList());
-            return mediaNameList;
-
-//            Long memberSubscribeItemId = memberSubscribeItem.getId();
-//            // 아이템 전체 조회
-//            List<MemberSubscribeMediaItem> memberSubscribeMediaItems = memberSubscribeMediaItemRepository.findByMemberSubscribeItemId(memberSubscribeItemId);
-//            return  memberSubscribeMediaItems.stream()
-//                    .map(o -> o.getMedia().getName())
-//                    .collect(Collectors.toList());
-        }
-        return null;
-    }
+    private final TokenDecoder td;
 
     @Override
     @Transactional
     public Long updateSubscribeCategory(Long memberId, List<String> categoryNameList) {
         // 엔티티 조회
-        Member member = memberRepository.findById(memberId).get();
-        // findOne -> findById + get() 메서드(Optional개봉)
+        Member member = memberRepository.findByTokenId(memberId);
         MemberSubscribeItem memberSubscribeItem = null;
         if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
             memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId);
@@ -90,7 +53,7 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     @Transactional
     public Long updateSubscribeKeyword(Long memberId, List<String> keywordNameList) {
         // 엔티티 조회
-        Member member = memberRepository.findById(memberId).get();
+        Member member = memberRepository.findByTokenId(memberId);
         // findOne -> findById + get() 메서드(Optional개봉)
         MemberSubscribeItem memberSubscribeItem = null;
         if (memberSubscribeItemRepository.countByMemberId(memberId) > 0) {
@@ -125,7 +88,7 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
             memberSubscribeItem.removeMemberSubscribeMediaItems(ids);
         }
         else {
-            Member member = memberRepository.findById(memberId).get();
+            Member member = memberRepository.findByTokenId(memberId);
             memberSubscribeItem = new MemberSubscribeItem();
             memberSubscribeItem.setMember(member);
             memberSubscribeItemRepository.save(memberSubscribeItem);
@@ -137,7 +100,7 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     }
 
     @Override
-    public MemberSubscribeItem getMemberSubscribeItem(Long memberId) {
-        return memberSubscribeItemRepository.findByMemberId(memberId);
+    public MemberSubscribeItem getMemberSubscribeItem() {
+        return memberSubscribeItemRepository.findByMemberId(td.currentUserId());
     }
 }

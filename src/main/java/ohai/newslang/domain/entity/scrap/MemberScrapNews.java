@@ -48,11 +48,11 @@ public class MemberScrapNews {
         });
     }
 
-    public static MemberScrapNews newMemberScrapNews(MemberScrapNews memberScrapNews, Member member, NewsArchive newsArchive){
-        if (memberScrapNews == null) {
-            memberScrapNews = new MemberScrapNews();
-            memberScrapNews.setMember(member);
-        }
+    public static MemberScrapNews newMemberScrapNews(Member member, NewsArchive newsArchive){
+
+        MemberScrapNews memberScrapNews = new MemberScrapNews();
+        memberScrapNews.setMember(member);
+
         MemberScrapNewsArchive memberScrapNewsArchive =MemberScrapNewsArchive.createMemberScrapNews(newsArchive);
         memberScrapNews.newMemberScrapNewsArchive(memberScrapNewsArchive);
         return memberScrapNews;

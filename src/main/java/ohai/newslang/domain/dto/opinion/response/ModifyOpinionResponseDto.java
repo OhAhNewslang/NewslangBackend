@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 public class ModifyOpinionResponseDto {
-    private Long opinionId;
+    private String opinionId;
     private String memberName;
     private String memberImagePath;
     private LocalDate opinionCreateDate;
@@ -21,7 +21,7 @@ public class ModifyOpinionResponseDto {
     private RequestResult result;
     @Builder
     public ModifyOpinionResponseDto(Opinion opinion, RequestResult result) {
-        this.opinionId = opinion.getId();
+        this.opinionId = opinion.getUuid();
         this.memberName = opinion.getMember().getName();
         this.memberImagePath = opinion.getMember().getImagePath();
         this.opinionCreateDate = opinion.getCreateTime().toLocalDate();

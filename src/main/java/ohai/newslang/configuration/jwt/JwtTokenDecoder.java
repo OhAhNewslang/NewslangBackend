@@ -89,9 +89,9 @@ public class JwtTokenDecoder implements TokenDecoder{
         // Filter에서는 토큰의 존재 여부 + 만료되지 않음 이라는 정보만 있으면 검증이 완료된 상태이다.
         // Security에서 우리의 필터를 통해 권한 필터링을 하기 위해 Authentication 객체를 생성해서
         // SecurityContextHolder에 저장 시켜놓는다.
-        // 흐름상으로 설명하면 그 다음 차례이지만 메서드 한 두개 가 동작하는 시간은 정말 짧기 때문에
-        // 거의 동시에 진행된다고 생각해도 무방할 정도로 바로 SecurityContextHolder의 권한 정보를 이용해
-        // Security에서 필터링한다.
+        // 흐름상으로 설명하면 그 다음 차례이지만 메서드 한,두개 가 동작하는 시간은 정말 짧기 때문에
+        // 거의 동시에 진행된다고 생각해도 무방할 정도로 바로
+        // SecurityContextHolder의 권한 정보를 이용해 Security에서 필터링한다.
         // Client
         // -> Filter(SecurityContextHolder)
         // -> Security(SecurityContextHolder)
@@ -136,6 +136,8 @@ public class JwtTokenDecoder implements TokenDecoder{
         // 토큰 유효성 검증 수행
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            memberRepository.findById(tokenToId(token))
+            .orElseThrow(()-> new IllegalAccessException("이미 탈퇴된 회원입니다."));
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("로그인 먼저 해주세요.");
@@ -145,6 +147,8 @@ public class JwtTokenDecoder implements TokenDecoder{
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
+        } catch (IllegalAccessException e) {
+            log.info(e.getMessage());
         }
         return false;
     }

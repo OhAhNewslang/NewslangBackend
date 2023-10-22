@@ -27,7 +27,7 @@ public class MemberRecommend extends TimeStamp {
     private List<OpinionRecommend> opinionRecommends = new ArrayList<>();
 
     @OneToMany(mappedBy = "memberRecommend", cascade = CascadeType.ALL)
-    private List<DetailNewsRecommend> detailNewsRecommends = new ArrayList<>();
+    private List<NewsRecommend> newsRecommends = new ArrayList<>();
 
     //연관 관계 메서드
     public void foreignMember(Member newMember) {

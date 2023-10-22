@@ -12,7 +12,6 @@ import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.recommend.MemberRecommend;
 import ohai.newslang.repository.member.MemberRepository;
-import ohai.newslang.repository.recommand.MemberRecommendRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,6 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
-    private final MemberRecommendRepository memberRecommendRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenDecoder td;
 
@@ -60,18 +58,21 @@ public class MemberServiceImpl implements MemberService{
             Member findMember = optionalMember.get();
             if(passwordEncoder.matches(loginMemberDto.getPassword(), findMember.getPassword())){
                 return TokenDto.builder()
-                        .token(td.createToken(String.valueOf(findMember.getId()), String.valueOf(findMember.getRole())))
-                        .result(RequestResult.builder().resultCode("200").resultMessage("로그인이 정상적으로 처리되었습니다.").build())
-                        .build();
+                .token(td.createToken(String.valueOf(findMember.getId()),
+                String.valueOf(findMember.getRole())))
+                .result(RequestResult.builder()
+                .resultCode("200")
+                .resultMessage("로그인이 정상적으로 처리되었습니다.").build()).build();
             } else {
                 return TokenDto.builder()
-                        .result(RequestResult.builder().resultCode("202").resultMessage("비밀번호가 틀렸습니다.").build())
-                        .build();
+                .result(RequestResult.builder().resultCode("202").resultMessage("비밀번호가 틀렸습니다.").build())
+                .build();
             }
         } else {
             return TokenDto.builder()
-                    .result(RequestResult.builder().resultCode("202").resultMessage("해당 아이디로 가입된 회원이 없습니다.").build())
-                    .build();
+            .result(RequestResult.builder()
+            .resultCode("202")
+            .resultMessage("해당 아이디로 가입된 회원이 없습니다.").build()).build();
         }
     }
 
@@ -79,11 +80,11 @@ public class MemberServiceImpl implements MemberService{
     public MemberInfoDto readMemberInfo() {
         Member currentMember = memberRepository.findByTokenId(td.currentUserId());
         return MemberInfoDto.builder()
-                .email(currentMember.getEmail())
-                .name(currentMember.getName())
-                .imagePath(currentMember.getImagePath())
-                .result(RequestResult.builder().resultCode("200").resultMessage("").build())
-                .build();
+        .email(currentMember.getEmail())
+        .name(currentMember.getName())
+        .imagePath(currentMember.getImagePath())
+        .result(RequestResult.builder().resultCode("200").resultMessage("").build())
+        .build();
     }
 
     @Override
@@ -153,15 +154,13 @@ public class MemberServiceImpl implements MemberService{
         Member currentMember = memberRepository.findByTokenId(td.currentUserId());
         if (passwordEncoder.matches(password, currentMember.getPassword())) {
             memberRepository.delete(currentMember);
-            return RequestResult.builder().resultCode("200").resultMessage("탈퇴가 정상적으로 처리되었습니다.").build();
-
+            return RequestResult.builder()
+            .resultCode("200")
+            .resultMessage("탈퇴가 정상적으로 처리되었습니다.").build();
         } else {
-            return RequestResult.builder().resultCode("202").resultMessage("이미 탈퇴된 회원 입니다.").build();
+            return RequestResult.builder()
+            .resultCode("202")
+            .resultMessage("비밀번호가 일치하지 않습니다.").build();
         }
-    }
-
-    @Override
-    public Long getMemberId(String loginId) {
-        return memberRepository.findByLoginId(loginId).get().getId();
     }
 }

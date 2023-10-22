@@ -28,11 +28,14 @@ public interface MemberSubscribeItemRepository extends JpaRepository<MemberSubsc
     @Query("SELECT msi " +
             "FROM MemberSubscribeItem msi " +
             "JOIN msi.member m " +
-            "JOIN FETCH msi.memberSubscribeMediaItemList sm " +
-            "JOIN FETCH msi.subscribeCategoryList sc " +
-            "JOIN FETCH msi.subscribeKeywordList sk " +
+            "JOIN FETCH msi.memberSubscribeMediaItemList msmi " +
             "WHERE m.id = :memberId")
     MemberSubscribeItem findByMemberId(@Param("memberId") Long memberId);
+
+    @Query("SELECT msi.id FROM MemberSubscribeItem msi " +
+            "JOIN msi.member m " +
+            "WHERE m.id = :memberId")
+    Long findMemberSubscribeItemIdByMember_Id(@Param("memberId") Long memberId);
 
 
 

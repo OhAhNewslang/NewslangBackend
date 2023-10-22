@@ -10,6 +10,8 @@ import ohai.newslang.domain.dto.subscribe.ResultSubscribeDto;
 import ohai.newslang.domain.dto.subscribe.ResultSubscribeMediaDto;
 import ohai.newslang.domain.dto.subscribe.subscribeReference.MediaDto;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
+import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
+import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Category;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
@@ -32,38 +34,42 @@ public class SubscribeApiController {
 
     @GetMapping("/api/media")
     public ResultSubscribeMediaDto getAllMedias() {
-        List<Media> mediaList = mediaService.findAll();
-        List<MediaDto> mediaDtoList = mediaList.stream()
-                .map(o -> MediaDto.builder().mediaName(o.getName()).imagePath(o.getImagePath()).build())
-                .collect(Collectors.toList());
 
-        return ResultSubscribeMediaDto.builder().mediaList(mediaDtoList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
+        return ResultSubscribeMediaDto.builder()
+        .mediaList(mediaService.findAll())
+        .result(RequestResult.builder()
+        .resultCode("200")
+        .resultMessage("언론사 목록 조회 성공").build())
+        .build();
     }
 
     @GetMapping("/api/category")
     public ResultSubscribeCategoryDto getAllCategories() {
-        List<Category> subscribeItems = categoryService.findAll();
-        List<String> nameList =subscribeItems.stream()
-                .map(c -> c.getName())
-                .collect(Collectors.toList());
-        return ResultSubscribeCategoryDto.builder().nameList(nameList).result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
+        return ResultSubscribeCategoryDto.builder()
+        .nameList(categoryService.findAll())
+        .result(RequestResult.builder()
+        .resultCode("200")
+        .resultMessage("카테고리 목록 조회 성공").build())
+        .build();
     }
 
     @GetMapping("/api/subscribe")
     public ResultSubscribeDto getSubscribe(){
-        Long memberId = tokenDecoder.currentUserId();
-        MemberSubscribeItem memberSubscribeItem = this.memberSubscribeItemService.getMemberSubscribeItem(memberId);
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemService.getMemberSubscribeItem();
         return ResultSubscribeDto.builder()
-                .mediaList(memberSubscribeItem.getMemberSubscribeMediaItemList().stream().map(m -> m.getMedia().getName()).collect(Collectors.toList()))
-                .categoryList(memberSubscribeItem.getSubscribeCategoryList().stream().map(c -> c.getName()).collect(Collectors.toList()))
-                .keywordList(memberSubscribeItem.getSubscribeKeywordList().stream().map(k -> k.getName()).collect(Collectors.toList())).build();
+        .mediaList(memberSubscribeItem.getMemberSubscribeMediaItemList().stream()
+        .map(m -> m.getMedia().getName()).collect(Collectors.toList()))
+        .categoryList(memberSubscribeItem.getSubscribeCategoryList().stream()
+        .map(SubscribeCategory::getName).collect(Collectors.toList()))
+        .keywordList(memberSubscribeItem.getSubscribeKeywordList().stream()
+        .map(SubscribeKeyword::getName).collect(Collectors.toList())).build();
     }
 
     @PostMapping("/api/media")
     public ResultDto subscribeMedia(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeMediaItems(memberId, request.getNameList());
+            memberSubscribeItemService.updateSubscribeMediaItems(memberId, request.getNameList());
             return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder
@@ -78,7 +84,7 @@ public class SubscribeApiController {
     public ResultDto subscribeCategory(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeCategory(memberId, request.getNameList());
+            memberSubscribeItemService.updateSubscribeCategory(memberId, request.getNameList());
             return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder
@@ -93,7 +99,7 @@ public class SubscribeApiController {
     public ResultDto subscribeKeyword(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeKeyword(memberId, request.getNameList());
+            memberSubscribeItemService.updateSubscribeKeyword(memberId, request.getNameList());
             return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder

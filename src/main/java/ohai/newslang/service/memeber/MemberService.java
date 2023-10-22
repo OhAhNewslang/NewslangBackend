@@ -15,5 +15,4 @@ public interface MemberService {
     MemberInfoDto updateMemberInfo(UpdateMemberDto memberInfoDto);
     MemberInfoDto updateMemberPassword(UpdatePasswordDto updatePasswordDto);
     RequestResult deleteMember(String password);
-    Long getMemberId(String loginId);
 }
