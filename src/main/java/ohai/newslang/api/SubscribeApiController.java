@@ -56,14 +56,15 @@ public class SubscribeApiController {
         return ResultSubscribeDto.builder()
                 .mediaList(memberSubscribeItem.getMemberSubscribeMediaItemList().stream().map(m -> m.getMedia().getName()).collect(Collectors.toList()))
                 .categoryList(memberSubscribeItem.getSubscribeCategoryList().stream().map(c -> c.getName()).collect(Collectors.toList()))
-                .keywordList(memberSubscribeItem.getSubscribeKeywordList().stream().map(k -> k.getName()).collect(Collectors.toList())).build();
+                .keywordList(memberSubscribeItem.getSubscribeKeywordList().stream().map(k -> k.getName()).collect(Collectors.toList()))
+                .result(RequestResult.builder().resultCode("200").resultMessage("").build()).build();
     }
 
     @PostMapping("/api/media")
     public ResultDto subscribeMedia(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeMediaItems(memberId, request.getNameList());
+            memberSubscribeItemService.updateSubscribeMediaItems(memberId, request.getNameList());
             return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder
@@ -78,7 +79,7 @@ public class SubscribeApiController {
     public ResultDto subscribeCategory(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeCategory(memberId, request.getNameList());
+            memberSubscribeItemService.updateSubscribeCategory(memberId, request.getNameList());
             return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder
@@ -93,7 +94,7 @@ public class SubscribeApiController {
     public ResultDto subscribeKeyword(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
-            Long memberSubscribeId = memberSubscribeItemService.updateSubscribeKeyword(memberId, request.getNameList());
+            memberSubscribeItemService.updateSubscribeKeyword(memberId, request.getNameList());
             return ResultDto.builder().resultCode("200").resultMessage("").build();
         } catch (Exception e) {
             // to do list finder

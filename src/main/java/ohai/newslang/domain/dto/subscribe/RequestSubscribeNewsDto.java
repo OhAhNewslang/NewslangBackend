@@ -9,12 +9,10 @@ import ohai.newslang.domain.dto.page.RequestPageSourceDto;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestSubscribeNewsDto {
-    private String loginId;
     private RequestPageSourceDto pageSource;
 
     @Builder
-    public RequestSubscribeNewsDto(String loginId, RequestPageSourceDto pageSource) {
-        this.loginId = loginId;
+    public RequestSubscribeNewsDto(RequestPageSourceDto pageSource) {
         this.pageSource = pageSource;
     }
 }

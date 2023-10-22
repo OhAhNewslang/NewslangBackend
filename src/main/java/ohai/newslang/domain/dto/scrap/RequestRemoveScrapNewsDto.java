@@ -8,6 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestRemoveScrapNewsDto {
 
-    private String loginId;
     private String newsUrl;
 }

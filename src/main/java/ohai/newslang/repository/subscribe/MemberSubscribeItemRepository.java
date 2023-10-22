@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 
+import java.util.List;
+import java.util.Optional;
+
 //@Repository
 //@RequiredArgsConstructor
 public interface MemberSubscribeItemRepository extends JpaRepository<MemberSubscribeItem, Long> {
@@ -27,12 +30,9 @@ public interface MemberSubscribeItemRepository extends JpaRepository<MemberSubsc
 
     @Query("SELECT msi " +
             "FROM MemberSubscribeItem msi " +
-            "JOIN msi.member m " +
             "JOIN FETCH msi.memberSubscribeMediaItemList sm " +
-            "JOIN FETCH msi.subscribeCategoryList sc " +
-            "JOIN FETCH msi.subscribeKeywordList sk " +
-            "WHERE m.id = :memberId")
-    MemberSubscribeItem findByMemberId(@Param("memberId") Long memberId);
+            "WHERE msi.member.id = :memberId")
+    Optional<MemberSubscribeItem> findByMemberId(@Param("memberId") Long memberId);
 
 
 

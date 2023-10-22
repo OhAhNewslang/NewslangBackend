@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/api/member/newPassword"))
                 .requestMatchers(new AntPathRequestMatcher("/api/news/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/media/**"))
+                .requestMatchers(new AntPathRequestMatcher("/api/subscribe/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/category/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/keyword/**"));
     }
