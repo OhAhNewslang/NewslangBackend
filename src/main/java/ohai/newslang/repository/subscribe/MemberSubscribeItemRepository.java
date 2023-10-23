@@ -31,6 +31,7 @@ public interface MemberSubscribeItemRepository extends JpaRepository<MemberSubsc
     @Query("SELECT msi " +
             "FROM MemberSubscribeItem msi " +
             "JOIN FETCH msi.memberSubscribeMediaItemList sm " +
+            "JOIN FETCH sm.media m " +
             "WHERE msi.member.id = :memberId")
     Optional<MemberSubscribeItem> findByMemberId(@Param("memberId") Long memberId);
 

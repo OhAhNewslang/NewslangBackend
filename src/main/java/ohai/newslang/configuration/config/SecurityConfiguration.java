@@ -48,7 +48,9 @@ public class SecurityConfiguration {
                 requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/members/in"))
                 .requestMatchers(new AntPathRequestMatcher("/api/members/new"))
-                .requestMatchers(new AntPathRequestMatcher("/api/news/live"));
+                .requestMatchers(new AntPathRequestMatcher("/api/subscribe/guest/**"))
+                .requestMatchers(new AntPathRequestMatcher("/api/news/guest/**"))
+                ;
     }
 
     @Bean
@@ -67,13 +69,12 @@ public class SecurityConfiguration {
             // 세션을 유지하여 SessionId를 확인할 필요없이 요청 시에 토큰을 받아서 사용하면 되므로 세션을 유지할 이유가 없다.
             .authorizeHttpRequests(
             (authorize) -> authorize
-            .requestMatchers(mvcMatcherBuilder.pattern("/api/member/**")).hasRole("USER")
+            .requestMatchers(mvcMatcherBuilder.pattern("/api/members/**")).hasRole("USER")
             .requestMatchers(mvcMatcherBuilder.pattern("/api/opinions/**")).hasRole("USER")
             .requestMatchers(new AntPathRequestMatcher("/api/recommends/**")).hasRole("USER")
             .requestMatchers(new AntPathRequestMatcher("/api/news/**")).hasRole("USER")
-            .requestMatchers(new AntPathRequestMatcher("/api/media/**")).hasRole("USER")
-            .requestMatchers(new AntPathRequestMatcher("/api/category/**")).hasRole("USER")
-            .requestMatchers(new AntPathRequestMatcher("/api/keyword/**")).hasRole("USER")
+            .requestMatchers(new AntPathRequestMatcher("/api/subscribe/**")).hasRole("USER")
+            .requestMatchers(new AntPathRequestMatcher("/api/scrap/**")).hasRole("USER")
             .anyRequest().authenticated())// 그 외 인증없이 접근 X
             // whitelist 방식
             // 커스텀 필터 추가 : 요청이 시작되기 전에 만들어놓은 JwtTokenFilter를 사용할 필터로 설정

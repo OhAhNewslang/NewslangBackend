@@ -18,7 +18,7 @@ public class NewsArchiveApiController {
 
     private final NewsArchiveService newsArchiveService;
 
-    @GetMapping("/live")
+    @GetMapping("/guest/live")
     public ResponseThumbnailNewsDto getLiveNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto){
         return newsArchiveService
         .findAllLiveNews(pageSourceDto.getPage(), pageSourceDto.getLimit());

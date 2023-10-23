@@ -92,7 +92,6 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
     public ResponseThumbnailNewsDto findAllSubscribeNews(int page, int limit) {
 
         // 전체 구독 목록 조회
-        // 제대로 작동 안하는 것으로 보임.
         MemberSubscribeItem memberSubscribeItem = subscribeItemRepository
         .findByMemberId(td.currentUserId()).orElseGet(MemberSubscribeItem::new);
 
