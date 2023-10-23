@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/subscribe")
 public class SubscribeApiController {
 
     private final MemberSubscribeItemService memberSubscribeItemService;
@@ -32,7 +33,7 @@ public class SubscribeApiController {
     private final CategoryService categoryService;
     private final TokenDecoder tokenDecoder;
 
-    @GetMapping("/api/media")
+    @GetMapping("/guest/media")
     public ResultSubscribeMediaDto getAllMedias() {
 
         return ResultSubscribeMediaDto.builder()
@@ -43,7 +44,7 @@ public class SubscribeApiController {
         .build();
     }
 
-    @GetMapping("/api/category")
+    @GetMapping("/guest/category")
     public ResultSubscribeCategoryDto getAllCategories() {
         return ResultSubscribeCategoryDto.builder()
         .nameList(categoryService.findAll())
@@ -53,9 +54,10 @@ public class SubscribeApiController {
         .build();
     }
 
-    @GetMapping("/api/subscribe")
+    @GetMapping("/all")
     public ResultSubscribeDto getSubscribe(){
-        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemService.getMemberSubscribeItem();
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemService
+        .getMemberSubscribeItem(tokenDecoder.currentUserId());
         return ResultSubscribeDto.builder()
         .mediaList(memberSubscribeItem.getMemberSubscribeMediaItemList().stream()
         .map(m -> m.getMedia().getName()).collect(Collectors.toList()))
@@ -65,7 +67,7 @@ public class SubscribeApiController {
         .map(SubscribeKeyword::getName).collect(Collectors.toList())).build();
     }
 
-    @PostMapping("/api/media")
+    @PostMapping("/media")
     public ResultDto subscribeMedia(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
@@ -80,7 +82,7 @@ public class SubscribeApiController {
         }
     }
 
-    @PostMapping("/api/category")
+    @PostMapping("/category")
     public ResultDto subscribeCategory(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {
@@ -95,7 +97,7 @@ public class SubscribeApiController {
         }
     }
 
-    @PostMapping("/api/keyword")
+    @PostMapping("/keyword")
     public ResultDto subscribeKeyword(@RequestBody @Valid RequestSubscribeDto request){
         Long memberId = tokenDecoder.currentUserId();
         try {

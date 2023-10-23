@@ -114,10 +114,11 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
         Long memberId = td.currentUserId();
         if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
             MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNewsArchiveRepository.findByMemberId(memberId);
+            List<MemberScrapNewsArchive> memberScrapNewsArchiveList =
+            memberScrapNewsArchiveRepository.findByMemberId(memberId);
             List<String> urlList = memberScrapNewsArchiveList.stream()
-                    .map(n -> n.getNewsArchive().getUrl())
-                    .collect(Collectors.toList());
+            .map(n -> n.getNewsArchive().getUrl())
+            .collect(Collectors.toList());
             memberScrapNews.removeMemberScrapNewsArchive(urlList);
         }
     }

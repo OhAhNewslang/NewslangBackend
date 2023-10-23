@@ -13,30 +13,30 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/news")
+@RequestMapping("/api/scrap")
 public class ScrapNewsApiController {
 
     private final MemberScrapNewsService memberScrapNewsService;
     private final TokenDecoder tokenDecoder;
 
-    @PostMapping("/scrap")
+
+    @PostMapping("/news")
     public ResultDto scrapNews(@RequestBody @Valid RequestScrapNewsDto request,
-                               BindingResult bindingResult){
+                               BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResultDto.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
-            .build();
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+                    .build();
         }
-
-        memberScrapNewsService.addScrapNews(request.getNewsUrl());
-        return ResultDto.builder().resultMessage("뉴스 스크랩 성공").resultCode("200").build();
+            memberScrapNewsService.addScrapNews(request.getNewsUrl());
+            return ResultDto.builder().resultMessage("뉴스 스크랩 성공").resultCode("200").build();
     }
 
-    @GetMapping("/scrap")
+    @GetMapping("/news")
     public ResultScrapNewsDto getScrapNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto,
-                                           BindingResult bindingResult){
+                                    BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return ResultScrapNewsDto.builder()
             .result(RequestResult.builder()
@@ -48,7 +48,9 @@ public class ScrapNewsApiController {
         return memberScrapNewsService.scarpNewsList(pageSourceDto.getPage(), pageSourceDto.getLimit());
     }
 
-    @DeleteMapping("/scrap")
+    // + a 여러개 선택해서 배열로 받아서 스크랩 취소하기
+
+    @DeleteMapping("/news")
     public ResultDto removeScrapNews(@RequestBody @Valid RequestScrapNewsDto request,
                                      BindingResult bindingResult){
 

@@ -6,6 +6,8 @@ import ohai.newslang.domain.dto.news.ResponseThumbnailNewsDto;
 import ohai.newslang.domain.dto.news.ResultDetailNewsDto;
 import ohai.newslang.domain.dto.page.RequestPageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
+import ohai.newslang.domain.dto.subscribe.RequestSubscribeNewsDto;
+import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.service.news.NewsArchiveService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +20,14 @@ public class NewsArchiveApiController {
 
     @GetMapping("/live")
     public ResponseThumbnailNewsDto getLiveNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto){
-        return newsArchiveService.findAllLiveNews(pageSourceDto.getPage(),
-        pageSourceDto.getLimit());
+        return newsArchiveService
+        .findAllLiveNews(pageSourceDto.getPage(), pageSourceDto.getLimit());
     }
 
     @GetMapping("/subscribe")
-    public ResponseThumbnailNewsDto getSubscribeNews(@RequestBody @Valid RequestPageSourceDto request) {
-        return newsArchiveService.findAllSubscribeNews(request.getPage(), request.getLimit());
+    public ResponseThumbnailNewsDto getSubscribeNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto) {
+        return newsArchiveService
+        .findAllSubscribeNews(pageSourceDto.getPage(), pageSourceDto.getLimit());
     }
 
     @GetMapping("/detail")

@@ -63,17 +63,15 @@ public class MemberServiceImpl implements MemberService{
                 .result(RequestResult.builder()
                 .resultCode("200")
                 .resultMessage("로그인이 정상적으로 처리되었습니다.").build()).build();
-            } else {
-                return TokenDto.builder()
-                .result(RequestResult.builder().resultCode("202").resultMessage("비밀번호가 틀렸습니다.").build())
-                .build();
             }
-        } else {
             return TokenDto.builder()
-            .result(RequestResult.builder()
-            .resultCode("202")
-            .resultMessage("해당 아이디로 가입된 회원이 없습니다.").build()).build();
+            .result(RequestResult.builder().resultCode("202").resultMessage("비밀번호가 틀렸습니다.").build())
+            .build();
         }
+        return TokenDto.builder()
+        .result(RequestResult.builder()
+        .resultCode("202")
+        .resultMessage("해당 아이디로 가입된 회원이 없습니다.").build()).build();
     }
 
     @Override
@@ -81,6 +79,7 @@ public class MemberServiceImpl implements MemberService{
         Member currentMember = memberRepository.findByTokenId(td.currentUserId());
         return MemberInfoDto.builder()
         .email(currentMember.getEmail())
+        .loginId(currentMember.getLoginId())
         .name(currentMember.getName())
         .imagePath(currentMember.getImagePath())
         .result(RequestResult.builder().resultCode("200").resultMessage("").build())
@@ -120,6 +119,7 @@ public class MemberServiceImpl implements MemberService{
 
         return MemberInfoDto.builder()
                 .name(currentMember.getName())
+                .loginId(currentMember.getLoginId())
                 .email(currentMember.getEmail())
                 .imagePath(currentMember.getImagePath())
                 .result(result)
@@ -133,19 +133,20 @@ public class MemberServiceImpl implements MemberService{
         if (passwordEncoder.matches(updatePasswordDto.getOldPassword(), currentMember.getPassword())) {
             currentMember.updatePassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
             return MemberInfoDto.builder()
-                    .name(currentMember.getName())
-                    .email(currentMember.getEmail())
-                    .imagePath(currentMember.getImagePath())
-                    .result(RequestResult.builder().resultCode("200").resultMessage("비밀번호 변경 완료.").build())
-                    .build();
-        } else {
-            return MemberInfoDto.builder()
-                    .name(currentMember.getName())
-                    .email(currentMember.getEmail())
-                    .imagePath(currentMember.getImagePath())
-                    .result(RequestResult.builder().resultCode("202").resultMessage("현재 비밀번호가 일치 하지 않습니다.").build())
-                    .build();
+            .name(currentMember.getName())
+            .loginId(currentMember.getLoginId())
+            .email(currentMember.getEmail())
+            .imagePath(currentMember.getImagePath())
+            .result(RequestResult.builder().resultCode("200").resultMessage("비밀번호 변경 완료.").build())
+            .build();
         }
+        return MemberInfoDto.builder()
+        .name(currentMember.getName())
+        .loginId(currentMember.getLoginId())
+        .email(currentMember.getEmail())
+        .imagePath(currentMember.getImagePath())
+        .result(RequestResult.builder().resultCode("202").resultMessage("현재 비밀번호가 일치 하지 않습니다.").build())
+        .build();
     }
 
     @Override

@@ -33,16 +33,14 @@ public interface MemberScrapNewsArchiveRepository extends JpaRepository<MemberSc
 
     @Query("SELECT msna " +
             "FROM MemberScrapNewsArchive msna " +
-            "JOIN msna.memberScrapNews msn " +
-            "JOIN FETCH msna.newsArchive na " +
+            "JOIN FETCH msna.memberScrapNews msn " +
             "WHERE msn.member.id = :memberId")
     Page<MemberScrapNewsArchive> findByMemberId(@Param("memberId") Long memberId,
                                                          Pageable pageable);
 
     @Query("SELECT msna " +
             "FROM MemberScrapNewsArchive msna " +
-            "JOIN msna.memberScrapNews msn " +
-            "JOIN FETCH msna.newsArchive na " +
+            "JOIN FETCH msna.memberScrapNews msn " +
             "WHERE msn.member.id = :memberId")
     List<MemberScrapNewsArchive> findByMemberId(@Param("memberId") Long memberId);
 

@@ -8,6 +8,7 @@ import ohai.newslang.domain.dto.news.ThumbnailNewsDto;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.news.NewsArchive;
+import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
 import ohai.newslang.repository.news.NewsArchiveRepository;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,9 +32,6 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
 
     private final NewsArchiveRepository newsArchiveRepository;
     private final MemberSubscribeItemRepository subscribeItemRepository;
-    private final MemberSubscribeMediaItemRepository subscribeMediaRepository;
-    private final SubscribeKeywordRepository subscribeKeywordRepository;
-    private final SubscribeCategoryRepository subscribeCategoryRepository;
     private final TokenDecoder td;
 
     // 크롤링에 사용 되는 뉴스 서비스 1
@@ -47,11 +46,6 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
     public List<String> isAlreadyExistUrl(List<String> urlList){
         return newsArchiveRepository.alreadyExistByUrl(urlList);
     }
-
-//    @Override
-//    public NewsArchive findByUrl(String url){
-//        return newsArchiveRepository.findByUrl(url);
-//    }
 
     @Override
     public ResultDetailNewsDto findByUrl(String url){
@@ -97,7 +91,10 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
     @Override
     public ResponseThumbnailNewsDto findAllSubscribeNews(int page, int limit) {
 
-        Long memberSubscribeId = subscribeItemRepository.findMemberSubscribeItemIdByMember_Id(td.currentUserId());
+        // 전체 구독 목록 조회
+        // 제대로 작동 안하는 것으로 보임.
+        MemberSubscribeItem memberSubscribeItem = subscribeItemRepository
+        .findByMemberId(td.currentUserId()).orElseGet(MemberSubscribeItem::new);
 
         // 페이징 조건
         PageRequest pageable = PageRequest
@@ -105,15 +102,17 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
 
         // 페이징 쿼리
         Page<NewsArchive> pagingSubscribeNews = newsArchiveRepository
-        .findAllByFilters(subscribeMediaRepository
-        .findByMemberSubscribeItemId(memberSubscribeId).stream()
+        // 전체 구독 목록에서 언론사 부분만 추출?
+        .findAllByFilters(memberSubscribeItem.getMemberSubscribeMediaItemList().stream()
         .map(s -> s.getMedia().getName()).toList(),
-        subscribeCategoryRepository
-        .findAllByMemberSubscribeItem_Id(memberSubscribeId).stream()
+
+        // 전체 구독 목록에서 카테고리 부분만 추출?
+        memberSubscribeItem.getSubscribeCategoryList().stream()
         .map(SubscribeCategory::getName).toList(),
+
+        // 전체 구독 목록에서 키워드 부분만 추출?
         // 키워드는 하나의 문자열로 만들어서 찾아야함.
-        String.join("|", subscribeKeywordRepository
-        .findAllByMemberSubscribeItem_Id(memberSubscribeId).stream()
+        String.join("|", memberSubscribeItem.getSubscribeKeywordList().stream()
         .map(SubscribeKeyword::getName).toList()), pageable);
 
         // 이번 페이징 조건에 맞게 페이징된

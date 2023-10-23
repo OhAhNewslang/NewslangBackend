@@ -5,8 +5,8 @@ import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import java.util.List;
 
 public interface MemberSubscribeItemService {
-    Long updateSubscribeCategory(Long memberId, List<String> categoryNameList);
-    Long updateSubscribeKeyword(Long memberId, List<String> keywordNameList);
-    Long updateSubscribeMediaItems(Long memberId, List<String> subscribeItemNameList);
-    MemberSubscribeItem getMemberSubscribeItem();
+    void updateSubscribeCategory(Long memberId, List<String> categoryNameList);
+    void updateSubscribeKeyword(Long memberId, List<String> keywordNameList);
+    void updateSubscribeMediaItems(Long memberId, List<String> subscribeItemNameList) throws Exception;
+    MemberSubscribeItem getMemberSubscribeItem(Long memberId);
 }
