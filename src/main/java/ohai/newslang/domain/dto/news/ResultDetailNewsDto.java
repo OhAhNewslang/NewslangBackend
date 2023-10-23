@@ -15,17 +15,19 @@ public class ResultDetailNewsDto {
     private String title;
     private String contents;
     private String media;
+    private int likeCount;
     private LocalDateTime postDateTime;
     private LocalDateTime modifyDateTime;
     private String reporter;
     private RequestResult result;
 
     @Builder
-    public ResultDetailNewsDto(String url, String title, String contents, String media, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter, RequestResult result) {
+    public ResultDetailNewsDto(String url, String title, String contents, String media, int likeCount, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter, RequestResult result) {
         this.url = url;
         this.title = title;
         this.contents = contents;
         this.media = media;
+        this.likeCount = likeCount;
         this.postDateTime = postDateTime;
         this.modifyDateTime = modifyDateTime;
         this.reporter = reporter;

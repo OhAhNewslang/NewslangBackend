@@ -11,5 +11,5 @@ public interface CategoryService {
 
     boolean isExistCategoryName(String categoryName);
 
-    List<Category> findAll();
+    List<String> findAll();
 }

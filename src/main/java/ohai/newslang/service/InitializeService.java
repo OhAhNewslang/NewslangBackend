@@ -3,9 +3,9 @@ package ohai.newslang.service;
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.CrawlerProperties;
 import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.entity.news.DetailNewsArchive;
+import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.entity.opinion.Opinion;
-import ohai.newslang.domain.entity.recommend.DetailNewsRecommend;
+import ohai.newslang.domain.entity.recommend.NewsRecommend;
 import ohai.newslang.domain.entity.recommend.MemberRecommend;
 import ohai.newslang.domain.entity.recommend.OpinionRecommend;
 import ohai.newslang.domain.enumulate.RecommendStatus;
@@ -62,10 +62,10 @@ public class InitializeService {
                     pe.encode("1234")
             ));
 
-            DetailNewsArchive news = DetailNewsArchive.builder()
-                    .newsUrl("http://dummyUrl1:8080").build();
+            NewsArchive news = NewsArchive.builder()
+                    .url("http://dummyUrl1:8080").build();
 
-            DetailNewsRecommend
+            NewsRecommend
                     .createNewsRecommend(memberRecommend, news, RecommendStatus.NONE);
 
             em.persist(news);
@@ -121,8 +121,8 @@ public class InitializeService {
             em.persist(member4);
             em.persist(member5);
 
-            DetailNewsArchive news = DetailNewsArchive.builder()
-                    .newsUrl("http://dummyUrl2:8080").build();
+            NewsArchive news = NewsArchive.builder()
+                    .url("http://dummyUrl2:8080").build();
 
             em.persist(news);
 

@@ -33,7 +33,9 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<Category> findAll(){
-        return  categoryRepository.findAll();
+    public List<String> findAll(){
+        return categoryRepository.findAll().stream()
+        .map(Category::getName)
+        .toList();
     }
 }

@@ -1,20 +1,20 @@
 package ohai.newslang.domain.dto.news;
 
 import lombok.*;
-import ohai.newslang.domain.dto.page.PageSourceDto;
+import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ResultThumbnailNewsDto {
+public class ResponseThumbnailNewsDto {
     private List<ThumbnailNewsDto> thumbnailNewsList;
-    private PageSourceDto pageSource;
+    private ResponsePageSourceDto pageSource;
     private RequestResult result;
 
     @Builder
-    public ResultThumbnailNewsDto(List<ThumbnailNewsDto> thumbnailNewsList, PageSourceDto pageSource, RequestResult result) {
+    public ResponseThumbnailNewsDto(List<ThumbnailNewsDto> thumbnailNewsList, ResponsePageSourceDto pageSource, RequestResult result) {
         this.thumbnailNewsList = thumbnailNewsList;
         this.pageSource = pageSource;
         this.result = result;

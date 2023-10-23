@@ -1,13 +1,18 @@
 package ohai.newslang.service.subscribe;
 
 import lombok.RequiredArgsConstructor;
+import ohai.newslang.configuration.jwt.TokenDecoder;
 import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeMediaItem;
+import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
+import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 import ohai.newslang.repository.member.MemberRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeMediaItemRepository;
+import ohai.newslang.repository.subscribe.SubscribeCategoryRepository;
+import ohai.newslang.repository.subscribe.SubscribeKeywordRepository;
 import ohai.newslang.repository.subscribe.subscribeReference.MediaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +28,11 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     private final MemberRepository memberRepository;
     private final MemberSubscribeItemRepository memberSubscribeItemRepository;
     private final MemberSubscribeMediaItemRepository memberSubscribeMediaItemRepository;
+    private final MemberSubscribeMediaItemRepository subscribeMediaRepository;
+    private final SubscribeKeywordRepository subscribeKeywordRepository;
+    private final SubscribeCategoryRepository subscribeCategoryRepository;
     private final MediaRepository mediaRepository;
+    private final TokenDecoder td;
 
     @Override
     @Transactional
@@ -63,7 +72,7 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     @Transactional
     public void updateSubscribeMediaItems(Long memberId, List<String> subscribeItemNameList) throws Exception {
         List<Media> mediaList = mediaRepository.findByNameIn(subscribeItemNameList);
-        if (mediaList.size() < 1) throw new Exception("Not exist media");
+        if (mediaList.isEmpty()) throw new Exception("Not exist media");
         // findOne -> findById + get() 메서드(Optional개봉)
         MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElse(null);
         if (memberSubscribeItem == null){

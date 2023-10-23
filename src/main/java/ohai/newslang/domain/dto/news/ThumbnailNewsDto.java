@@ -3,10 +3,12 @@ package ohai.newslang.domain.dto.news;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class ThumbnailNewsDto {
     private String url;
     private String media;

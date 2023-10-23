@@ -8,7 +8,7 @@ import ohai.newslang.domain.entity.subscribe.subscribeReference.Category;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 import ohai.newslang.service.crawling.CrawlingMediaService;
 import ohai.newslang.service.crawling.CrawlingNewsService;
-import ohai.newslang.service.crawling.NewsArchiveService;
+import ohai.newslang.service.news.NewsArchiveService;
 import ohai.newslang.service.subscribe.subscribeReference.CategoryService;
 import ohai.newslang.service.subscribe.subscribeReference.MediaService;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -110,7 +110,6 @@ public class CrawlingService {
                                 .countLike(0L)
                                 .postDateTime(t.getPostDateTime())
                                 .modifyDateTime(t.getModifyDateTime())
-                                .reporter(t.getReporter())
                                 .build());
                     }
                 });

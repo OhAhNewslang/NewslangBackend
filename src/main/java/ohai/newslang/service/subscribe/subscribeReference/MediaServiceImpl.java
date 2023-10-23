@@ -1,6 +1,7 @@
 package ohai.newslang.service.subscribe.subscribeReference;
 
 import lombok.RequiredArgsConstructor;
+import ohai.newslang.domain.dto.subscribe.subscribeReference.MediaDto;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 import ohai.newslang.repository.subscribe.subscribeReference.MediaRepository;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,6 @@ public class MediaServiceImpl implements MediaService{
         mediaRepository.save(media);
     }
 
-    @Override
-    @Transactional
-    public void saveAll(List<Media> mediaList){
-        mediaRepository.saveAll(mediaList);
-    }
 
     @Override
     public boolean isExistMediaName(String mediaName){
@@ -33,7 +29,11 @@ public class MediaServiceImpl implements MediaService{
     }
 
     @Override
-    public List<Media> findAll(){
-        return  mediaRepository.findAll();
+    public List<MediaDto> findAll(){
+        return  mediaRepository.findAll().stream()
+        .map(m -> MediaDto.builder()
+        .mediaName(m.getName())
+        .imagePath(m.getImagePath())
+        .build()).toList();
     }
 }

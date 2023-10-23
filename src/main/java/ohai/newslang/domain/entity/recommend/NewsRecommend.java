@@ -1,11 +1,10 @@
 package ohai.newslang.domain.entity.recommend;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ohai.newslang.domain.entity.TimeStamp;
-import ohai.newslang.domain.entity.news.DetailNewsArchive;
+import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.enumulate.RecommendStatus;
 
 import jakarta.persistence.*;
@@ -13,7 +12,7 @@ import jakarta.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DetailNewsRecommend extends TimeStamp {
+public class NewsRecommend extends TimeStamp {
 
     @Id
     @GeneratedValue
@@ -25,8 +24,8 @@ public class DetailNewsRecommend extends TimeStamp {
     private MemberRecommend memberRecommend;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "detail_news_archive_id")
-    private DetailNewsArchive detailNewsArchive;
+    @JoinColumn(name = "news_archive_id")
+    private NewsArchive newsArchive;
 
     @Enumerated(EnumType.STRING)
     private RecommendStatus status;
@@ -34,30 +33,30 @@ public class DetailNewsRecommend extends TimeStamp {
     //연관 관계 메서드
     public void foreignMemberRecommend(MemberRecommend newMemberRecommend) {
         memberRecommend = newMemberRecommend;
-        memberRecommend.getDetailNewsRecommends().add(this);
+        memberRecommend.getNewsRecommends().add(this);
     }
 
-    public void foreignDetailNewArchive(DetailNewsArchive newDetailNewsArchive) {
-        detailNewsArchive = newDetailNewsArchive;
-        detailNewsArchive.getDetailNewsRecommends().add(this);
+    public void foreignDetailNewArchive(NewsArchive newNewsArchive) {
+        newsArchive = newNewsArchive;
+        newsArchive.getNewsRecommends().add(this);
     }
 
     //비즈니스 로직
-    public static DetailNewsRecommend createNewsRecommend(
+    public static NewsRecommend createNewsRecommend(
             MemberRecommend newMemberRecommend,
-            DetailNewsArchive newDetailNewsArchive,
+            NewsArchive newNewsArchive,
             RecommendStatus newStatus) {
 
-        DetailNewsRecommend detailNewsRecommend = new DetailNewsRecommend();
-        detailNewsRecommend.foreignMemberRecommend(newMemberRecommend);
-        detailNewsRecommend.foreignDetailNewArchive(newDetailNewsArchive);
-        detailNewsRecommend.status = newStatus;
+        NewsRecommend newsRecommend = new NewsRecommend();
+        newsRecommend.foreignMemberRecommend(newMemberRecommend);
+        newsRecommend.foreignDetailNewArchive(newNewsArchive);
+        newsRecommend.status = newStatus;
 
-        return detailNewsRecommend;
+        return newsRecommend;
     }
 
     public void updateStatus(RecommendStatus newStatus) {
-        detailNewsArchive.updateLikeCount(countStatus(status, newStatus));
+        newsArchive.updateLikeCount(countStatus(status, newStatus));
         status = newStatus;
 
     }

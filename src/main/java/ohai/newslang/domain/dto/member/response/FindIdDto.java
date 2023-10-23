@@ -9,7 +9,8 @@ import ohai.newslang.domain.dto.request.RequestResult;
 @Builder
 @AllArgsConstructor
 public class FindIdDto {
-    String loginId;
 
+    String loginId;
     RequestResult result;
+
 }

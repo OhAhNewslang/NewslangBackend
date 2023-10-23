@@ -34,6 +34,11 @@ public interface MemberSubscribeItemRepository extends JpaRepository<MemberSubsc
             "WHERE msi.member.id = :memberId")
     Optional<MemberSubscribeItem> findByMemberId(@Param("memberId") Long memberId);
 
+    @Query("SELECT msi.id FROM MemberSubscribeItem msi " +
+            "JOIN msi.member m " +
+            "WHERE m.id = :memberId")
+    Long findMemberSubscribeItemIdByMember_Id(@Param("memberId") Long memberId);
+
 
 
 //    public boolean isExistMemberSubscribeItem(Long memberId){
