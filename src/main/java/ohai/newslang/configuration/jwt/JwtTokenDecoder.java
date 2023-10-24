@@ -2,22 +2,17 @@ package ohai.newslang.configuration.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ohai.newslang.configuration.exception.WithdrawMemberException;
 import ohai.newslang.repository.member.MemberRepository;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.Key;
 import java.util.Date;
@@ -138,8 +133,6 @@ public class JwtTokenDecoder implements TokenDecoder{
         // 토큰 유효성 검증 수행
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            memberRepository.findById(tokenToId(token))
-            .orElseThrow(WithdrawMemberException::new);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("로그인 먼저 해주세요.");
@@ -149,8 +142,6 @@ public class JwtTokenDecoder implements TokenDecoder{
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
-        } catch (WithdrawMemberException e) {
-            log.info(e.getMessage());
         }
         return false;
     }

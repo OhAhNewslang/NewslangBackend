@@ -18,20 +18,19 @@ public class NewsArchiveApiController {
 
     private final NewsArchiveService newsArchiveService;
 
-    @GetMapping("/guest/live")
-    public ResponseThumbnailNewsDto getLiveNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto){
-        return newsArchiveService
-        .findAllLiveNews(pageSourceDto.getPage(), pageSourceDto.getLimit());
+    @GetMapping("/guest/live/{page}/{limit}")
+    public ResponseThumbnailNewsDto getLiveNews(@PathVariable("page")int page, @PathVariable("limit")int limit/*@RequestBody @Valid RequestPageSourceDto pageSourceDto*/){
+        return newsArchiveService.findAllLiveNews(page,limit);
     }
 
-    @GetMapping("/subscribe")
-    public ResponseThumbnailNewsDto getSubscribeNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto) {
+    @GetMapping("/subscribe/{page}/{limit}")
+    public ResponseThumbnailNewsDto getSubscribeNews(@PathVariable("page")int page, @PathVariable("limit")int limit/*@RequestBody @Valid RequestPageSourceDto pageSourceDto*/) {
         return newsArchiveService
-        .findAllSubscribeNews(pageSourceDto.getPage(), pageSourceDto.getLimit());
+        .findAllSubscribeNews(page,limit);
     }
 
-    @GetMapping("/detail")
-    public ResultDetailNewsDto getDetailNews(@RequestParam("newsUrl") String newsUrl){
+    @GetMapping("/detail/{newsUrl}")
+    public ResultDetailNewsDto getDetailNews(@PathVariable("newsUrl") String newsUrl){
         if (newsUrl.isBlank()) {
             return ResultDetailNewsDto.builder()
             .result(RequestResult.builder()
