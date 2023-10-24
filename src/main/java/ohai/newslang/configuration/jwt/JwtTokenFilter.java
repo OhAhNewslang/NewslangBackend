@@ -25,13 +25,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = td.resolveToken(request);
-        System.out.println("################################");
-        System.out.println("token = " + token);
         // token이 Null이 아니고, 유효기간이 넘지 않았을 때
         // SecurityContextHolder에 저장
         if (StringUtils.hasText(token) && td.expiredToken(token)) {
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            System.out.println("token = " + token);
             Authentication authentication = td.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

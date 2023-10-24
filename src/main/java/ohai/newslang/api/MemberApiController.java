@@ -2,10 +2,8 @@ package ohai.newslang.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.dto.member.request.JoinMemberDto;
-import ohai.newslang.domain.dto.member.request.LoginMemberDto;
-import ohai.newslang.domain.dto.member.request.UpdateMemberDto;
-import ohai.newslang.domain.dto.member.request.UpdatePasswordDto;
+import ohai.newslang.configuration.exception.WithdrawMemberException;
+import ohai.newslang.domain.dto.member.request.*;
 import ohai.newslang.domain.dto.member.response.MemberInfoDto;
 import ohai.newslang.domain.dto.member.response.TokenDto;
 import ohai.newslang.domain.dto.request.RequestResult;
@@ -14,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RestControllerAdvice
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
 public class MemberApiController {
@@ -88,8 +87,15 @@ public class MemberApiController {
     }
 
     @DeleteMapping("")
-    public RequestResult withdraw(@RequestParam("password") String password) {
-        return memberService.deleteMember(password);
+    public RequestResult withdraw(@RequestBody WithdrawPasswordDto passwordDto,
+                                  BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return RequestResult.builder()
+            .resultCode("202")
+            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+            .build();
+        }
+        return memberService.deleteMember(passwordDto.getPassword());
     }
 
 //    @PostMapping("/certify")
