@@ -2,10 +2,12 @@ package ohai.newslang.configuration.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ohai.newslang.configuration.exception.WithdrawMemberException;
 import ohai.newslang.repository.member.MemberRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -132,12 +134,12 @@ public class JwtTokenDecoder implements TokenDecoder{
     }
 
     @Override
-    public boolean expiredToken(String token) {
+    public boolean expiredToken(String token){
         // 토큰 유효성 검증 수행
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             memberRepository.findById(tokenToId(token))
-            .orElseThrow(()-> new IllegalAccessException("이미 탈퇴된 회원입니다."));
+            .orElseThrow(WithdrawMemberException::new);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("로그인 먼저 해주세요.");
@@ -147,7 +149,7 @@ public class JwtTokenDecoder implements TokenDecoder{
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
-        } catch (IllegalAccessException e) {
+        } catch (WithdrawMemberException e) {
             log.info(e.getMessage());
         }
         return false;
