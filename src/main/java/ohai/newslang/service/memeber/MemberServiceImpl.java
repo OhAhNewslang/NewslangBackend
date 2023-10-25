@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public MemberInfoDto readMemberInfo() {
-        Member currentMember = memberRepository.findByTokenId(td.currentUserId());
+        Member currentMember = memberRepository.findByTokenId(td.currentMemberId());
         return MemberInfoDto.builder()
         .email(currentMember.getEmail())
         .loginId(currentMember.getLoginId())
@@ -89,7 +89,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public MemberInfoDto updateMemberInfo(UpdateMemberDto updateMemberDto) {
-        Member currentMember = memberRepository.findByTokenId(td.currentUserId());
+        Member currentMember = memberRepository.findByTokenId(td.currentMemberId());
         RequestResult result = new RequestResult();
 
         // 수정하지 않고 수정 완료 버튼을 눌렀을때
@@ -129,7 +129,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public MemberInfoDto updateMemberPassword(UpdatePasswordDto updatePasswordDto) {
-        Member currentMember = memberRepository.findByTokenId(td.currentUserId());
+        Member currentMember = memberRepository.findByTokenId(td.currentMemberId());
         if (passwordEncoder.matches(updatePasswordDto.getOldPassword(), currentMember.getPassword())) {
             currentMember.updatePassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
             return MemberInfoDto.builder()
@@ -152,7 +152,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public RequestResult deleteMember(String password) {
-        Member currentMember = memberRepository.findByTokenId(td.currentUserId());
+        Member currentMember = memberRepository.findByTokenId(td.currentMemberId());
         if (passwordEncoder.matches(password, currentMember.getPassword())) {
             memberRepository.delete(currentMember);
             return RequestResult.builder()

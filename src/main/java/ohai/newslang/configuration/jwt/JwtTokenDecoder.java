@@ -147,7 +147,7 @@ public class JwtTokenDecoder implements TokenDecoder{
     }
 
     @Override
-    public Long currentUserId() {
+    public Long currentMemberId() {
         // 현재 유저 정보는 SecurityContextHolder에
         // Authentication객체에 (memberId, 유효한지, 역할)로 저장해놓은 상태이므로
         // Authentication 가져오기

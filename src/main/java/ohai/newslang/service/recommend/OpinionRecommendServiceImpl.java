@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.configuration.jwt.TokenDecoder;
 import ohai.newslang.domain.dto.recommend.opinionRecommend.OpinionRecommendDto;
 import ohai.newslang.domain.dto.request.RequestResult;
-import ohai.newslang.domain.entity.opinion.Opinion;
 import ohai.newslang.domain.entity.recommend.OpinionRecommend;
 import ohai.newslang.domain.enumulate.RecommendStatus;
 import ohai.newslang.repository.opinion.OpinionRepository;
@@ -26,11 +25,12 @@ public class OpinionRecommendServiceImpl implements OpinionRecommendService{
     @Override
     @Transactional
     public RequestResult updateRecommendStatus(OpinionRecommendDto opinionRecommendDto) {
-        opinionRecommendRepository.findByMemberRecommend_IdAndOpinion_Id(
-            memberRecommendRepository.findByMember_Id(td.currentUserId()).getId(),
-            opinionRecommendDto.getOpinionId())
-                .orElseGet(() ->  createRecommendInfo(opinionRecommendDto))
-                .updateStatus(opinionRecommendDto.getStatus());
+        opinionRecommendRepository
+        .findByMemberRecommend_IdAndOpinion_Uuid(memberRecommendRepository
+        .findByMember_Id(td.currentMemberId()).getId(),
+        opinionRecommendDto.getOpinionId())
+        .orElseGet(() ->  createRecommendInfo(opinionRecommendDto))
+        .updateStatus(opinionRecommendDto.getStatus());
 
         return RequestResult.builder()
                 .resultCode("200")
@@ -40,8 +40,8 @@ public class OpinionRecommendServiceImpl implements OpinionRecommendService{
     @Transactional
     public OpinionRecommend createRecommendInfo(OpinionRecommendDto opinionRecommendDto) {
         OpinionRecommend opinionRecommend = OpinionRecommend.createOpinionRecommend(
-                memberRecommendRepository.findByMember_Id(td.currentUserId()),
-                opinionRepository.findNoOptionalById(opinionRecommendDto.getOpinionId()),
+                memberRecommendRepository.findByMember_Id(td.currentMemberId()),
+                opinionRepository.findNoOptionalByUuid(opinionRecommendDto.getOpinionId()),
                 RecommendStatus.NONE);
 
         return opinionRecommendRepository.save(opinionRecommend);

@@ -21,5 +21,5 @@ public interface OpinionService {
     OpinionListResponseDto opinionListByRecentOrderForMember(
             int pageNumber, int pageSize);
     ModifyOpinionResponseDto modifyContent(OpinionModifyRequestDto opinionModifyRequestDto);
-    RequestResult deleteOpinion(Long opinionId);
+    RequestResult deleteOpinion(String opinionId);
 }
