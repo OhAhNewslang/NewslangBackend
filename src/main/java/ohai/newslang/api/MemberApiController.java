@@ -2,7 +2,6 @@ package ohai.newslang.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.configuration.exception.WithdrawMemberException;
 import ohai.newslang.domain.dto.member.request.*;
 import ohai.newslang.domain.dto.member.response.MemberInfoDto;
 import ohai.newslang.domain.dto.member.response.TokenDto;
@@ -12,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RestControllerAdvice
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
 public class MemberApiController {

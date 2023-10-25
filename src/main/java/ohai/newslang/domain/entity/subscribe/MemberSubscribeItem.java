@@ -41,20 +41,19 @@ public class MemberSubscribeItem {
 
     public void addCategory(List<String> nameList){
         nameList.forEach(sn -> {
-            SubscribeCategory subscribeCategory = new SubscribeCategory();
-            subscribeCategory.setName(sn);
-            subscribeCategory.setMemberSubscribeItem(this);
-            this.subscribeCategoryList.add(subscribeCategory);
+        SubscribeCategory subscribeCategory = new SubscribeCategory();
+        subscribeCategory.setName(sn);
+        subscribeCategory.setMemberSubscribeItem(this);
+        this.subscribeCategoryList.add(subscribeCategory);
         });
     }
 
     public void addKeyword(List<String> nameList){
         nameList.forEach(sn -> {
-            SubscribeKeyword subscribeKeyword = new SubscribeKeyword();
-            subscribeKeyword.setName(sn);
-            subscribeKeyword.setMemberSubscribeItem(this);
-            this.subscribeKeywordList.add(subscribeKeyword);
-        });
+        SubscribeKeyword subscribeKeyword = new SubscribeKeyword();
+        subscribeKeyword.setName(sn);
+        subscribeKeyword.setMemberSubscribeItem(this);
+        this.subscribeKeywordList.add(subscribeKeyword); });
     }
 
     public void clearCategory() {
@@ -73,11 +72,10 @@ public class MemberSubscribeItem {
 
     public void addMemberSubscribeMediaItems(List<Media> mediaList){
         mediaList.forEach(sn -> {
-            MemberSubscribeMediaItem msmi = new MemberSubscribeMediaItem();
-            msmi.setMedia(sn);
-            msmi.setMemberSubscribeItem(this);
-            this.memberSubscribeMediaItemList.add(msmi);
-        });
+        MemberSubscribeMediaItem msmi = new MemberSubscribeMediaItem();
+        msmi.setMedia(sn);
+        msmi.setMemberSubscribeItem(this);
+        this.memberSubscribeMediaItemList.add(msmi); });
     }
 
     public void removeMemberSubscribeMediaItems(List<Long> memberSubscribeMediaItemIdList) {

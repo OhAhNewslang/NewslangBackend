@@ -19,8 +19,11 @@ public interface OpinionRecommendRepository extends JpaRepository<OpinionRecomme
 //            "WHERE mr.id =:mRId AND o.id =:oId")
 //    Optional<OpinionRecommend> findOpinionRecommend(@Param("mRId") Long mRId,
 //                                              @Param("oId") Long oId);
-    @EntityGraph(attributePaths = {"opinion"})
-    Optional<OpinionRecommend> findByMemberRecommend_IdAndOpinion_Id(
-            Long memberRecommendId,
-            Long opinionId);
+    @Query("SELECT or " +
+            "FROM OpinionRecommend or " +
+            "JOIN or.opinion o " +
+            "WHERE or.memberRecommend.id = :mrid AND o.uuid = :uuid")
+    Optional<OpinionRecommend> findByMemberRecommend_IdAndOpinion_Uuid(
+            @Param("mrid") Long memberRecommendId,
+            @Param("uuid") String opinionId);
 }

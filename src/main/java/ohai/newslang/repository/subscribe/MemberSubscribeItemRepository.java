@@ -33,14 +33,19 @@ public interface MemberSubscribeItemRepository extends JpaRepository<MemberSubsc
             "JOIN FETCH msi.memberSubscribeMediaItemList sm " +
             "JOIN FETCH sm.media m " +
             "WHERE msi.member.id = :memberId")
-    Optional<MemberSubscribeItem> findByMemberId(@Param("memberId") Long memberId);
+    Optional<MemberSubscribeItem> findSubscribeMediaByMemberId(@Param("memberId") Long memberId);
 
-    @Query("SELECT msi.id FROM MemberSubscribeItem msi " +
-            "JOIN msi.member m " +
-            "WHERE m.id = :memberId")
-    Long findMemberSubscribeItemIdByMember_Id(@Param("memberId") Long memberId);
+    @Query("SELECT msi " +
+            "FROM MemberSubscribeItem msi " +
+            "JOIN FETCH msi.subscribeCategoryList sc " +
+            "WHERE msi.member.id = :memberId")
+    Optional<MemberSubscribeItem> findSubscribeCategoryByMemberId(@Param("memberId") Long memberId);
 
-
+    @Query("SELECT msi " +
+            "FROM MemberSubscribeItem msi " +
+            "JOIN FETCH msi.subscribeKeywordList sk " +
+            "WHERE msi.member.id = :memberId")
+    Optional<MemberSubscribeItem> findSubscribeKeywordByMemberId(@Param("memberId") Long memberId);
 
 //    public boolean isExistMemberSubscribeItem(Long memberId){
 //        Long result = (Long)em.createQuery("select count(msi.id) from MemberSubscribeItem msi where msi.member.id = :memberId")

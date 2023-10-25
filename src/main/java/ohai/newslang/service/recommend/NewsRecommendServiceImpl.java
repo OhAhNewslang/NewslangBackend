@@ -27,7 +27,7 @@ public class NewsRecommendServiceImpl implements NewsRecommendService {
     public RequestResult updateRecommendStatus(NewsRecommendDto newsRecommendDto) {
         newsRecommendRepository.findByMemberRecommend_IdAndDetailNewsArchiveUrl(
                 memberRecommendRepository.findByMember_Id(
-                    td.currentUserId()).getId(),
+                    td.currentMemberId()).getId(),
                     newsRecommendDto.getNewsUrl()
                 ).orElseGet(() -> createRecommendInfo(newsRecommendDto)
                 ).updateStatus(newsRecommendDto.getStatus());
@@ -43,7 +43,7 @@ public class NewsRecommendServiceImpl implements NewsRecommendService {
         // 뉴스 추천정보 만들기 도메인 로직 호출
         NewsRecommend newsRecommend = NewsRecommend.createNewsRecommend(
             // 멤버 추천 정보, 디테일 뉴스 영속성 부여
-            memberRecommendRepository.findByMember_Id(td.currentUserId()),
+            memberRecommendRepository.findByMember_Id(td.currentMemberId()),
             newsArchiveRepository.findByUrl(newsRecommendDto.getNewsUrl()),
             RecommendStatus.NONE
         );

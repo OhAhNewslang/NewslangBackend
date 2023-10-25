@@ -32,7 +32,7 @@ public class OpinionServiceImpl implements OpinionService{
     @Transactional
     public OpinionResponseDto resistOpinion(OpinionResistRequestDto opinionResistRequestDto) {
 
-        Long currentUserId = td.currentUserId();
+        Long currentUserId = td.currentMemberId();
         Opinion newOpinion = Opinion.createOpinion(
         memberRepository.findByTokenId(currentUserId),
         newsArchiveRepository.findByUrl(opinionResistRequestDto.getNewsUrl()),
@@ -84,7 +84,7 @@ public class OpinionServiceImpl implements OpinionService{
         .opinions(findOpinions.map(opinion ->
         OpinionResponseDto.builder()
         .opinion(opinion)
-        .modifiable(opinion.getMember().getId().equals(td.currentUserId()))
+        .modifiable(opinion.getMember().getId().equals(td.currentMemberId()))
         .build()).toList())
         .pageSource(ResponsePageSourceDto.builder()
         .page(pageNumber)
@@ -122,7 +122,7 @@ public class OpinionServiceImpl implements OpinionService{
 
     // 의견 모아보기용 의견 페이징 -> 이번 회원의 의견 모아보기 api 호출에 해당하는 페이지 리스트
     private OpinionListResponseDto getOpinionListResponseDto(int pageNumber, int pageSize, PageRequest pageRequest) {
-        Page<Opinion> findOpinions = opinionRepository.findAllByMemberId(td.currentUserId(), pageRequest);
+        Page<Opinion> findOpinions = opinionRepository.findAllByMemberId(td.currentMemberId(), pageRequest);
         return OpinionListResponseDto.builder()
         .opinions(findOpinions
         .map(opinion -> OpinionResponseDto.builder()
@@ -143,12 +143,12 @@ public class OpinionServiceImpl implements OpinionService{
     @Transactional
     public ModifyOpinionResponseDto modifyContent(OpinionModifyRequestDto opinionModifyRequestDto) {
 
-        opinionRepository.findNoOptionalById(opinionModifyRequestDto.getOpinionId())
+        opinionRepository.findNoOptionalByUuid(opinionModifyRequestDto.getOpinionId())
                 .updateContent(opinionModifyRequestDto.getOpinionContent());
 
         return ModifyOpinionResponseDto.builder()
         .opinion(opinionRepository
-        .findNoOptionalJoinMemberById(opinionModifyRequestDto.getOpinionId()))
+        .findNoOptionalJoinMemberByUuid(opinionModifyRequestDto.getOpinionId()))
         .result(RequestResult.builder()
         .resultCode("200")
         .resultMessage("댓글 수정 완료")
@@ -158,9 +158,9 @@ public class OpinionServiceImpl implements OpinionService{
 
     @Override
     @Transactional
-    public RequestResult deleteOpinion(Long opinionId) {
+    public RequestResult deleteOpinion(String opinionId) {
 
-        Opinion findOpinion = opinionRepository.findNoOptionalById(opinionId);
+        Opinion findOpinion = opinionRepository.findNoOptionalByUuid(opinionId);
         opinionRepository.delete(findOpinion.deleteOpinion());
         return RequestResult.builder()
         .resultCode("200")
