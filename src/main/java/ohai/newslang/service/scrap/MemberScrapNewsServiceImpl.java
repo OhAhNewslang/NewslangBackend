@@ -37,7 +37,7 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
 
     @Override
     public ResultScrapNewsDto scarpNewsList(int page, int limit) {
-        Long memberId = td.currentUserId();
+        Long memberId = td.currentMemberId();
         PageRequest pageable = PageRequest.of(page - 1, limit, Sort.by("scrapDateTime").descending());
 
         Page<MemberScrapNewsArchive> pagingScrapNews = memberScrapNewsArchiveRepository.findByMemberId(memberId, pageable);
@@ -83,19 +83,19 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
         if (isExistScrapNews(newsUrl)){
             return RequestResult.builder().resultMessage("이미 스크랩한 뉴스입니다.").resultCode("202").build();
         }
-        Long memberId = td.currentUserId();
+        Long memberId = td.currentMemberId();
         NewsArchive newsArchive = newsArchiveRepository.findByUrl(newsUrl);
         Member member = memberRepository.findByTokenId(memberId);
         MemberScrapNews memberScrapNews = MemberScrapNews.newMemberScrapNews(member, newsArchive);
         memberScrapNewsRepository.save(memberScrapNews);
         return RequestResult.builder()
-                .resultCode("200")
-                .resultMessage("뉴스 스크랩 성공").build();
+        .resultCode("200")
+        .resultMessage("뉴스 스크랩 성공").build();
     }
 
     // 이미 스크랩된 뉴스인지 확인.
     public boolean isExistScrapNews(String newsUrl) {
-        Long memberId = td.currentUserId();
+        Long memberId = td.currentMemberId();
         if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
             MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
             List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNews.getMemberScrapNewsArchiveList();
@@ -111,7 +111,7 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
     @Override
     @Transactional
     public void removeScrapNews(String url) {
-        Long memberId = td.currentUserId();
+        Long memberId = td.currentMemberId();
         if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
             MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
             List<MemberScrapNewsArchive> memberScrapNewsArchiveList =

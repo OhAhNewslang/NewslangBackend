@@ -7,15 +7,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ohai.newslang.repository.member.MemberRepository;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.Key;
 import java.util.Date;
@@ -132,12 +129,10 @@ public class JwtTokenDecoder implements TokenDecoder{
     }
 
     @Override
-    public boolean expiredToken(String token) {
+    public boolean expiredToken(String token){
         // 토큰 유효성 검증 수행
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            memberRepository.findById(tokenToId(token))
-            .orElseThrow(()-> new IllegalAccessException("이미 탈퇴된 회원입니다."));
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("로그인 먼저 해주세요.");
@@ -147,14 +142,12 @@ public class JwtTokenDecoder implements TokenDecoder{
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
-        } catch (IllegalAccessException e) {
-            log.info(e.getMessage());
         }
         return false;
     }
 
     @Override
-    public Long currentUserId() {
+    public Long currentMemberId() {
         // 현재 유저 정보는 SecurityContextHolder에
         // Authentication객체에 (memberId, 유효한지, 역할)로 저장해놓은 상태이므로
         // Authentication 가져오기

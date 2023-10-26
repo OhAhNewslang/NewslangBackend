@@ -64,7 +64,6 @@ public class OpinionRecommend extends TimeStamp {
     }
 
     // 댓글 추천 정보를
-
     private int countStatus(RecommendStatus status, RecommendStatus newStatus) {
         // 업데이트 할 추천 정보와 현재 추천 정보가 서로 같으면 0을 리턴해 무시
         // 같지 않다면 새로운 정보가 "LIKE"인지 확인하고 맞으면 OTHER -> LIKE 이므로 1 리턴

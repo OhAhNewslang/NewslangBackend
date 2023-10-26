@@ -13,9 +13,6 @@ import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
 import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
-import ohai.newslang.repository.subscribe.MemberSubscribeMediaItemRepository;
-import ohai.newslang.repository.subscribe.SubscribeCategoryRepository;
-import ohai.newslang.repository.subscribe.SubscribeKeywordRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -93,7 +89,7 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
 
         // 전체 구독 목록 조회
         MemberSubscribeItem memberSubscribeItem = subscribeItemRepository
-        .findByMemberId(td.currentUserId()).orElseGet(MemberSubscribeItem::new);
+        .findSubscribeMediaByMemberId(td.currentMemberId()).orElseGet(MemberSubscribeItem::new);
 
         // 페이징 조건
         PageRequest pageable = PageRequest

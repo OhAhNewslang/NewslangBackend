@@ -12,7 +12,7 @@ import ohai.newslang.domain.enumulate.RecommendStatus;
 public class OpinionRecommendDto {
 
     @NotBlank(message = "잘못된 등록 요청입니다.")
-    private Long opinionId;
+    private String opinionId;
 
     @NotBlank(message = "잘못된 등록 요청입니다.")
     private RecommendStatus status;

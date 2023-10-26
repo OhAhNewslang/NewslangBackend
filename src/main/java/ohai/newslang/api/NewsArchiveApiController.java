@@ -1,6 +1,9 @@
 package ohai.newslang.api;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.dto.news.ResponseThumbnailNewsDto;
 import ohai.newslang.domain.dto.news.ResultDetailNewsDto;
@@ -9,6 +12,7 @@ import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.dto.subscribe.RequestSubscribeNewsDto;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.service.news.NewsArchiveService;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +23,10 @@ public class NewsArchiveApiController {
     private final NewsArchiveService newsArchiveService;
 
     @GetMapping("/guest/live")
-    public ResponseThumbnailNewsDto getLiveNews(@RequestParam("page") int page, @RequestParam("limit") int limit){
-        return newsArchiveService
-                .findAllLiveNews(page, limit);
+    public ResponseThumbnailNewsDto getLiveNews(
+        @RequestParam("page") int page,
+        @RequestParam("limit") int limit) {
+        return newsArchiveService.findAllLiveNews(page,limit);
     }
 
 //    @GetMapping("/guest/live")
@@ -31,19 +36,15 @@ public class NewsArchiveApiController {
 //    }
 
     @GetMapping("/subscribe")
-    public ResponseThumbnailNewsDto getSubscribeNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto) {
-        return newsArchiveService
-        .findAllSubscribeNews(pageSourceDto.getPage(), pageSourceDto.getLimit());
+    public ResponseThumbnailNewsDto getSubscribeNews(
+        @RequestParam("page") int page,
+        @RequestParam("limit") int limit) {
+        return newsArchiveService.findAllSubscribeNews(page,limit);
     }
 
     @GetMapping("/detail")
-    public ResultDetailNewsDto getDetailNews(@RequestParam("newsUrl") String newsUrl){
-        if (newsUrl.isBlank()) {
-            return ResultDetailNewsDto.builder()
-            .result(RequestResult.builder()
-            .resultCode("202")
-            .resultMessage("잘못된 요청 입니다.").build()).build();
-        }
+    public ResultDetailNewsDto getDetailNews(
+        @RequestParam("newsUrl") String newsUrl) {
         return newsArchiveService.findByUrl(newsUrl);
     }
 }

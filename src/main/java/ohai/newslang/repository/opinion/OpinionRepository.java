@@ -11,12 +11,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface OpinionRepository extends JpaRepository<Opinion, Long> {
 
-    Opinion findNoOptionalById(Long oId);
+    Opinion findNoOptionalByUuid(String uuid);
     @Query("SELECT o " +
             "FROM Opinion o " +
             "JOIN FETCH o.member m " +
-            "WHERE o.id = :oId")
-    Opinion findNoOptionalJoinMemberById(@Param("oId") Long oId);
+            "WHERE o.uuid = :uuid")
+    Opinion findNoOptionalJoinMemberByUuid(@Param("uuid") String uuid);
 
     // member를 Fetch Join해서 Slice<Opinion>으로 페이징
     // 마이페이지용 memberId key값으로 조회
