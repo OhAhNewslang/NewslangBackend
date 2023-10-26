@@ -19,10 +19,16 @@ public class NewsArchiveApiController {
     private final NewsArchiveService newsArchiveService;
 
     @GetMapping("/guest/live")
-    public ResponseThumbnailNewsDto getLiveNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto){
+    public ResponseThumbnailNewsDto getLiveNews(@RequestParam("page") int page, @RequestParam("limit") int limit){
         return newsArchiveService
-        .findAllLiveNews(pageSourceDto.getPage(), pageSourceDto.getLimit());
+                .findAllLiveNews(page, limit);
     }
+
+//    @GetMapping("/guest/live")
+//    public ResponseThumbnailNewsDto getLiveNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto){
+//        return newsArchiveService
+//                .findAllLiveNews(pageSourceDto.getPage(), pageSourceDto.getLimit());
+//    }
 
     @GetMapping("/subscribe")
     public ResponseThumbnailNewsDto getSubscribeNews(@RequestBody @Valid RequestPageSourceDto pageSourceDto) {
