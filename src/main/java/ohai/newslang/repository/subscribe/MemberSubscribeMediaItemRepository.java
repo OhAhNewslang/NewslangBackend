@@ -9,7 +9,4 @@ import java.util.List;
 
 public interface MemberSubscribeMediaItemRepository extends JpaRepository<MemberSubscribeMediaItem, Long> {
 
-    @Query("select msmi from MemberSubscribeMediaItem msmi where msmi.memberSubscribeItem.id = :memberSubscribeItemId")
-    List<MemberSubscribeMediaItem> findByMemberSubscribeItemId(@Param("memberSubscribeItemId") Long memberSubscribeItemId);
-
 }

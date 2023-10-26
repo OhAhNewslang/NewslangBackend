@@ -32,7 +32,6 @@ public class SubscribeApiController {
 
     @GetMapping("/guest/media")
     public ResultSubscribeMediaDto getAllMedias() {
-
         return ResultSubscribeMediaDto.builder()
         .mediaList(mediaService.findAll())
         .result(RequestResult.builder()
@@ -61,7 +60,9 @@ public class SubscribeApiController {
         .categoryList(memberSubscribeItem.getSubscribeCategoryList().stream()
         .map(SubscribeCategory::getName).collect(Collectors.toList()))
         .keywordList(memberSubscribeItem.getSubscribeKeywordList().stream()
-        .map(SubscribeKeyword::getName).collect(Collectors.toList())).build();
+        .map(SubscribeKeyword::getName).collect(Collectors.toList()))
+        .result(RequestResult.builder().resultCode("200").resultMessage("구독 목록 조회 성공").build())
+        .build();
     }
 
     @PostMapping("/media")
@@ -79,11 +80,9 @@ public class SubscribeApiController {
     }
 
     @PostMapping("/keyword")
-    public ResultDto subscribeKeyword(
+    public RequestResult subscribeKeyword(
         @RequestBody @Valid RequestSubscribeDto request){
-        memberSubscribeItemService.updateSubscribeKeyword(request.getNameList());
-        return ResultDto.builder()
-        .resultCode("200")
-        .resultMessage("임시").build();
+        return memberSubscribeItemService
+                .updateSubscribeKeyword(request.getNameList());
     }
 }

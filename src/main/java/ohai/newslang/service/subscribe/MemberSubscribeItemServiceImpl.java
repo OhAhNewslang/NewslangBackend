@@ -29,6 +29,8 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     private final MemberSubscribeItemRepository memberSubscribeItemRepository;
     private final MemberSubscribeMediaItemRepository memberSubscribeMediaItemRepository;
     private final MediaRepository mediaRepository;
+    private final SubscribeCategoryRepository subscribeCategoryRepository;
+    private final SubscribeKeywordRepository subscribeKeywordRepository;
     private final TokenDecoder td;
 
     @Override
@@ -36,14 +38,19 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     public RequestResult updateSubscribeCategory(List<String> categoryNameList) {
         Long memberId = td.currentMemberId();
         MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository
-        .findSubscribeCategoryByMemberId(memberId)
-        .orElseGet(MemberSubscribeItem::new);
-
+        .findByMemberId(memberId)
+        .orElseGet(this::createMemberSubscribeInfo);
+        // 기존 카테고리 삭제 진행
+        List<Long> removeIds = memberSubscribeItem.getSubscribeCategoryList().stream().map(c -> {
+            c.setMemberSubscribeItem(null);
+            return c.getId();
+        }).collect(Collectors.toList());
+        subscribeCategoryRepository.deleteAllById(removeIds);
+        memberSubscribeItem.getSubscribeCategoryList().clear();
+        // 새로운 카테고리 설정
         memberSubscribeItem.setMember(memberRepository.findByTokenId(memberId));
-        memberSubscribeItem.clearCategory();
-
-        memberSubscribeItemRepository.save(memberSubscribeItem);
         memberSubscribeItem.addCategory(categoryNameList);
+        memberSubscribeItemRepository.save(memberSubscribeItem);
         return RequestResult.builder()
         .resultCode("200")
         .resultMessage("구독 카테고리 갱신 성공")
@@ -55,14 +62,22 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     public RequestResult updateSubscribeKeyword(List<String> keywordNameList) {
         Long memberId = td.currentMemberId();
         MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository
-        .findSubscribeKeywordByMemberId(memberId).orElseGet(MemberSubscribeItem::new);
+        .findByMemberId(memberId)
+        .orElseGet(this::createMemberSubscribeInfo);
+        // 기존 키워드 삭제 진행
+        List<Long> removeIds = memberSubscribeItem.getSubscribeKeywordList().stream().map(c -> {
+            c.setMemberSubscribeItem(null);
+            return c.getId();
+        }).collect(Collectors.toList());
+        subscribeKeywordRepository.deleteAllById(removeIds);
+        memberSubscribeItem.getSubscribeKeywordList().clear();
+        // 새로운 키워드 설정
         memberSubscribeItem.setMember(memberRepository.findByTokenId(memberId));
-        memberSubscribeItem.clearKeyword();
-        memberSubscribeItemRepository.save(memberSubscribeItem);
         memberSubscribeItem.addKeyword(keywordNameList);
+        memberSubscribeItemRepository.save(memberSubscribeItem);
         return RequestResult.builder()
         .resultCode("200")
-        .resultMessage("구독 카테고리 갱신 성공")
+        .resultMessage("구독 키워드 갱신 성공")
         .build();
     }
 
@@ -70,6 +85,7 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     @Transactional
     public RequestResult updateSubscribeMediaItems(List<String> subscribeItemNameList) {
         Long memberId = td.currentMemberId();
+        // 언론사 조회
         List<Media> mediaList = mediaRepository.findByNameIn(subscribeItemNameList);
         if (mediaList.size() != subscribeItemNameList.size()){
             return RequestResult.builder()
@@ -77,15 +93,21 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
             .resultMessage("존재하지 않는 언론사가 포함되었습니다.")
             .build();
         }
-
         MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository
-        .findSubscribeMediaByMemberId(memberId)
+        .findByMemberId(memberId)
         .orElseGet(this::createMemberSubscribeInfo);
-
-        memberSubscribeItem
-        .removeMemberSubscribeMediaItems(memberSubscribeItem
-        .getMemberSubscribeMediaItemList().stream()
-        .map(MemberSubscribeMediaItem::getId).toList());
+        // 기존 언론사 삭제 진행
+        List<Long> removeIds = memberSubscribeItem.getMemberSubscribeMediaItemList().stream().map(m -> {
+            m.setMedia(null);
+            m.setMemberSubscribeItem(null);
+            return m.getId();
+        }).collect(Collectors.toList());
+        memberSubscribeMediaItemRepository.deleteAllById(removeIds);
+        memberSubscribeItem.getMemberSubscribeMediaItemList().clear();
+        // 새로운 언론사 설정
+        memberSubscribeItem.setMember(memberRepository.findByTokenId(memberId));
+        memberSubscribeItem.addMemberSubscribeMediaItems(mediaList);
+        memberSubscribeItemRepository.save(memberSubscribeItem);
 
         return RequestResult.builder()
                 .resultCode("200")
@@ -93,24 +115,16 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
                 .build();
     }
 
-    private MemberSubscribeMediaItem subscribeMedia(Media media) {
-        MemberSubscribeMediaItem memberSubscribeMediaItem = new MemberSubscribeMediaItem();
-        memberSubscribeMediaItem.setMedia(media);
-
-        return memberSubscribeMediaItemRepository
-                .save(memberSubscribeMediaItem);
-    }
     private MemberSubscribeItem createMemberSubscribeInfo(){
         MemberSubscribeItem memberSubscribeItem = new MemberSubscribeItem();
         memberSubscribeItem.setMember(memberRepository.findByTokenId(td.currentMemberId()));
         return memberSubscribeItemRepository.save(memberSubscribeItem);
     }
-
     // 확인
     @Override
     public MemberSubscribeItem getMemberSubscribeItem() {
         return memberSubscribeItemRepository
-        .findSubscribeMediaByMemberId(td.currentMemberId())
-        .orElseGet(MemberSubscribeItem::new);
+                .findByMemberId(td.currentMemberId())
+                .orElseGet(this::createMemberSubscribeInfo);
     }
 }

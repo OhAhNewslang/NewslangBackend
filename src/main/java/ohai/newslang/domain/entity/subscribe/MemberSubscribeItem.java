@@ -56,13 +56,6 @@ public class MemberSubscribeItem {
         this.subscribeKeywordList.add(subscribeKeyword); });
     }
 
-    public void clearCategory() {
-        for (SubscribeCategory item : this.subscribeCategoryList) {
-            item.setMemberSubscribeItem(null);
-        }
-        this.subscribeCategoryList.clear();
-    }
-
     public void clearKeyword() {
         for (SubscribeKeyword item : this.subscribeKeywordList) {
             item.setMemberSubscribeItem(null);

@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface SubscribeCategoryRepository extends JpaRepository<SubscribeCategory, Long> {
 
-    List<SubscribeCategory> findAllByMemberSubscribeItem_Id(Long itemId);
 }

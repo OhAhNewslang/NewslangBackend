@@ -13,23 +13,7 @@ import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
-//@Repository
-//@RequiredArgsConstructor
 public interface MemberScrapNewsArchiveRepository extends JpaRepository<MemberScrapNewsArchive, Long> {
-
-//    private final EntityManager em;
-//
-//    public List<MemberScrapNewsArchive> findAllWithMemberScrapNewsId(Long memberScrapNewsId){
-//        return em.createQuery("select msna from MemberScrapNewsArchive msna" +
-//                        " where msna.memberScrapNews.id = :memberScrapNewsId",MemberScrapNewsArchive.class)
-//                .setParameter("memberScrapNewsId", memberScrapNewsId)
-//                .getResultList();
-//    }
-
-//    @Query("select msna from MemberScrapNewsArchive msna where msna.memberScrapNews.id = :memberScrapNewsId")
-//    Page<MemberScrapNewsArchive> findByMemberScrapNewsId(@Param("memberScrapNewsId") Long memberScrapNewsId,
-//                                                         Pageable pageable);
-
 
     @Query("SELECT msna " +
             "FROM MemberScrapNewsArchive msna " +
@@ -43,13 +27,4 @@ public interface MemberScrapNewsArchiveRepository extends JpaRepository<MemberSc
             "JOIN FETCH msna.memberScrapNews msn " +
             "WHERE msn.member.id = :memberId")
     List<MemberScrapNewsArchive> findByMemberId(@Param("memberId") Long memberId);
-
-//    public void delete(Long memberScrapNewsId, String url){
-//        Query q = em.createQuery(
-//                        "delete from MemberScrapNewsArchive msna"+
-//                                " where msna.memberScrapNews.id = :memberScrapNewsId and msna.newsArchive.news.url = :url")
-//                .setParameter("memberScrapNewsId", memberScrapNewsId)
-//                .setParameter("url", url);
-//        q.executeUpdate();
-//    }
 }

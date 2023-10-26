@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface SubscribeKeywordRepository extends JpaRepository<SubscribeKeyword, Long> {
 
-    List<SubscribeKeyword> findAllByMemberSubscribeItem_Id(Long itemId);
 }

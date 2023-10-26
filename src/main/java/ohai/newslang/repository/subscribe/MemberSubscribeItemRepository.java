@@ -12,21 +12,9 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-//@Repository
-//@RequiredArgsConstructor
 public interface MemberSubscribeItemRepository extends JpaRepository<MemberSubscribeItem, Long> {
 
-//    private final EntityManager em;
-//
-//    public void save(MemberSubscribeItem memberSubscribeItem){
-//        em.persist(memberSubscribeItem);
-//    }
-
-
-    @Query("select count(msi.id) from MemberSubscribeItem msi where msi.member.id = :memberId")
-    Long countByMemberId(@Param("memberId") Long memberId);
-
-//    @Query("select msi from MemberSubscribeItem msi where msi.member.id = :memberId")
+    Optional<MemberSubscribeItem> findByMemberId(@Param("memberId") Long memberId);
 
     @Query("SELECT msi " +
             "FROM MemberSubscribeItem msi " +
@@ -34,30 +22,4 @@ public interface MemberSubscribeItemRepository extends JpaRepository<MemberSubsc
             "JOIN FETCH sm.media m " +
             "WHERE msi.member.id = :memberId")
     Optional<MemberSubscribeItem> findSubscribeMediaByMemberId(@Param("memberId") Long memberId);
-
-    @Query("SELECT msi " +
-            "FROM MemberSubscribeItem msi " +
-            "JOIN FETCH msi.subscribeCategoryList sc " +
-            "WHERE msi.member.id = :memberId")
-    Optional<MemberSubscribeItem> findSubscribeCategoryByMemberId(@Param("memberId") Long memberId);
-
-    @Query("SELECT msi " +
-            "FROM MemberSubscribeItem msi " +
-            "JOIN FETCH msi.subscribeKeywordList sk " +
-            "WHERE msi.member.id = :memberId")
-    Optional<MemberSubscribeItem> findSubscribeKeywordByMemberId(@Param("memberId") Long memberId);
-
-//    public boolean isExistMemberSubscribeItem(Long memberId){
-//        Long result = (Long)em.createQuery("select count(msi.id) from MemberSubscribeItem msi where msi.member.id = :memberId")
-//                .setParameter("memberId", memberId)
-//                .getSingleResult();
-//        return ((result.equals(0L)) ? false : true);
-//    }
-
-    //
-//    public MemberSubscribeItem findOne(Long memberId){
-//        return em.createQuery("select msi from MemberSubscribeItem msi where msi.member.id = :memberId", MemberSubscribeItem.class)
-//                .setParameter("memberId", memberId)
-//                .getSingleResult();
-//    }
 }
