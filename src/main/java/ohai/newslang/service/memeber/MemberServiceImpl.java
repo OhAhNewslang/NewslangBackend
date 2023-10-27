@@ -56,22 +56,24 @@ public class MemberServiceImpl implements MemberService{
 
         if(optionalMember.isPresent()) {
             Member findMember = optionalMember.get();
-            if(passwordEncoder.matches(loginMemberDto.getPassword(), findMember.getPassword())){
+            if(passwordEncoder
+                .matches(loginMemberDto.getPassword(), findMember.getPassword())){
                 return TokenDto.builder()
-                .token(td.createToken(String.valueOf(findMember.getId()),
-                String.valueOf(findMember.getRole())))
-                .result(RequestResult.builder()
-                .resultCode("200")
-                .resultMessage("로그인이 정상적으로 처리되었습니다.").build()).build();
+                        .token(td.createToken(String.valueOf(findMember.getId()),
+                        String.valueOf(findMember.getRole())))
+                        .result(RequestResult.builder()
+                        .resultCode("200")
+                        .resultMessage("로그인이 정상적으로 처리되었습니다.")
+                        .build()).build();
             }
             return TokenDto.builder()
-            .result(RequestResult.builder().resultCode("202").resultMessage("비밀번호가 틀렸습니다.").build())
-            .build();
+                    .result(RequestResult.builder().resultCode("202").resultMessage("비밀번호가 틀렸습니다.").build())
+                    .build();
         }
         return TokenDto.builder()
-        .result(RequestResult.builder()
-        .resultCode("202")
-        .resultMessage("해당 아이디로 가입된 회원이 없습니다.").build()).build();
+                .result(RequestResult.builder()
+                .resultCode("202")
+                .resultMessage("해당 아이디로 가입된 회원이 없습니다.").build()).build();
     }
 
     @Override
@@ -81,7 +83,6 @@ public class MemberServiceImpl implements MemberService{
         .email(currentMember.getEmail())
         .loginId(currentMember.getLoginId())
         .name(currentMember.getName())
-        .imagePath(currentMember.getImagePath())
         .result(RequestResult.builder().resultCode("200").resultMessage("").build())
         .build();
     }
@@ -94,34 +95,35 @@ public class MemberServiceImpl implements MemberService{
 
         // 수정하지 않고 수정 완료 버튼을 눌렀을때
         if (currentMember.getName().equals(updateMemberDto.getName())
-                && currentMember.getImagePath().equals(updateMemberDto.getImagePath())
-                && currentMember.getEmail().equals(updateMemberDto.getEmail())) {
-            result = RequestResult.builder().resultCode("202").resultMessage("수정된 회원정보가 없습니다.").build();
+            && currentMember.getEmail().equals(updateMemberDto.getEmail())) {
+            result = RequestResult.builder()
+                    .resultCode("202")
+                    .resultMessage("수정된 회원정보가 없습니다.")
+                    .build();
         }
 
         // 이름이 수정 되었을 때
         if (!currentMember.getName().equals(updateMemberDto.getName())){
             currentMember.updateName(updateMemberDto.getName());
-            result = RequestResult.builder().resultCode("200").resultMessage("회원 정보가 수정되었습니다.").build();
-        }
-
-        // 이미지가 수정 되었을 때
-        if (!currentMember.getImagePath().equals(updateMemberDto.getImagePath())){
-            currentMember.updateImagePath(updateMemberDto.getImagePath());
-            result = RequestResult.builder().resultCode("200").resultMessage("회원 정보가 수정되었습니다.").build();
+            result = RequestResult.builder()
+                    .resultCode("200")
+                    .resultMessage("회원 정보가 수정되었습니다.")
+                    .build();
         }
 
         // 이메일이 수정 되었을 때
         if (!currentMember.getEmail().equals(updateMemberDto.getEmail())){
             currentMember.updateEmail(updateMemberDto.getEmail());
-            result = RequestResult.builder().resultCode("200").resultMessage("회원 정보가 수정되었습니다.").build();
+            result = RequestResult.builder()
+                    .resultCode("200")
+                    .resultMessage("회원 정보가 수정되었습니다.")
+                    .build();
         }
 
         return MemberInfoDto.builder()
                 .name(currentMember.getName())
                 .loginId(currentMember.getLoginId())
                 .email(currentMember.getEmail())
-                .imagePath(currentMember.getImagePath())
                 .result(result)
                 .build();
     }
@@ -130,23 +132,27 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     public MemberInfoDto updateMemberPassword(UpdatePasswordDto updatePasswordDto) {
         Member currentMember = memberRepository.findByTokenId(td.currentMemberId());
-        if (passwordEncoder.matches(updatePasswordDto.getOldPassword(), currentMember.getPassword())) {
-            currentMember.updatePassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+        if (passwordEncoder.matches(updatePasswordDto.getOldPassword(),
+            currentMember.getPassword())) {
+            currentMember
+            .updatePassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
             return MemberInfoDto.builder()
-            .name(currentMember.getName())
-            .loginId(currentMember.getLoginId())
-            .email(currentMember.getEmail())
-            .imagePath(currentMember.getImagePath())
-            .result(RequestResult.builder().resultCode("200").resultMessage("비밀번호 변경 완료.").build())
-            .build();
+                    .name(currentMember.getName())
+                    .loginId(currentMember.getLoginId())
+                    .email(currentMember.getEmail())
+                    .result(RequestResult.builder()
+                    .resultCode("200")
+                    .resultMessage("비밀번호 변경 완료.").build())
+                    .build();
         }
         return MemberInfoDto.builder()
-        .name(currentMember.getName())
-        .loginId(currentMember.getLoginId())
-        .email(currentMember.getEmail())
-        .imagePath(currentMember.getImagePath())
-        .result(RequestResult.builder().resultCode("202").resultMessage("현재 비밀번호가 일치 하지 않습니다.").build())
-        .build();
+                .name(currentMember.getName())
+                .loginId(currentMember.getLoginId())
+                .email(currentMember.getEmail())
+                .result(RequestResult.builder()
+                .resultCode("202")
+                .resultMessage("현재 비밀번호가 일치 하지 않습니다.").build())
+                .build();
     }
 
     @Override
