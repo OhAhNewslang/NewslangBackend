@@ -40,7 +40,7 @@ public class OpinionApiController {
         @RequestParam("limit")int limit) {
 
         return opinionService
-        .opinionListByLikeCountOrderForDetailNews(newUrl, page, limit);
+                .opinionListByLikeCountOrderForDetailNews(newUrl, page, limit);
     }
 
     // 상세 뉴스 최신순
@@ -60,7 +60,7 @@ public class OpinionApiController {
         @RequestParam("page") int page,
         @RequestParam("limit")int limit){
         return opinionService
-        .opinionListByLikeCountOrderForMember(page, limit);
+                .opinionListByLikeCountOrderForMember(page, limit);
     }
 
     // 마이페이지 최신순
@@ -69,7 +69,7 @@ public class OpinionApiController {
         @RequestParam("page") int page,
         @RequestParam("limit")int limit) {
         return opinionService
-        .opinionListByRecentOrderForMember(page, limit);
+                .opinionListByRecentOrderForMember(page, limit);
     }
 
     @PutMapping("")
@@ -78,10 +78,10 @@ public class OpinionApiController {
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return ModifyOpinionResponseDto.builder()
-            .result(RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage()).build())
-            .build();
+                    .result(RequestResult.builder()
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage()).build())
+                    .build();
         }
         return opinionService.modifyContent(opinionModifyRequestDto);
     }
@@ -92,8 +92,8 @@ public class OpinionApiController {
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage()).build();
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage()).build();
         }
         return opinionService.deleteOpinion(requestDto.getOpinionId());
     }

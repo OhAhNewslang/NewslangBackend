@@ -24,9 +24,9 @@ public class RecommendApiController {
                                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
-            .build();
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+                    .build();
         }
         return newsRecommendService.updateRecommendStatus(newsRecommendDto);
     }
@@ -35,9 +35,9 @@ public class RecommendApiController {
                                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
-            .build();
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+                    .build();
         }
         return opinionRecommendService.updateRecommendStatus(opinionRecommendDto);
     }
