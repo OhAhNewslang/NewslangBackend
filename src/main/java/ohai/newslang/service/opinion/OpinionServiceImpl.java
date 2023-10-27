@@ -7,6 +7,7 @@ import ohai.newslang.domain.dto.opinion.request.OpinionResistRequestDto;
 import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionListResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
+import ohai.newslang.domain.dto.opinion.response.ResistOpinionResponseDto;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.opinion.Opinion;
@@ -30,7 +31,7 @@ public class OpinionServiceImpl implements OpinionService{
 
     @Override
     @Transactional
-    public OpinionResponseDto resistOpinion(OpinionResistRequestDto opinionResistRequestDto) {
+    public ResistOpinionResponseDto resistOpinion(OpinionResistRequestDto opinionResistRequestDto) {
 
         Long currentUserId = td.currentMemberId();
         Opinion newOpinion = Opinion.createOpinion(
@@ -39,7 +40,7 @@ public class OpinionServiceImpl implements OpinionService{
         opinionResistRequestDto.getOpinionContent());
 
         Opinion savedOpinion = opinionRepository.save(newOpinion);
-        return OpinionResponseDto.builder()
+        return ResistOpinionResponseDto.builder()
                 .opinion(savedOpinion)
                 .modifiable(savedOpinion.getMember().getId().equals(currentUserId))
                 .result(RequestResult.builder()

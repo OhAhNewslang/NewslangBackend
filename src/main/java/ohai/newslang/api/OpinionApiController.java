@@ -7,6 +7,7 @@ import ohai.newslang.domain.dto.opinion.request.OpinionResistRequestDto;
 import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionListResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
+import ohai.newslang.domain.dto.opinion.response.ResistOpinionResponseDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.service.opinion.OpinionService;
 import org.springframework.validation.BindingResult;
@@ -19,11 +20,11 @@ public class OpinionApiController {
     private final OpinionService opinionService;
 
     @PostMapping("")
-    public OpinionResponseDto resistOpinion(
+    public ResistOpinionResponseDto resistOpinion(
             @RequestBody OpinionResistRequestDto opinionResistRequestDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return OpinionResponseDto.builder()
+            return ResistOpinionResponseDto.builder()
             .result(RequestResult.builder()
             .resultCode("202")
             .resultMessage(bindingResult.getFieldError().getDefaultMessage())
