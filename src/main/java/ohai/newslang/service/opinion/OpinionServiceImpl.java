@@ -10,8 +10,8 @@ import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.opinion.Opinion;
-import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.member.MemberRepository;
+import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.opinion.OpinionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,11 +40,11 @@ public class OpinionServiceImpl implements OpinionService{
 
         Opinion savedOpinion = opinionRepository.save(newOpinion);
         return OpinionResponseDto.builder()
-        .opinion(savedOpinion)
-        .modifiable(savedOpinion.getMember().getId().equals(currentUserId))
-        .result(RequestResult.builder()
-        .resultCode("201")
-        .resultMessage("의견 등록 완료").build()).build();
+                .opinion(savedOpinion)
+                .modifiable(savedOpinion.getMember().getId().equals(currentUserId))
+                .result(RequestResult.builder()
+                .resultCode("201")
+                .resultMessage("의견 등록 완료").build()).build();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class OpinionServiceImpl implements OpinionService{
         PageRequest pageRequest = PageRequest
         .of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,"likeCount"));
 
-        return getOpinionListResponseDto(newsUrl, pageNumber, pageSize, pageRequest);
+        return getOpinionListResponseDto(newsUrl, pageNumber-1, pageSize, pageRequest);
     }
 
     @Override
@@ -74,26 +74,26 @@ public class OpinionServiceImpl implements OpinionService{
         PageRequest pageRequest = PageRequest
         .of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,"createTime"));
 
-        return getOpinionListResponseDto(newsUrl, pageNumber, pageSize, pageRequest);
+        return getOpinionListResponseDto(newsUrl, pageNumber-1, pageSize, pageRequest);
     }
 
     // 상세 뉴스용 의견 페이징 -> 이번 상세뉴스의 의견 목록 api 호출에 해당하는 페이지 리스트
     private OpinionListResponseDto getOpinionListResponseDto(String newsUrl, int pageNumber, int pageSize, PageRequest pageRequest) {
         Page<Opinion> findOpinions = opinionRepository.findAllByDetailNewsArchiveUrl(newsUrl, pageRequest);
         return OpinionListResponseDto.builder()
-        .opinions(findOpinions.map(opinion ->
-        OpinionResponseDto.builder()
-        .opinion(opinion)
-        .modifiable(opinion.getMember().getId().equals(td.currentMemberId()))
-        .build()).toList())
-        .pageSource(ResponsePageSourceDto.builder()
-        .page(pageNumber)
-        .limit(pageSize)
-        .totalPage(findOpinions.getTotalPages()).build())
-        .result(RequestResult.builder()
-        .resultCode("200")
-        .resultMessage("뉴스 댓글 목록 조회 성공")
-        .build()).build();
+                .opinions(findOpinions.map(opinion ->
+                OpinionResponseDto.builder()
+                .opinion(opinion)
+                .modifiable(opinion.getMember().getId().equals(td.currentMemberId()))
+                .build()).toList())
+                .pageSource(ResponsePageSourceDto.builder()
+                .page(pageNumber)
+                .limit(pageSize)
+                .totalPage(findOpinions.getTotalPages()).build())
+                .result(RequestResult.builder()
+                .resultCode("200")
+                .resultMessage("뉴스 댓글 목록 조회 성공")
+                .build()).build();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class OpinionServiceImpl implements OpinionService{
         PageRequest pageRequest = PageRequest
         .of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,"likeCount"));
 
-        return getOpinionListResponseDto(pageNumber, pageSize, pageRequest);
+        return getOpinionListResponseDto(pageNumber-1, pageSize, pageRequest);
     }
 
     @Override
@@ -117,26 +117,26 @@ public class OpinionServiceImpl implements OpinionService{
         PageRequest pageRequest = PageRequest
         .of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,"createTime"));
 
-        return getOpinionListResponseDto(pageNumber, pageSize, pageRequest);
+        return getOpinionListResponseDto(pageNumber-1, pageSize, pageRequest);
     }
 
     // 의견 모아보기용 의견 페이징 -> 이번 회원의 의견 모아보기 api 호출에 해당하는 페이지 리스트
     private OpinionListResponseDto getOpinionListResponseDto(int pageNumber, int pageSize, PageRequest pageRequest) {
         Page<Opinion> findOpinions = opinionRepository.findAllByMemberId(td.currentMemberId(), pageRequest);
         return OpinionListResponseDto.builder()
-        .opinions(findOpinions
-        .map(opinion -> OpinionResponseDto.builder()
-        .opinion(opinion)
-        .modifiable(true)
-        .build()).toList())
-        .pageSource(ResponsePageSourceDto.builder()
-        .page(pageNumber)
-        .limit(pageSize)
-        .totalPage(findOpinions.getTotalPages()).build())
-        .result(RequestResult.builder()
-        .resultCode("200")
-        .resultMessage("뉴스 댓글 목록 조회 성공")
-        .build()).build();
+                .opinions(findOpinions
+                .map(opinion -> OpinionResponseDto.builder()
+                .opinion(opinion)
+                .modifiable(true)
+                .build()).toList())
+                .pageSource(ResponsePageSourceDto.builder()
+                .page(pageNumber)
+                .limit(pageSize)
+                .totalPage(findOpinions.getTotalPages()).build())
+                .result(RequestResult.builder()
+                .resultCode("200")
+                .resultMessage("뉴스 댓글 목록 조회 성공")
+                .build()).build();
     }
 
     @Override
@@ -147,12 +147,12 @@ public class OpinionServiceImpl implements OpinionService{
                 .updateContent(opinionModifyRequestDto.getOpinionContent());
 
         return ModifyOpinionResponseDto.builder()
-        .opinion(opinionRepository
-        .findNoOptionalJoinMemberByUuid(opinionModifyRequestDto.getOpinionId()))
-        .result(RequestResult.builder()
-        .resultCode("200")
-        .resultMessage("댓글 수정 완료")
-        .build()).build();
+                .opinion(opinionRepository
+                .findNoOptionalJoinMemberByUuid(opinionModifyRequestDto.getOpinionId()))
+                .result(RequestResult.builder()
+                .resultCode("200")
+                .resultMessage("댓글 수정 완료")
+                .build()).build();
 
     }
 
@@ -163,7 +163,7 @@ public class OpinionServiceImpl implements OpinionService{
         Opinion findOpinion = opinionRepository.findNoOptionalByUuid(opinionId);
         opinionRepository.delete(findOpinion.deleteOpinion());
         return RequestResult.builder()
-        .resultCode("200")
-        .resultMessage("의견 삭제 완료").build();
+                .resultCode("200")
+                .resultMessage("의견 삭제 완료").build();
     }
 }
