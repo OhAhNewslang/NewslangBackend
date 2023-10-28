@@ -58,9 +58,9 @@ public class OpinionServiceImpl implements OpinionService{
 
         // 추천수 페이징 정렬 조건
         PageRequest pageRequest = PageRequest
-        .of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,"likeCount"));
+        .of(pageNumber - 1, pageSize, Sort.by(Sort.Direction.DESC,"likeCount"));
 
-        return getOpinionListResponseDto(newsUrl, pageNumber-1, pageSize, pageRequest);
+        return getOpinionListResponseDto(newsUrl, pageRequest);
     }
 
     @Override
@@ -73,23 +73,23 @@ public class OpinionServiceImpl implements OpinionService{
 
         // 추천수 페이징 정렬 조건
         PageRequest pageRequest = PageRequest
-        .of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,"createTime"));
+        .of(pageNumber - 1, pageSize, Sort.by(Sort.Direction.DESC,"createTime"));
 
-        return getOpinionListResponseDto(newsUrl, pageNumber-1, pageSize, pageRequest);
+        return getOpinionListResponseDto(newsUrl, pageRequest);
     }
 
     // 상세 뉴스용 의견 페이징 -> 이번 상세뉴스의 의견 목록 api 호출에 해당하는 페이지 리스트
-    private OpinionListResponseDto getOpinionListResponseDto(String newsUrl, int pageNumber, int pageSize, PageRequest pageRequest) {
+    private OpinionListResponseDto getOpinionListResponseDto(String newsUrl, PageRequest pageRequest) {
         Page<Opinion> findOpinions = opinionRepository.findAllByDetailNewsArchiveUrl(newsUrl, pageRequest);
         return OpinionListResponseDto.builder()
-                .opinions(findOpinions.map(opinion ->
-                OpinionResponseDto.builder()
-                .opinion(opinion)
-                .modifiable(opinion.getMember().getId().equals(td.currentMemberId()))
+                .opinions(findOpinions.stream()
+                .map(o -> OpinionResponseDto.builder()
+                .opinion(o)
+                .modifiable(o.getMember().getId().equals(td.currentMemberId()))
                 .build()).toList())
                 .pageSource(ResponsePageSourceDto.builder()
-                .page(pageNumber)
-                .limit(pageSize)
+                .page(pageRequest.getPageNumber() + 1)
+                .limit(pageRequest.getPageSize())
                 .totalPage(findOpinions.getTotalPages()).build())
                 .result(RequestResult.builder()
                 .resultCode("200")
@@ -104,9 +104,9 @@ public class OpinionServiceImpl implements OpinionService{
         //Pageable 인터페이스의 구현체 PageRequest
         // 추천수 페이징 정렬 조건
         PageRequest pageRequest = PageRequest
-        .of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,"likeCount"));
+        .of(pageNumber - 1, pageSize, Sort.by(Sort.Direction.DESC,"likeCount"));
 
-        return getOpinionListResponseDto(pageNumber-1, pageSize, pageRequest);
+        return getOpinionListResponseDto(pageRequest);
     }
 
     @Override
@@ -116,23 +116,25 @@ public class OpinionServiceImpl implements OpinionService{
         //Pageable 인터페이스의 구현체 PageRequest
         // 추천수 페이징 정렬 조건
         PageRequest pageRequest = PageRequest
-        .of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,"createTime"));
+        .of(pageNumber - 1, pageSize, Sort.by(Sort.Direction.DESC,"createTime"));
 
-        return getOpinionListResponseDto(pageNumber-1, pageSize, pageRequest);
+        return getOpinionListResponseDto(pageRequest);
     }
 
     // 의견 모아보기용 의견 페이징 -> 이번 회원의 의견 모아보기 api 호출에 해당하는 페이지 리스트
-    private OpinionListResponseDto getOpinionListResponseDto(int pageNumber, int pageSize, PageRequest pageRequest) {
-        Page<Opinion> findOpinions = opinionRepository.findAllByMemberId(td.currentMemberId(), pageRequest);
+    private OpinionListResponseDto getOpinionListResponseDto(PageRequest pageRequest) {
+        Page<Opinion> findOpinions = opinionRepository
+                .findAllByMemberId(td.currentMemberId(),pageRequest);
+
         return OpinionListResponseDto.builder()
-                .opinions(findOpinions
-                .map(opinion -> OpinionResponseDto.builder()
-                .opinion(opinion)
+                .opinions(findOpinions.stream()
+                .map(o -> OpinionResponseDto.builder()
+                .opinion(o)
                 .modifiable(true)
                 .build()).toList())
                 .pageSource(ResponsePageSourceDto.builder()
-                .page(pageNumber)
-                .limit(pageSize)
+                .page(pageRequest.getPageNumber() + 1)
+                .limit(pageRequest.getPageSize())
                 .totalPage(findOpinions.getTotalPages()).build())
                 .result(RequestResult.builder()
                 .resultCode("200")

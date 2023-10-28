@@ -88,7 +88,6 @@ public class InitializeService {
                     pe.encode("1234")
             );
 
-
             Member member3 = Member.createMember(
                     MemberRecommend.createMemberRecommend(),
                     "김이박",
