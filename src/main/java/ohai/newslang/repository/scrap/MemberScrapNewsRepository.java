@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 
+import java.util.Optional;
+
 public interface MemberScrapNewsRepository extends JpaRepository<MemberScrapNews, Long> {
 
     @Query("select count(msn.id) from MemberScrapNews msn where msn.member.id = :memberId")
@@ -16,5 +18,5 @@ public interface MemberScrapNewsRepository extends JpaRepository<MemberScrapNews
 
 
     @Query("select msn from MemberScrapNews msn where msn.member.id = :memberId")
-    MemberScrapNews findByMemberId(@Param("memberId") Long memberId);
+    Optional<MemberScrapNews> findByMemberId(@Param("memberId") Long memberId);
 }

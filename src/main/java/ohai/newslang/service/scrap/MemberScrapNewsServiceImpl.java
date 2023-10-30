@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,32 +81,19 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
     @Override
     @Transactional
     public RequestResult addScrapNews(String newsUrl) {
-        if (isExistScrapNews(newsUrl)){
-            return RequestResult.builder().resultMessage("이미 스크랩한 뉴스입니다.").resultCode("202").build();
-        }
+        // frontend 에서 처리 하도록 변경 - 20231031 lwt
+//        if (isExistScrapNews(newsUrl)){
+//            return RequestResult.builder().resultMessage("이미 스크랩한 뉴스입니다.").resultCode("202").build();
+//        }
         Long memberId = td.currentMemberId();
         NewsArchive newsArchive = newsArchiveRepository.findByUrl(newsUrl);
-        Member member = memberRepository.findByTokenId(memberId);
-        MemberScrapNews memberScrapNews = MemberScrapNews.newMemberScrapNews(member, newsArchive);
+        MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId).orElseGet(this::createMemberScrapNews);
+        MemberScrapNewsArchive memberScrapNewsArchive = MemberScrapNewsArchive.createMemberScrapNews(newsArchive);
+        memberScrapNews.newMemberScrapNewsArchive(memberScrapNewsArchive);
         memberScrapNewsRepository.save(memberScrapNews);
         return RequestResult.builder()
         .resultCode("200")
         .resultMessage("뉴스 스크랩 성공").build();
-    }
-
-    // 이미 스크랩된 뉴스인지 확인.
-    public boolean isExistScrapNews(String newsUrl) {
-        Long memberId = td.currentMemberId();
-        if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
-            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNews.getMemberScrapNewsArchiveList();
-            for (MemberScrapNewsArchive item : memberScrapNewsArchiveList) {
-                if (item.getNewsArchive().getUrl().equals(newsUrl)){
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     @Override
@@ -113,13 +101,23 @@ public class MemberScrapNewsServiceImpl implements MemberScrapNewsService {
     public void removeScrapNews(String url) {
         Long memberId = td.currentMemberId();
         if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
-            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId);
-            List<MemberScrapNewsArchive> memberScrapNewsArchiveList =
-            memberScrapNewsArchiveRepository.findByMemberId(memberId);
-            List<String> urlList = memberScrapNewsArchiveList.stream()
-            .map(n -> n.getNewsArchive().getUrl())
-            .collect(Collectors.toList());
-            memberScrapNews.removeMemberScrapNewsArchive(urlList);
+            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId).orElseThrow(() -> new IllegalStateException("Not found member"));
+            memberScrapNews.getMemberScrapNewsArchiveList().removeIf(n -> {
+                if (n.getNewsArchive().getUrl().equals(url)){
+                    n.setMemberScrapNews(null);
+                    n.setNewsArchive(null);
+                    memberScrapNewsArchiveRepository.deleteById(n.getId());
+                    return true;
+                }
+                return false;
+            });
         }
+    }
+
+    private MemberScrapNews createMemberScrapNews(){
+        Member member = memberRepository.findByTokenId(td.currentMemberId());
+        MemberScrapNews memberScrapNews = new MemberScrapNews();
+        memberScrapNews.setMember(member);
+        return memberScrapNews;
     }
 }

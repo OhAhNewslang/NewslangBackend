@@ -52,8 +52,7 @@ public class MemberScrapNews {
 
         MemberScrapNews memberScrapNews = new MemberScrapNews();
         memberScrapNews.setMember(member);
-
-        MemberScrapNewsArchive memberScrapNewsArchive =MemberScrapNewsArchive.createMemberScrapNews(newsArchive);
+        MemberScrapNewsArchive memberScrapNewsArchive = MemberScrapNewsArchive.createMemberScrapNews(newsArchive);
         memberScrapNews.newMemberScrapNewsArchive(memberScrapNewsArchive);
         return memberScrapNews;
     }
