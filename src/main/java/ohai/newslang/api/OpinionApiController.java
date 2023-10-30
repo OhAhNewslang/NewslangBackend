@@ -39,8 +39,10 @@ public class OpinionApiController {
         @RequestParam("page") int page,
         @RequestParam("limit")int limit) {
 
-        return opinionService
-        .opinionListByLikeCountOrderForDetailNews(newUrl, page, limit);
+        OpinionListResponseDto rst = opinionService
+                .opinionListByLikeCountOrderForDetailNews(newUrl, page, limit);
+
+        return rst;
     }
 
     // 상세 뉴스 최신순

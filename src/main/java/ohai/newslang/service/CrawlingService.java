@@ -110,6 +110,7 @@ public class CrawlingService {
                                 .countLike(0L)
                                 .postDateTime(t.getPostDateTime())
                                 .modifyDateTime(t.getModifyDateTime())
+                                .reporter(t.getReporter())
                                 .build());
                     }
                 });
