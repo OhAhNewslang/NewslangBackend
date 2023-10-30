@@ -23,9 +23,9 @@ public class MemberApiController {
                               BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
-            .build();
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+                    .build();
         }
         return memberService.createMember(joinMemberDto);
     }
@@ -36,10 +36,10 @@ public class MemberApiController {
 
         if (bindingResult.hasErrors()) {
             return TokenDto.builder()
-            .result(RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
-            .build()).build();
+                    .result(RequestResult.builder()
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+                    .build()).build();
         }
         return memberService.logIn(loginMemberDto);
     }
@@ -57,10 +57,10 @@ public class MemberApiController {
 
         if (bindingResult.hasErrors()) {
             return MemberInfoDto.builder()
-            .result(RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
-            .build()).build();
+                    .result(RequestResult.builder()
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+                    .build()).build();
         }
         return memberService.updateMemberInfo(updateMemberDto);
     }
@@ -70,10 +70,10 @@ public class MemberApiController {
                                         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return MemberInfoDto.builder()
-            .result(RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
-            .build()).build();
+                    .result(RequestResult.builder()
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+                    .build()).build();
         }
         return memberService.updateMemberPassword(updatePasswordDto);
     }
@@ -89,9 +89,9 @@ public class MemberApiController {
                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage())
-            .build();
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage())
+                    .build();
         }
         return memberService.deleteMember(passwordDto.getPassword());
     }

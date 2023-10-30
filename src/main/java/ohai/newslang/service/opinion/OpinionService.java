@@ -5,10 +5,11 @@ import ohai.newslang.domain.dto.opinion.request.OpinionModifyRequestDto;
 import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionListResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
+import ohai.newslang.domain.dto.opinion.response.ResistOpinionResponseDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 
 public interface OpinionService {
-    OpinionResponseDto resistOpinion(OpinionResistRequestDto opinionResistRequestDto);
+    ResistOpinionResponseDto resistOpinion(OpinionResistRequestDto opinionResistRequestDto);
     OpinionListResponseDto opinionListByLikeCountOrderForDetailNews(
             String newsUrl, int pageNumber, int pageSize);
 

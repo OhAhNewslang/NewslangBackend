@@ -17,6 +17,4 @@ public class UpdateMemberDto {
     @Email(message = "이메일 형식으로 입력해 주세요.")
     private String email;
 
-    private String imagePath;
-
 }

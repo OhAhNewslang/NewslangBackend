@@ -7,6 +7,7 @@ import ohai.newslang.domain.dto.opinion.request.OpinionResistRequestDto;
 import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionListResponseDto;
 import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
+import ohai.newslang.domain.dto.opinion.response.ResistOpinionResponseDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.service.opinion.OpinionService;
 import org.springframework.validation.BindingResult;
@@ -19,11 +20,11 @@ public class OpinionApiController {
     private final OpinionService opinionService;
 
     @PostMapping("")
-    public OpinionResponseDto resistOpinion(
+    public ResistOpinionResponseDto resistOpinion(
             @RequestBody OpinionResistRequestDto opinionResistRequestDto,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return OpinionResponseDto.builder()
+            return ResistOpinionResponseDto.builder()
             .result(RequestResult.builder()
             .resultCode("202")
             .resultMessage(bindingResult.getFieldError().getDefaultMessage())
@@ -39,10 +40,8 @@ public class OpinionApiController {
         @RequestParam("page") int page,
         @RequestParam("limit")int limit) {
 
-        OpinionListResponseDto rst = opinionService
+        return opinionService
                 .opinionListByLikeCountOrderForDetailNews(newUrl, page, limit);
-
-        return rst;
     }
 
     // 상세 뉴스 최신순
@@ -62,7 +61,7 @@ public class OpinionApiController {
         @RequestParam("page") int page,
         @RequestParam("limit")int limit){
         return opinionService
-        .opinionListByLikeCountOrderForMember(page, limit);
+                .opinionListByLikeCountOrderForMember(page, limit);
     }
 
     // 마이페이지 최신순
@@ -71,7 +70,7 @@ public class OpinionApiController {
         @RequestParam("page") int page,
         @RequestParam("limit")int limit) {
         return opinionService
-        .opinionListByRecentOrderForMember(page, limit);
+                .opinionListByRecentOrderForMember(page, limit);
     }
 
     @PutMapping("")
@@ -80,10 +79,10 @@ public class OpinionApiController {
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return ModifyOpinionResponseDto.builder()
-            .result(RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage()).build())
-            .build();
+                    .result(RequestResult.builder()
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage()).build())
+                    .build();
         }
         return opinionService.modifyContent(opinionModifyRequestDto);
     }
@@ -94,8 +93,8 @@ public class OpinionApiController {
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return RequestResult.builder()
-            .resultCode("202")
-            .resultMessage(bindingResult.getFieldError().getDefaultMessage()).build();
+                    .resultCode("202")
+                    .resultMessage(bindingResult.getFieldError().getDefaultMessage()).build();
         }
         return opinionService.deleteOpinion(requestDto.getOpinionId());
     }
