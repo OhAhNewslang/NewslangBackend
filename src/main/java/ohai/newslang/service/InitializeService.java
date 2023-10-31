@@ -52,23 +52,23 @@ public class InitializeService {
         }
 
         public void initDetailNews() {
-            MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
+//            MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
+//
+//            em.persist(Member.createMember(
+//                    memberRecommend,
+//                    "오진석",
+//                    "ojs",
+//                    "EFGH@gmail.com",
+//                    pe.encode("1234")
+//            ));
 
-            em.persist(Member.createMember(
-                    memberRecommend,
-                    "오진석",
-                    "ojs",
-                    "EFGH@gmail.com",
-                    pe.encode("1234")
-            ));
-
-            NewsArchive news = NewsArchive.builder()
-                    .url("http://dummyUrl1:8080").build();
-
-            NewsRecommend
-                    .createNewsRecommend(memberRecommend, news, RecommendStatus.NONE);
-
-            em.persist(news);
+//            NewsArchive news = NewsArchive.builder()
+//                    .url("http://dummyUrl1:8080").build();
+//
+//            NewsRecommend
+//                    .createNewsRecommend(memberRecommend, news, RecommendStatus.NONE);
+//
+//            em.persist(news);
 
         }
         public void initOpinion() {
@@ -120,35 +120,35 @@ public class InitializeService {
             em.persist(member4);
             em.persist(member5);
 
-            NewsArchive news = NewsArchive.builder()
-                    .url("http://dummyUrl2:8080").build();
-
-            em.persist(news);
-
-            Opinion opinion1 = Opinion.createOpinion(member1, news, "의견1 의견");
-
-            OpinionRecommend
-                    .createOpinionRecommend(member2.getMemberRecommend(),opinion1, RecommendStatus.LIKE);
-
-            Opinion opinion2 = Opinion.createOpinion(member1, news, "의견2 의견");
-
-            OpinionRecommend
-                    .createOpinionRecommend(member3.getMemberRecommend(),opinion2, RecommendStatus.LIKE);
-            OpinionRecommend
-                    .createOpinionRecommend(member4.getMemberRecommend(),opinion2, RecommendStatus.LIKE);
-
-            Opinion opinion3 = Opinion.createOpinion(member1, news, "의견3 의견");
-
-            OpinionRecommend
-                    .createOpinionRecommend(member3.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
-            OpinionRecommend
-                    .createOpinionRecommend(member4.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
-            OpinionRecommend
-                    .createOpinionRecommend(member5.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
-
-            em.persist(opinion1);
-            em.persist(opinion2);
-            em.persist(opinion3);
+//            NewsArchive news = NewsArchive.builder()
+//                    .url("http://dummyUrl2:8080").build();
+//
+//            em.persist(news);
+//
+//            Opinion opinion1 = Opinion.createOpinion(member1, news, "의견1 의견");
+//
+//            OpinionRecommend
+//                    .createOpinionRecommend(member2.getMemberRecommend(),opinion1, RecommendStatus.LIKE);
+//
+//            Opinion opinion2 = Opinion.createOpinion(member1, news, "의견2 의견");
+//
+//            OpinionRecommend
+//                    .createOpinionRecommend(member3.getMemberRecommend(),opinion2, RecommendStatus.LIKE);
+//            OpinionRecommend
+//                    .createOpinionRecommend(member4.getMemberRecommend(),opinion2, RecommendStatus.LIKE);
+//
+//            Opinion opinion3 = Opinion.createOpinion(member1, news, "의견3 의견");
+//
+//            OpinionRecommend
+//                    .createOpinionRecommend(member3.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
+//            OpinionRecommend
+//                    .createOpinionRecommend(member4.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
+//            OpinionRecommend
+//                    .createOpinionRecommend(member5.getMemberRecommend(),opinion3, RecommendStatus.LIKE);
+//
+//            em.persist(opinion1);
+//            em.persist(opinion2);
+//            em.persist(opinion3);
 
 
         }
