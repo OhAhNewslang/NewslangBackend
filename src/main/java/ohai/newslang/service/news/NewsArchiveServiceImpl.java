@@ -6,12 +6,17 @@ import ohai.newslang.domain.dto.news.ResponseThumbnailNewsDto;
 import ohai.newslang.domain.dto.news.ResultDetailNewsDto;
 import ohai.newslang.domain.dto.news.ThumbnailNewsDto;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
+import ohai.newslang.domain.dto.recommend.newsRecommend.NewsRecommendDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.news.NewsArchive;
+import ohai.newslang.domain.entity.recommend.NewsRecommend;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
+import ohai.newslang.domain.enumulate.RecommendStatus;
 import ohai.newslang.repository.news.NewsArchiveRepository;
+import ohai.newslang.repository.recommand.MemberRecommendRepository;
+import ohai.newslang.repository.recommand.NewsRecommendRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,6 +34,8 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
 
     private final NewsArchiveRepository newsArchiveRepository;
     private final MemberSubscribeItemRepository subscribeItemRepository;
+    private final NewsRecommendRepository newsRecommendRepository;
+    private final MemberRecommendRepository memberRecommendRepository;
     private final TokenDecoder td;
 
     // 크롤링에 사용 되는 뉴스 서비스 1
@@ -53,6 +61,10 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         .contents(findDetailNews.getContents())
         .media(findDetailNews.getMediaName())
         .likeCount(findDetailNews.getLikeCount())
+        .recommend(newsRecommendRepository
+        .findByMemberRecommend_IdAndDetailNewsArchiveUrl(
+        memberRecommendRepository.findByMember_Id(td.currentMemberId()).getId(), url)
+        .orElse(NewsRecommend.getNoneRecommend()).getStatus())
         .postDateTime(findDetailNews.getPostDateTime())
         .modifyDateTime(findDetailNews.getModifyDateTime())
         .reporter(findDetailNews.getReporter())

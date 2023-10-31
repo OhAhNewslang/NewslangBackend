@@ -71,4 +71,14 @@ public class OpinionRecommend extends TimeStamp {
         return status.equals(newStatus) ? 0 :
                 newStatus.equals(RecommendStatus.LIKE) ? 1 : -1;
     }
+
+    public static OpinionRecommend getNoneRecommend(){
+        OpinionRecommend opinionRecommend = new OpinionRecommend();
+
+        opinionRecommend.opinion = null;
+        opinionRecommend.memberRecommend = null;
+        opinionRecommend.status = RecommendStatus.NONE;
+
+        return opinionRecommend;
+    }
 }

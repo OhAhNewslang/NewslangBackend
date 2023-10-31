@@ -11,9 +11,13 @@ import ohai.newslang.domain.dto.opinion.response.ResistOpinionResponseDto;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.opinion.Opinion;
+import ohai.newslang.domain.entity.recommend.NewsRecommend;
+import ohai.newslang.domain.entity.recommend.OpinionRecommend;
 import ohai.newslang.repository.member.MemberRepository;
 import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.opinion.OpinionRepository;
+import ohai.newslang.repository.recommand.MemberRecommendRepository;
+import ohai.newslang.repository.recommand.OpinionRecommendRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,6 +31,8 @@ public class OpinionServiceImpl implements OpinionService{
     private final MemberRepository memberRepository;
     private final OpinionRepository opinionRepository;
     private final NewsArchiveRepository newsArchiveRepository;
+    private final OpinionRecommendRepository opinionRecommendRepository;
+    private final MemberRecommendRepository memberRecommendRepository;
     private final TokenDecoder td;
 
     @Override
@@ -86,6 +92,10 @@ public class OpinionServiceImpl implements OpinionService{
                 OpinionResponseDto.builder()
                 .opinion(opinion)
                 .modifiable(opinion.getMember().getId().equals(td.currentMemberId()))
+                .recommend(opinionRecommendRepository
+                .findByMemberRecommend_IdAndOpinion_Uuid(memberRecommendRepository
+                .findByMember_Id(td.currentMemberId()).getId(), opinion.getUuid())
+                .orElse(OpinionRecommend.getNoneRecommend()).getStatus())
                 .build()).toList())
                 .pageSource(ResponsePageSourceDto.builder()
                 .page(pageNumber)
@@ -129,6 +139,10 @@ public class OpinionServiceImpl implements OpinionService{
                 .map(opinion -> OpinionResponseDto.builder()
                 .opinion(opinion)
                 .modifiable(true)
+                .recommend(opinionRecommendRepository
+                .findByMemberRecommend_IdAndOpinion_Uuid(memberRecommendRepository
+                .findByMember_Id(td.currentMemberId()).getId(), opinion.getUuid())
+                .orElse(OpinionRecommend.getNoneRecommend()).getStatus())
                 .build()).toList())
                 .pageSource(ResponsePageSourceDto.builder()
                 .page(pageNumber)
