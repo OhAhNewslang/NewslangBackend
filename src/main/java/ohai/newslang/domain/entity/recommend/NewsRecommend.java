@@ -68,4 +68,12 @@ public class NewsRecommend extends TimeStamp {
         return status.equals(newStatus) ? 0 :
                 newStatus.equals(RecommendStatus.LIKE) ? 1 : -1;
     }
+
+    public static NewsRecommend getNoneRecommend(){
+        NewsRecommend newsRecommend = new NewsRecommend();
+        newsRecommend.memberRecommend = null;
+        newsRecommend.newsArchive = null;
+        newsRecommend.status = RecommendStatus.NONE;
+        return newsRecommend;
+    }
 }

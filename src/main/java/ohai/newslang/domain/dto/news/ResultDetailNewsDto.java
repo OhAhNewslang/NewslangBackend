@@ -4,12 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ohai.newslang.domain.dto.request.RequestResult;
+import ohai.newslang.domain.enumulate.RecommendStatus;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 public class ResultDetailNewsDto {
+
 
     private DetailNewsDto detailNews;
     private RequestResult result;

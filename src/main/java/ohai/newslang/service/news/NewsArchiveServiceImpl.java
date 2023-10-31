@@ -9,13 +9,15 @@ import ohai.newslang.domain.dto.news.ThumbnailNewsDto;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.news.NewsArchive;
+import ohai.newslang.domain.entity.recommend.NewsRecommend;
 import ohai.newslang.domain.entity.scrap.MemberScrapNews;
 import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
 import ohai.newslang.repository.news.NewsArchiveRepository;
-import ohai.newslang.repository.scrap.MemberScrapNewsArchiveRepository;
+import ohai.newslang.repository.recommand.MemberRecommendRepository;
+import ohai.newslang.repository.recommand.NewsRecommendRepository;
 import ohai.newslang.repository.scrap.MemberScrapNewsRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,8 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
 
     private final NewsArchiveRepository newsArchiveRepository;
     private final MemberSubscribeItemRepository subscribeItemRepository;
+    private final NewsRecommendRepository newsRecommendRepository;
+    private final MemberRecommendRepository memberRecommendRepository;
     private final MemberScrapNewsRepository memberScrapNewsRepository;
     private final TokenDecoder td;
 
@@ -60,6 +64,10 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         .contents(findDetailNews.getContents())
         .media(findDetailNews.getMediaName())
         .likeCount(findDetailNews.getLikeCount())
+        .recommend(newsRecommendRepository
+        .findByMemberRecommend_IdAndDetailNewsArchiveUrl(
+        memberRecommendRepository.findByMember_Id(td.currentMemberId()).getId(), url)
+        .orElse(NewsRecommend.getNoneRecommend()).getStatus())
         .postDateTime(findDetailNews.getPostDateTime())
         .modifyDateTime(findDetailNews.getModifyDateTime())
         .reporter(findDetailNews.getReporter())
