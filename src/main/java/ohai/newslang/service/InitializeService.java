@@ -52,15 +52,15 @@ public class InitializeService {
         }
 
         public void initDetailNews() {
-//            MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
+            MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
 //
-//            em.persist(Member.createMember(
-//                    memberRecommend,
-//                    "오진석",
-//                    "ojs",
-//                    "EFGH@gmail.com",
-//                    pe.encode("1234")
-//            ));
+            em.persist(Member.createMember(
+                    memberRecommend,
+                    "오진석",
+                    "ojs",
+                    "EFGH@gmail.com",
+                    pe.encode("1234")
+            ));
 
 //            NewsArchive news = NewsArchive.builder()
 //                    .url("http://dummyUrl1:8080").build();
