@@ -13,6 +13,7 @@ import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.opinion.Opinion;
 import ohai.newslang.domain.entity.recommend.NewsRecommend;
 import ohai.newslang.domain.entity.recommend.OpinionRecommend;
+import ohai.newslang.domain.enumulate.RecommendStatus;
 import ohai.newslang.repository.member.MemberRepository;
 import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.opinion.OpinionRepository;
@@ -45,10 +46,18 @@ public class OpinionServiceImpl implements OpinionService{
         newsArchiveRepository.findByUrl(opinionResistRequestDto.getNewsUrl()),
         opinionResistRequestDto.getOpinionContent());
 
+        OpinionRecommend opinionRecommend = OpinionRecommend.createOpinionRecommend(
+                memberRecommendRepository.findByMember_Id(td.currentMemberId()),
+                opinionRepository.findNoOptionalByUuid(newOpinion.getUuid()),
+                RecommendStatus.NONE);
+
+        opinionRecommendRepository.save(opinionRecommend);
+
         Opinion savedOpinion = opinionRepository.save(newOpinion);
         return ResistOpinionResponseDto.builder()
                 .opinion(savedOpinion)
                 .modifiable(savedOpinion.getMember().getId().equals(currentUserId))
+                .recommend(opinionRecommend.getStatus())
                 .result(RequestResult.builder()
                 .resultCode("201")
                 .resultMessage("의견 등록 완료").build()).build();
