@@ -2,21 +2,23 @@ package ohai.newslang.service.news;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.configuration.jwt.TokenDecoder;
+import ohai.newslang.domain.dto.news.DetailNewsDto;
 import ohai.newslang.domain.dto.news.ResponseThumbnailNewsDto;
 import ohai.newslang.domain.dto.news.ResultDetailNewsDto;
 import ohai.newslang.domain.dto.news.ThumbnailNewsDto;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
-import ohai.newslang.domain.dto.recommend.newsRecommend.NewsRecommendDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.entity.recommend.NewsRecommend;
+import ohai.newslang.domain.entity.scrap.MemberScrapNews;
+import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
-import ohai.newslang.domain.enumulate.RecommendStatus;
 import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.recommand.MemberRecommendRepository;
 import ohai.newslang.repository.recommand.NewsRecommendRepository;
+import ohai.newslang.repository.scrap.MemberScrapNewsRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,6 +37,7 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
     private final MemberSubscribeItemRepository subscribeItemRepository;
     private final NewsRecommendRepository newsRecommendRepository;
     private final MemberRecommendRepository memberRecommendRepository;
+    private final MemberScrapNewsRepository memberScrapNewsRepository;
     private final TokenDecoder td;
 
     // 크롤링에 사용 되는 뉴스 서비스 1
@@ -56,6 +58,7 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         NewsArchive findDetailNews = newsArchiveRepository.findNewsArchiveByUrl(url);
 
         return ResultDetailNewsDto.builder()
+        .detailNews(DetailNewsDto.builder()
         .url(findDetailNews.getUrl())
         .title(findDetailNews.getTitle())
         .contents(findDetailNews.getContents())
@@ -68,6 +71,7 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         .postDateTime(findDetailNews.getPostDateTime())
         .modifyDateTime(findDetailNews.getModifyDateTime())
         .reporter(findDetailNews.getReporter())
+        .isScrap(this.isExistScrapNews(url)).build())
         .result(RequestResult.builder()
         .resultCode("200")
         .resultMessage("상세 뉴스 조회 성공").build()).build();
@@ -148,5 +152,20 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         .title(n.getTitle()).summary("")
         .imagePath(n.getImagePath())
         .postDateTime(n.getPostDateTime()).build()).toList();
+    }
+
+    // 이미 스크랩된 뉴스인지 확인.
+    public boolean isExistScrapNews(String newsUrl) {
+        Long memberId = td.currentMemberId();
+        if (memberScrapNewsRepository.countByMemberId(memberId) > 0){
+            MemberScrapNews memberScrapNews = memberScrapNewsRepository.findByMemberId(memberId).orElseThrow(() -> new IllegalStateException("Not found member"));
+            List<MemberScrapNewsArchive> memberScrapNewsArchiveList = memberScrapNews.getMemberScrapNewsArchiveList();
+            for (MemberScrapNewsArchive item : memberScrapNewsArchiveList) {
+                if (item.getNewsArchive().getUrl().equals(newsUrl)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
