@@ -68,8 +68,16 @@ public class OpinionRecommend extends TimeStamp {
         // 업데이트 할 추천 정보와 현재 추천 정보가 서로 같으면 0을 리턴해 무시
         // 같지 않다면 새로운 정보가 "LIKE"인지 확인하고 맞으면 OTHER -> LIKE 이므로 1 리턴
         // 아니면 "LIKE" -> OTHER 이므로 -1 리턴
+        // none -> dislike = 0
+        // like -> other = -1
+        // other -> like = +1
         return status.equals(newStatus) ? 0 :
-                newStatus.equals(RecommendStatus.LIKE) ? 1 : -1;
+                status.equals(RecommendStatus.LIKE) ? -1
+                        : newStatus.equals(RecommendStatus.LIKE) ? 1 : 0;
+        // 서로 같으면 변경이 없었으므로 0
+        // 같지 않은데 이전 값이 Like면 Like가 취소 되거나 DisLike가 된것이므로 -1
+        // 같지 않은데 이전 값이 None, DisLike일 때 새로 들어온 값이 Like면 + 1
+        // 나머지 경우(none -> dislike, dislike -> none)면 0
     }
 
     public static OpinionRecommend getNoneRecommend(){
