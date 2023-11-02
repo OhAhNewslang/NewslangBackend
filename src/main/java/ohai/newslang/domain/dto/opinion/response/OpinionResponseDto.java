@@ -18,7 +18,7 @@ public class OpinionResponseDto {
     private boolean modifiable;
     private int likeCount;
     @Builder
-    public OpinionResponseDto(Opinion opinion,boolean modifiable,RequestResult result) {
+    public OpinionResponseDto(Opinion opinion,boolean modifiable) {
         this.opinionId = opinion.getUuid();
         this.memberName = opinion.getMember().getName();
         this.opinionCreateDate = opinion.getCreateTime().toLocalDate();

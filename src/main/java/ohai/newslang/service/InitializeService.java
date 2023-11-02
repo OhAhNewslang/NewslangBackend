@@ -149,8 +149,10 @@ public class InitializeService {
             em.persist(opinion1);
             em.persist(opinion2);
             em.persist(opinion3);
-
-
         }
+
+//        public void initSubscribe() {
+//            em.createQuery("SELECT ")
+//        }
     }
 }
