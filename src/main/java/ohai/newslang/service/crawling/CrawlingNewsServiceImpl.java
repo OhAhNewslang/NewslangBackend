@@ -21,22 +21,25 @@ import java.util.stream.Collectors;
 public class CrawlingNewsServiceImpl implements CrawlingNewsService{
 
     @Override
-    public List<News> getNewsList(String oId, String date, int page)  {
+    public List<News> getNewsList(String oId, String date, int page) throws IOException {
         List<News> newsList = new ArrayList<>();
+        String url = "https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + oId + "&date=" + date + "&page=" + page;
+        Connection conn = Jsoup.connect(url)
+                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21").timeout(10000);
+        Connection.Response resp = conn.execute();
         Document doc = null;
-        Connection conn = Jsoup.connect("https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + oId + "&date=" + date + "&page=" + page);
-        try {
+        if (resp.statusCode() == 200) {
             doc = conn.get();
-        } catch (IOException e) {
-            throw new RuntimeException("Not exist contents - " + e.getMessage());
-        }
-        if (doc != null) {
-            Elements type06_headline = doc.getElementsByClass("type06_headline");
-            Elements type06 = doc.getElementsByClass("type06");
-            if (type06_headline != null && type06_headline.size() > 0)
-                newsList.addAll(parsingScriptToThumbnailNews(type06_headline, oId));
-            if (type06 != null && type06.size() > 0)
-                newsList.addAll(parsingScriptToThumbnailNews(type06, oId));
+            if (doc != null) {
+                Elements type06_headline = doc.getElementsByClass("type06_headline");
+                Elements type06 = doc.getElementsByClass("type06");
+                if (type06_headline != null && type06_headline.size() > 0)
+                    newsList.addAll(parsingScriptToThumbnailNews(type06_headline, oId));
+                if (type06 != null && type06.size() > 0)
+                    newsList.addAll(parsingScriptToThumbnailNews(type06, oId));
+            }
+        }else{
+            log.error("Not response - " + url);
         }
         return newsList;
     }
@@ -95,31 +98,37 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService{
                         String reporter = "";
                         LocalDateTime postDateTime = null;
                         LocalDateTime modifyDateTime = null;
-                        Document doc = null;
-                        Connection conn = Jsoup.connect(link);
-                        try {
-                            doc = conn.get();
-                        } catch (IOException e) {
-                            throw new RuntimeException("Not exist contents - " + e.getMessage());
-                        }
-                        if (doc != null) {
-                            Elements article = doc.getElementsByClass("go_trans _article_content");
-                            contents += article.toString();
-                            postDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_DATE_TIME", "data-date-time");
-                            modifyDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_MODIFY_DATE_TIME", "data-modify-date-time");
 
-                            Elements elementsRepo = doc.getElementsByClass("byline_p");
-                            if (elementsRepo != null) {
-                                Elements elementsRepoSpan = elementsRepo.select("span");
-                                if (elementsRepoSpan != null) {
-                                    for (int i = 0; i < elementsRepoSpan.size(); i++) {
-                                        if (reporter != "") reporter += "\r\n";
-                                        reporter += elementsRepoSpan.get(i).html();
+                        Connection conn = Jsoup
+                                .connect(link)
+                                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                                .timeout(10000);
+                        Connection.Response resp = conn.execute();
+                        Document doc = null;
+                        if (resp.statusCode() == 200) {
+                            doc = conn.get();
+                            if (doc != null) {
+                                Elements article = doc.getElementsByClass("go_trans _article_content");
+                                contents += article.toString();
+                                postDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_DATE_TIME", "data-date-time");
+                                modifyDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_MODIFY_DATE_TIME", "data-modify-date-time");
+                                if (modifyDateTime == null) modifyDateTime = postDateTime;
+
+                                Elements elementsRepo = doc.getElementsByClass("byline_p");
+                                if (elementsRepo != null) {
+                                    Elements elementsRepoSpan = elementsRepo.select("span");
+                                    if (elementsRepoSpan != null) {
+                                        for (int i = 0; i < elementsRepoSpan.size(); i++) {
+                                            if (reporter != "") reporter += "\r\n";
+                                            reporter += elementsRepoSpan.get(i).html();
+                                        }
                                     }
                                 }
                             }
+                            newsList.add(News.builder().url(link).title(title).summary(summary).contents(contents).imagePath(imagePath).media(mediaName).oId(oId).postDateTime(postDateTime).modifyDateTime(modifyDateTime).reporter(reporter).build());
+                        }else{
+                            log.error("Not response - " + link);
                         }
-                        newsList.add(News.builder().url(link).title(title).summary(summary).contents(contents).imagePath(imagePath).media(mediaName).oId(oId).postDateTime(postDateTime).modifyDateTime(modifyDateTime).reporter(reporter).build());
                     }catch (Exception ex){
                         log.error("Parsing Error : " + ex.getMessage());
                     }
