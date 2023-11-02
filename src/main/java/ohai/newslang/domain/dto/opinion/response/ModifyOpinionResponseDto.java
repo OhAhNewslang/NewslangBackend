@@ -23,7 +23,6 @@ public class ModifyOpinionResponseDto {
     public ModifyOpinionResponseDto(Opinion opinion, RequestResult result) {
         this.opinionId = opinion.getUuid();
         this.memberName = opinion.getMember().getName();
-        this.memberImagePath = opinion.getMember().getImagePath();
         this.opinionCreateDate = opinion.getCreateTime().toLocalDate();
         this.opinionContent = opinion.getContent();
         this.likeCount = opinion.getLikeCount();

@@ -6,6 +6,7 @@ import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.dto.request.ResultDto;
 import ohai.newslang.domain.dto.scrap.RequestScrapNewsDto;
 import ohai.newslang.domain.dto.scrap.ResultScrapNewsDto;
+import ohai.newslang.domain.dto.scrap.ResultScrapStatusDto;
 import ohai.newslang.service.scrap.MemberScrapNewsService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +36,8 @@ public class ScrapNewsApiController {
 
     @GetMapping("/news")
     public ResultScrapNewsDto getScrapNews(
-        @RequestParam("page") int page,
-        @RequestParam("limit")int limit) {
+            @RequestParam("page") int page,
+            @RequestParam("limit")int limit) {
 
         return memberScrapNewsService.scarpNewsList(page, limit);
     }
