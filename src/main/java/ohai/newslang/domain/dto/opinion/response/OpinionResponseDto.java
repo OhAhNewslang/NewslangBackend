@@ -21,6 +21,7 @@ public class OpinionResponseDto {
     private int likeCount;
     private String recommend;
     @Builder
+
     public OpinionResponseDto(Opinion opinion,boolean modifiable,RecommendStatus recommend) {
         this.opinionId = opinion.getUuid();
         this.memberName = opinion.getMember().getName();
