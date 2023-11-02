@@ -33,6 +33,9 @@ public class Member extends TimeStamp {
     @Column(length = 100, nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private MemberRecommend memberRecommend;
 
@@ -57,6 +60,7 @@ public class Member extends TimeStamp {
         member.loginId =newLoginId;
         member.email = newEmail;
         member.password = newPassword;
+        member.role = UserRole.ROLE_USER;
         member.foreignMemberRecommend(newMemberRecommend);
 
 
