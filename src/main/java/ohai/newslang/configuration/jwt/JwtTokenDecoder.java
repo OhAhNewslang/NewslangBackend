@@ -81,7 +81,7 @@ public class JwtTokenDecoder implements TokenDecoder{
 //                Arrays.stream(principal.getRoles().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         // 단일 ROLE 방식
         Set<GrantedAuthority> setAuths = new HashSet<>();
-        setAuths.add(new SimpleGrantedAuthority(String.valueOf(memberRepository.findByTokenId(principal).getRole())));
+//        setAuths.add(new SimpleGrantedAuthority(String.valueOf(memberRepository.findByTokenId(principal).getRole())));
 
         // Filter에서는 토큰의 존재 여부 + 만료되지 않음 이라는 정보만 있으면 검증이 완료된 상태이다.
         // Security에서 우리의 필터를 통해 권한 필터링을 하기 위해 Authentication 객체를 생성해서
