@@ -33,11 +33,6 @@ public class Member extends TimeStamp {
     @Column(length = 100, nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
-
-    private String imagePath;
-
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private MemberRecommend memberRecommend;
 
@@ -62,8 +57,6 @@ public class Member extends TimeStamp {
         member.loginId =newLoginId;
         member.email = newEmail;
         member.password = newPassword;
-        member.imagePath = "DefaultImagePath";
-        member.role = UserRole.ROLE_USER;
         member.foreignMemberRecommend(newMemberRecommend);
 
 
@@ -79,12 +72,5 @@ public class Member extends TimeStamp {
 
     public void updateEmail(String newEmail){
         email = newEmail;
-    }
-    public void updateRoles(UserRole newRole){
-        role = newRole;
-    }
-
-    public void updateImagePath(String newImagePath) {
-        imagePath = newImagePath;
     }
 }
