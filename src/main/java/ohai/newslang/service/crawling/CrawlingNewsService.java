@@ -7,6 +7,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CrawlingNewsService {
-    List<News> getNewsList(String oId, String date, int page) throws IOException;
+    List<News> getNewsList(String oId, String date, int page) throws InterruptedException;
 //    DetailNews getDetailNewsList(String url, String media);
 }

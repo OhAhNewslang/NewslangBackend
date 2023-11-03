@@ -18,60 +18,22 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class CrawlingNewsServiceImpl implements CrawlingNewsService{
+public class CrawlingNewsServiceImpl implements CrawlingNewsService {
 
     @Override
-    public List<News> getNewsList(String oId, String date, int page) throws IOException {
+    public List<News> getNewsList(String oId, String date, int page) throws InterruptedException{
         List<News> newsList = new ArrayList<>();
-        String url = "https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + oId + "&date=" + date + "&page=" + page;
-        Connection conn = Jsoup.connect(url)
-                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21").timeout(10000);
-        Connection.Response resp = conn.execute();
-        Document doc = null;
-        if (resp.statusCode() == 200) {
-            doc = conn.get();
-            if (doc != null) {
-                Elements type06_headline = doc.getElementsByClass("type06_headline");
-                Elements type06 = doc.getElementsByClass("type06");
-                if (type06_headline != null && type06_headline.size() > 0)
-                    newsList.addAll(parsingScriptToThumbnailNews(type06_headline, oId));
-                if (type06 != null && type06.size() > 0)
-                    newsList.addAll(parsingScriptToThumbnailNews(type06, oId));
-            }
-        }else{
-            log.error("Not response - " + url);
-        }
+        Document doc = getDocument("https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + oId + "&date=" + date + "&page=" + page,
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+                40000);
+        Elements type06_headline = doc.getElementsByClass("type06_headline");
+        Elements type06 = doc.getElementsByClass("type06");
+        if (type06_headline != null && type06_headline.size() > 0)
+            newsList.addAll(parsingScriptToThumbnailNews(type06_headline, oId));
+        if (type06 != null && type06.size() > 0)
+            newsList.addAll(parsingScriptToThumbnailNews(type06, oId));
         return newsList;
     }
-
-//    @Override
-//    public DetailNews getDetailNewsList(String url, String media){
-//        Document doc = null;
-//        Connection conn = Jsoup.connect(url);
-//        try {
-//            doc = conn.get();
-//        } catch (IOException e) {
-//            throw new RuntimeException("Not exist contents - " + e.getMessage());
-//        }
-//        if (doc != null) {
-//            String contents = "";
-//
-//            LocalDateTime postDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_DATE_TIME", "data-date-time");
-//            LocalDateTime modifyDateTime= getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_MODIFY_DATE_TIME", "data-modify-date-time");
-//
-//            Elements title = doc.getElementsByClass("media_end_head_headline");
-//            String newsTitle = title.select("span").get(0).html();
-//            Elements body = doc.getElementsByClass("newsct_body");
-//            for (Element item : body){
-//                Elements article = item.getElementsByClass("newsct_article _article_body");
-//                contents += article.toString();
-//                Elements copyright = item.getElementsByClass("copyright");
-//                contents += copyright.toString();
-//            }
-//            return News.builder().link(url).title(newsTitle).contents(contents).media(media).postDateTime(postDateTime).modifyDateTime(modifyDateTime).build();
-//        }
-//        return null;
-//    }
 
     private List<News> parsingScriptToThumbnailNews(Elements root, String oId){
         List<News> newsList = new ArrayList<>();
@@ -99,45 +61,61 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService{
                         LocalDateTime postDateTime = null;
                         LocalDateTime modifyDateTime = null;
 
-                        Connection conn = Jsoup
-                                .connect(link)
-                                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                                .timeout(10000);
-                        Connection.Response resp = conn.execute();
-                        Document doc = null;
-                        if (resp.statusCode() == 200) {
-                            doc = conn.get();
-                            if (doc != null) {
-                                Elements article = doc.getElementsByClass("go_trans _article_content");
-                                contents += article.toString();
-                                postDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_DATE_TIME", "data-date-time");
-                                modifyDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_MODIFY_DATE_TIME", "data-modify-date-time");
-                                if (modifyDateTime == null) modifyDateTime = postDateTime;
-
-                                Elements elementsRepo = doc.getElementsByClass("byline_p");
-                                if (elementsRepo != null) {
-                                    Elements elementsRepoSpan = elementsRepo.select("span");
-                                    if (elementsRepoSpan != null) {
-                                        for (int i = 0; i < elementsRepoSpan.size(); i++) {
-                                            if (reporter != "") reporter += "\r\n";
-                                            reporter += elementsRepoSpan.get(i).html();
-                                        }
-                                    }
+                        Document doc = getDocument(link,
+                                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+                                40000);
+                        Elements article = doc.getElementsByClass("go_trans _article_content");
+                        contents += article.toString();
+                        postDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_DATE_TIME", "data-date-time");
+                        modifyDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_MODIFY_DATE_TIME", "data-modify-date-time");
+                        if (modifyDateTime == null) modifyDateTime = postDateTime;
+                        Elements elementsRepo = doc.getElementsByClass("byline_p");
+                        if (elementsRepo != null) {
+                            Elements elementsRepoSpan = elementsRepo.select("span");
+                            if (elementsRepoSpan != null) {
+                                for (int i = 0; i < elementsRepoSpan.size(); i++) {
+                                    if (reporter != "") reporter += "\r\n";
+                                    reporter += elementsRepoSpan.get(i).html();
                                 }
                             }
-                            newsList.add(News.builder().url(link).title(title).summary(summary).contents(contents).imagePath(imagePath).media(mediaName).oId(oId).postDateTime(postDateTime).modifyDateTime(modifyDateTime).reporter(reporter).build());
-                        }else{
-                            log.error("Not response - " + link);
                         }
-                    }catch (Exception ex){
+                        newsList.add(News.builder().url(link).title(title).summary(summary).contents(contents).imagePath(imagePath).media(mediaName).oId(oId).postDateTime(postDateTime).modifyDateTime(modifyDateTime).reporter(reporter).build());
+                    }catch (RuntimeException e) {
+                        throw new RuntimeException(e);
+                    }
+                    catch (Exception ex){
                         log.error("Parsing Error : " + ex.getMessage());
                     }
                 }
             }
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
+        }catch (RuntimeException e){
+            throw new RuntimeException(e);
         }
         return newsList;
+    }
+
+    private Document getDocument(String url, String userAgent, int millis) throws InterruptedException {
+        // 페이지 크롤링 담당
+        // 페이지 크롤링 거부시 재시도 반복
+        Connection conn = Jsoup
+                .connect(url)
+                .userAgent(userAgent)
+                .timeout(millis);
+        Document doc = null;
+        int retryCount = 0;
+        while (doc == null){
+            try {
+                Connection.Response resp = conn.execute();
+                doc = conn.get();
+            } catch (IOException ex) {
+                // 뉴스 상세 내용 크롤링에서 문제 발생
+                // 재시도 반복
+                log.error("Not response... Retry[" + retryCount + "]- " + url);
+                retryCount++;
+                Thread.sleep(1000);
+            }
+        }
+        return doc;
     }
 
     private LocalDateTime getDateTime(Document document, String className, String attributeKey){
