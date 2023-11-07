@@ -4,16 +4,14 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.configuration.jwt.TokenDecoder;
 import ohai.newslang.domain.dto.opinion.request.OpinionModifyRequestDto;
 import ohai.newslang.domain.dto.opinion.request.OpinionResistRequestDto;
-import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
-import ohai.newslang.domain.dto.opinion.response.OpinionListResponseDto;
-import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
-import ohai.newslang.domain.dto.opinion.response.ResistOpinionResponseDto;
+import ohai.newslang.domain.dto.opinion.response.*;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.opinion.Opinion;
 import ohai.newslang.domain.entity.recommend.NewsRecommend;
 import ohai.newslang.domain.entity.recommend.OpinionRecommend;
 import ohai.newslang.domain.enumulate.RecommendStatus;
+import ohai.newslang.domain.vo.MemberOpinionStatus;
 import ohai.newslang.repository.member.MemberRepository;
 import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.opinion.OpinionRepository;
@@ -24,6 +22,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +66,27 @@ public class OpinionServiceImpl implements OpinionService{
     }
 
     @Override
+    public MemberOpinionStatusDto opinionStatusForNews(
+            String newsUrl) {
+
+        List<Opinion> allByDetailNewsArchiveUrl = opinionRepository.findAllByDetailNewsArchiveUrl(newsUrl);
+
+        MemberOpinionStatusDto build = MemberOpinionStatusDto.builder()
+                .memberOpinionStatusList(allByDetailNewsArchiveUrl.stream().map(o ->
+                        MemberOpinionStatus.builder()
+                                .opinionId(o.getUuid())
+                                .modifiable(o.getMember().getId().equals(td.currentMemberId()))
+                                .recommend(opinionRecommendRepository
+                                        .findByMemberRecommend_IdAndOpinion_Uuid(memberRecommendRepository
+                                                .findByMember_Id(td.currentMemberId()).getId(), o.getUuid())
+                                        .orElse(OpinionRecommend.getNoneRecommend()).getStatus())
+                                .build()).collect(Collectors.toList()))
+                .build();
+
+        return build;
+    }
+
+    @Override
     public OpinionListResponseDto opinionListByLikeCountOrderForDetailNews(
             String newsUrl, int pageNumber, int pageSize) {
 
@@ -100,11 +123,6 @@ public class OpinionServiceImpl implements OpinionService{
                 .opinions(findOpinions
                 .map(o -> OpinionResponseDto.builder()
                 .opinion(o)
-                .modifiable(o.getMember().getId().equals(td.currentMemberId()))
-                .recommend(opinionRecommendRepository
-                .findByMemberRecommend_IdAndOpinion_Uuid(memberRecommendRepository
-                .findByMember_Id(td.currentMemberId()).getId(), o.getUuid())
-                .orElse(OpinionRecommend.getNoneRecommend()).getStatus())
                 .build()).toList())
                 .pageSource(ResponsePageSourceDto.builder()
                 .page(pageRequest.getPageNumber() + 1)

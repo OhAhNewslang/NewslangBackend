@@ -5,14 +5,17 @@ import lombok.Getter;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.vo.MemberOpinionStatus;
 
+import java.util.List;
+import java.util.Optional;
+
 @Getter
 public class MemberOpinionStatusDto {
-    private MemberOpinionStatus memberOpinionStatus;
+    private List<MemberOpinionStatus> memberOpinionStatusList;
     private RequestResult result;
 
     @Builder
-    public MemberOpinionStatusDto(MemberOpinionStatus memberOpinionStatus, RequestResult result) {
-        this.memberOpinionStatus = memberOpinionStatus;
+    public MemberOpinionStatusDto(List<MemberOpinionStatus> memberOpinionStatusList, RequestResult result) {
+        this.memberOpinionStatusList = memberOpinionStatusList;
         this.result = result;
     }
 }

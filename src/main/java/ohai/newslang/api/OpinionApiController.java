@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.dto.opinion.request.OpinionDeleteRequestDto;
 import ohai.newslang.domain.dto.opinion.request.OpinionModifyRequestDto;
 import ohai.newslang.domain.dto.opinion.request.OpinionResistRequestDto;
-import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
-import ohai.newslang.domain.dto.opinion.response.OpinionListResponseDto;
-import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
-import ohai.newslang.domain.dto.opinion.response.ResistOpinionResponseDto;
+import ohai.newslang.domain.dto.opinion.response.*;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.service.opinion.OpinionService;
 import org.springframework.validation.BindingResult;
@@ -34,15 +31,15 @@ public class OpinionApiController {
     }
 
     // 로그인한 사용자의 의견 정보
-    @GetMapping("/status")
-    public OpinionListResponseDto opinionStatus(
+    @GetMapping("/news/status")
+    public MemberOpinionStatusDto opinionStatusForNews(
             @RequestParam("newsUrl") String newUrl) {
         return opinionService
-                .opinionListByLikeCountOrderForDetailNews(newUrl, page, limit);
+                .opinionStatusForNews(newUrl);
     }
 
     // 상세 뉴스 공감순
-    @GetMapping("/news/like")
+    @GetMapping("/guest/news/like")
     public OpinionListResponseDto opinionListByLikeCountForNews(
         @RequestParam("newsUrl") String newUrl,
         @RequestParam("page") int page,
@@ -53,7 +50,7 @@ public class OpinionApiController {
     }
 
     // 상세 뉴스 최신순
-    @GetMapping("/news/recent")
+    @GetMapping("/guest/news/recent")
     public OpinionListResponseDto opinionListByRecentForNews(
         @RequestParam("newsUrl") String newUrl,
         @RequestParam("page") int page,

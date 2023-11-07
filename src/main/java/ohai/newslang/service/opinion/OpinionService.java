@@ -2,14 +2,14 @@ package ohai.newslang.service.opinion;
 
 import ohai.newslang.domain.dto.opinion.request.OpinionResistRequestDto;
 import ohai.newslang.domain.dto.opinion.request.OpinionModifyRequestDto;
-import ohai.newslang.domain.dto.opinion.response.ModifyOpinionResponseDto;
-import ohai.newslang.domain.dto.opinion.response.OpinionListResponseDto;
-import ohai.newslang.domain.dto.opinion.response.OpinionResponseDto;
-import ohai.newslang.domain.dto.opinion.response.ResistOpinionResponseDto;
+import ohai.newslang.domain.dto.opinion.response.*;
 import ohai.newslang.domain.dto.request.RequestResult;
 
 public interface OpinionService {
     ResistOpinionResponseDto resistOpinion(OpinionResistRequestDto opinionResistRequestDto);
+
+    MemberOpinionStatusDto opinionStatusForNews(String newsUrl);
+
     OpinionListResponseDto opinionListByLikeCountOrderForDetailNews(
             String newsUrl, int pageNumber, int pageSize);
 

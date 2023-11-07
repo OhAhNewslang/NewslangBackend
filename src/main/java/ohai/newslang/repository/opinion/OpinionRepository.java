@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface OpinionRepository extends JpaRepository<Opinion, Long> {
 
     Opinion findNoOptionalByUuid(String uuid);
@@ -32,4 +35,11 @@ public interface OpinionRepository extends JpaRepository<Opinion, Long> {
             "WHERE dna.url = :newUrl")
     Page<Opinion> findAllByDetailNewsArchiveUrl(@Param("newUrl") String newUrl,
                                                 Pageable pageable);
+
+    @Query("SELECT o " +
+            "FROM Opinion o " +
+            "JOIN FETCH o.member m " +
+            "JOIN o.newsArchive dna " +
+            "WHERE dna.url = :newUrl")
+    List<Opinion> findAllByDetailNewsArchiveUrl(@Param("newUrl") String newUrl);
 }

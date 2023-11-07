@@ -50,6 +50,7 @@ public class SecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/api/members/new"))
                 .requestMatchers(new AntPathRequestMatcher("/api/subscribe/guest/**"))
                 .requestMatchers(new AntPathRequestMatcher("/api/news/guest/**"))
+                .requestMatchers(new AntPathRequestMatcher("/api/opinions/guest/**"))
                 ;
     }
 
