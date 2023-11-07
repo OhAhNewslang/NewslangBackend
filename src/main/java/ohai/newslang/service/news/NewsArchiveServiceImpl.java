@@ -2,10 +2,7 @@ package ohai.newslang.service.news;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.configuration.jwt.TokenDecoder;
-import ohai.newslang.domain.dto.news.DetailNewsDto;
-import ohai.newslang.domain.dto.news.ResponseThumbnailNewsDto;
-import ohai.newslang.domain.dto.news.ResultDetailNewsDto;
-import ohai.newslang.domain.dto.news.ThumbnailNewsDto;
+import ohai.newslang.domain.dto.news.*;
 import ohai.newslang.domain.dto.page.ResponsePageSourceDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.news.NewsArchive;
@@ -15,6 +12,7 @@ import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
+import ohai.newslang.domain.vo.MemberNewsStatus;
 import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.recommand.MemberRecommendRepository;
 import ohai.newslang.repository.recommand.NewsRecommendRepository;
@@ -64,17 +62,31 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         .contents(findDetailNews.getContents())
         .media(findDetailNews.getMediaName())
         .likeCount(findDetailNews.getLikeCount())
-        .recommend(newsRecommendRepository
-        .findByMemberRecommend_IdAndDetailNewsArchiveUrl(
-        memberRecommendRepository.findByMember_Id(td.currentMemberId()).getId(), url)
-        .orElse(NewsRecommend.getNoneRecommend()).getStatus())
         .postDateTime(findDetailNews.getPostDateTime())
         .modifyDateTime(findDetailNews.getModifyDateTime())
         .reporter(findDetailNews.getReporter())
-        .isScrap(this.isExistScrapNews(url)).build())
+        .build())
         .result(RequestResult.builder()
         .resultCode("200")
         .resultMessage("상세 뉴스 조회 성공").build()).build();
+    }
+
+    @Override
+    public MemberNewsStatusDto findNewsStatusByUrl(String url){
+        NewsArchive findDetailNews = newsArchiveRepository.findNewsArchiveByUrl(url);
+        return MemberNewsStatusDto.builder()
+                .memberNewsStatus(MemberNewsStatus.builder()
+                        .recommend(newsRecommendRepository
+                                .findByMemberRecommend_IdAndDetailNewsArchiveUrl(memberRecommendRepository
+                                        .findByMember_Id(td.currentMemberId()).getId(), url)
+                                .orElse(NewsRecommend.getNoneRecommend()).getStatus())
+                        .isScrap(this.isExistScrapNews(url))
+                        .build())
+                .result(RequestResult.builder()
+                        .resultCode("200")
+                        .resultMessage("회원 뉴스 상태 조회 성공")
+                        .build())
+                .build();
     }
 
     @Override

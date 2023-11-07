@@ -33,6 +33,14 @@ public class OpinionApiController {
         return opinionService.resistOpinion(opinionResistRequestDto);
     }
 
+    // 로그인한 사용자의 의견 정보
+    @GetMapping("/status")
+    public OpinionListResponseDto opinionStatus(
+            @RequestParam("newsUrl") String newUrl) {
+        return opinionService
+                .opinionListByLikeCountOrderForDetailNews(newUrl, page, limit);
+    }
+
     // 상세 뉴스 공감순
     @GetMapping("/news/like")
     public OpinionListResponseDto opinionListByLikeCountForNews(

@@ -16,11 +16,9 @@ public class DetailNewsDto {
     private LocalDateTime postDateTime;
     private LocalDateTime modifyDateTime;
     private String reporter;
-    private boolean isScrap;
-    private String recommend;
 
     @Builder
-    public DetailNewsDto(String url, String title, String contents, String media, int likeCount, RecommendStatus recommend, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter, boolean isScrap) {
+    public DetailNewsDto(String url, String title, String contents, String media, int likeCount, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
         this.url = url;
         this.title = title;
         this.contents = contents;
@@ -29,7 +27,5 @@ public class DetailNewsDto {
         this.postDateTime = postDateTime;
         this.modifyDateTime = modifyDateTime;
         this.reporter = reporter;
-        this.isScrap = isScrap;
-        this.recommend = String.valueOf(recommend);
     }
 }

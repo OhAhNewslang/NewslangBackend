@@ -1,7 +1,7 @@
 package ohai.newslang.service.crawling;
 
 import lombok.extern.slf4j.Slf4j;
-import ohai.newslang.domain.News;
+import ohai.newslang.domain.vo.News;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j

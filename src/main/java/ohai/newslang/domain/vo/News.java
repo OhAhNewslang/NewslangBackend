@@ -1,4 +1,4 @@
-package ohai.newslang.domain;
+package ohai.newslang.domain.vo;
 
 
 import lombok.Builder;

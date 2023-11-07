@@ -1,17 +1,11 @@
 package ohai.newslang.service.crawling;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ohai.newslang.domain.News;
+import ohai.newslang.domain.vo.News;
 import ohai.newslang.domain.entity.news.NewsArchive;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
-import ohai.newslang.service.crawling.CrawlingNewsService;
 import ohai.newslang.service.news.NewsArchiveService;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
