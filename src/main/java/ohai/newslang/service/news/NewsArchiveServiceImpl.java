@@ -114,17 +114,12 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         // 페이징 쿼리
         Page<NewsArchive> pagingSubscribeNews = newsArchiveRepository
         // 전체 구독 목록에서 언론사 부분만 추출?
-        .findAllByFilters(memberSubscribeItem.getMemberSubscribeMediaItemList().stream()
-        .map(s -> s.getMedia().getName()).toList(),
-
+        .findAllByFilters(memberSubscribeItem.getMemberSubscribeMediaItemList().stream().map(s -> s.getMedia().getName()).toList(),
         // 전체 구독 목록에서 카테고리 부분만 추출?
-        memberSubscribeItem.getSubscribeCategoryList().stream()
-        .map(SubscribeCategory::getName).toList(),
-
+        memberSubscribeItem.getSubscribeCategoryList().stream().map(SubscribeCategory::getName).toList(),
         // 전체 구독 목록에서 키워드 부분만 추출?
         // 키워드는 하나의 문자열로 만들어서 찾아야함.
-        String.join("|", memberSubscribeItem.getSubscribeKeywordList().stream()
-        .map(SubscribeKeyword::getName).toList()), pageable);
+        String.join("|", memberSubscribeItem.getSubscribeKeywordList().stream().map(SubscribeKeyword::getName).toList()), pageable);
 
         // 이번 페이징 조건에 맞게 페이징된
         // Entity Page를 DTO List로 변환하여 리턴

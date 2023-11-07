@@ -55,10 +55,16 @@ public class CrawlingService {
         });
     }
 
+//    @Bean
+//    public void runCrawl() {
+//        Thread t = new Thread(new CrawlingNews(newsArchiveService, crawlingNewsService, "20231101", crawlingMediaList));
+//        t.start();
+//    }
+
     @Bean
     public void runCrawl() {
         String startDate = "20231101";
-        int threadCount = 4;
+        int threadCount = 5;
         int start = 0;
         int loopCnt = crawlingMediaList.size() / threadCount;
         int restCnt = crawlingMediaList.size() % threadCount;

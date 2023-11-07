@@ -25,7 +25,7 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService {
         List<News> newsList = new ArrayList<>();
         Document doc = getDocument("https://news.naver.com/main/list.naver?mode=LPOD&mid=sec&oid=" + oId + "&date=" + date + "&page=" + page,
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
-                40000);
+                30000);
         Elements type06_headline = doc.getElementsByClass("type06_headline");
         Elements type06 = doc.getElementsByClass("type06");
         if (type06_headline != null && type06_headline.size() > 0)
@@ -63,7 +63,7 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService {
 
                         Document doc = getDocument(link,
                                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
-                                40000);
+                                30000);
                         Elements article = doc.getElementsByClass("go_trans _article_content");
                         contents += article.toString();
                         postDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_DATE_TIME", "data-date-time");

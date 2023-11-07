@@ -24,6 +24,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
         String token = td.resolveToken(request);
         // token이 Null이 아니고, 유효기간이 넘지 않았을 때
         // SecurityContextHolder에 저장
