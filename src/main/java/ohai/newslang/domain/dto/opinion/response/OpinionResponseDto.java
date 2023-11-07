@@ -17,18 +17,14 @@ public class OpinionResponseDto {
     private String memberName;
     private LocalDate opinionCreateDate;
     private String opinionContent;
-    private boolean modifiable;
     private int likeCount;
-    private String recommend;
-    @Builder
 
-    public OpinionResponseDto(Opinion opinion,boolean modifiable,RecommendStatus recommend) {
+    @Builder
+    public OpinionResponseDto(Opinion opinion) {
         this.opinionId = opinion.getUuid();
         this.memberName = opinion.getMember().getName();
         this.opinionCreateDate = opinion.getCreateTime().toLocalDate();
         this.opinionContent = opinion.getContent();
         this.likeCount = opinion.getLikeCount();
-        this.modifiable = modifiable;
-        this.recommend = String.valueOf(recommend);
     }
 }

@@ -3,7 +3,7 @@
 //import jakarta.annotation.PostConstruct;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;
-//import ohai.newslang.domain.News;
+//import ohai.newslang.domain.vo.News;
 //import ohai.newslang.domain.entity.news.NewsArchive;
 //import ohai.newslang.domain.entity.subscribe.subscribeReference.Category;
 //import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
