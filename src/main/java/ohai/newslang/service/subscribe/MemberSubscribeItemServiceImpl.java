@@ -7,6 +7,7 @@ import ohai.newslang.domain.entity.member.Member;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeMediaItem;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
+import ohai.newslang.domain.enumulate.SubscribeStatus;
 import ohai.newslang.repository.member.MemberRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeMediaItemRepository;
@@ -112,6 +113,40 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
         return RequestResult.builder()
                 .resultCode("200")
                 .resultMessage("구독 언론사 갱신 성공")
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public RequestResult updateMediaSubscribeStatus(SubscribeStatus subscribeStatus) {
+        Long memberId = td.currentMemberId();
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseThrow();
+        memberSubscribeItem.setMediaSubscribeStatus(subscribeStatus);
+        return RequestResult.builder()
+                .resultCode("200")
+                .resultMessage("언론사 구독 상태 갱신 성공")
+                .build();
+    }
+
+    @Override
+    public RequestResult updateCategorySubscribeStatus(SubscribeStatus subscribeStatus) {
+        Long memberId = td.currentMemberId();
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseThrow();
+        memberSubscribeItem.setCategorySubscribeStatus(subscribeStatus);
+        return RequestResult.builder()
+                .resultCode("200")
+                .resultMessage("카테고리 구독 상태 갱신 성공")
+                .build();
+    }
+
+    @Override
+    public RequestResult updateKeywordSubscribeStatus(SubscribeStatus subscribeStatus) {
+        Long memberId = td.currentMemberId();
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseThrow();
+        memberSubscribeItem.setKeywordSubscribeStatus(subscribeStatus);
+        return RequestResult.builder()
+                .resultCode("200")
+                .resultMessage("키워드 구독 상태 갱신 성공")
                 .build();
     }
 

@@ -5,6 +5,7 @@ import lombok.Setter;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 
 import jakarta.persistence.*;
+import ohai.newslang.domain.enumulate.SubscribeStatus;
 
 @Entity
 @Getter

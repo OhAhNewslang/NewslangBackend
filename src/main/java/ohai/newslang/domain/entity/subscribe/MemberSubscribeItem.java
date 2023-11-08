@@ -8,6 +8,8 @@ import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
 import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 
 import jakarta.persistence.*;
+import ohai.newslang.domain.enumulate.SubscribeStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,10 +36,25 @@ public class MemberSubscribeItem {
     @OneToMany(mappedBy = "memberSubscribeItem", cascade = CascadeType.ALL)
     private List<MemberSubscribeMediaItem> memberSubscribeMediaItemList = new ArrayList<>();
 
+    @Column
+    private SubscribeStatus mediaSubscribeStatus = SubscribeStatus.SELECT;
+
+    @Column
+    private SubscribeStatus categorySubscribeStatus = SubscribeStatus.SELECT;
+
+    @Column
+    private SubscribeStatus keywordSubscribeStatus = SubscribeStatus.SELECT;
+
     //연관관계 메서드
     public void setMember(Member member){
         this.member = member;
     }
+
+    public void setMediaSubscribeStatus(SubscribeStatus subscribeStatus){ this.mediaSubscribeStatus = subscribeStatus; };
+
+    public void setCategorySubscribeStatus(SubscribeStatus subscribeStatus){ this.categorySubscribeStatus = subscribeStatus; };
+
+    public void setKeywordSubscribeStatus(SubscribeStatus subscribeStatus){ this.keywordSubscribeStatus = subscribeStatus; };
 
     public void addCategory(List<String> nameList){
         nameList.forEach(sn -> {

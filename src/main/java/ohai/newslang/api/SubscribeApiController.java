@@ -11,6 +11,7 @@ import ohai.newslang.domain.dto.subscribe.ResultSubscribeMediaDto;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
+import ohai.newslang.domain.enumulate.SubscribeStatus;
 import ohai.newslang.service.subscribe.MemberSubscribeItemService;
 import ohai.newslang.service.subscribe.subscribeReference.CategoryService;
 import ohai.newslang.service.subscribe.subscribeReference.MediaService;
@@ -28,7 +29,6 @@ public class SubscribeApiController {
     private final MemberSubscribeItemService memberSubscribeItemService;
     private final MediaService mediaService;
     private final CategoryService categoryService;
-    private final TokenDecoder tokenDecoder;
 
     @GetMapping("/guest/media")
     public ResultSubscribeMediaDto getAllMedias() {
@@ -61,6 +61,9 @@ public class SubscribeApiController {
         .map(SubscribeCategory::getName).collect(Collectors.toList()))
         .keywordList(memberSubscribeItem.getSubscribeKeywordList().stream()
         .map(SubscribeKeyword::getName).collect(Collectors.toList()))
+        .mediaSubscribeStatus(memberSubscribeItem.getMediaSubscribeStatus())
+        .categorySubscribeStatus(memberSubscribeItem.getCategorySubscribeStatus())
+        .keywordSubscribeStatus(memberSubscribeItem.getKeywordSubscribeStatus())
         .result(RequestResult.builder().resultCode("200").resultMessage("구독 목록 조회 성공").build())
         .build();
     }
@@ -84,5 +87,26 @@ public class SubscribeApiController {
         @RequestBody @Valid RequestSubscribeDto request){
         return memberSubscribeItemService
                 .updateSubscribeKeyword(request.getNameList());
+    }
+
+    @PostMapping("/media/status")
+    public RequestResult subscribeMediaStatus(
+            @RequestParam("status") SubscribeStatus status){
+        return memberSubscribeItemService
+                .updateMediaSubscribeStatus(status);
+    }
+
+    @PostMapping("/category/status")
+    public RequestResult subscribeCategoryStatus(
+            @RequestParam("status") SubscribeStatus status){
+        return memberSubscribeItemService
+                .updateCategorySubscribeStatus(status);
+    }
+
+    @PostMapping("/keyword/status")
+    public RequestResult subscribeKeywordStatus(
+            @RequestParam("status") SubscribeStatus status){
+        return memberSubscribeItemService
+                .updateKeywordSubscribeStatus(status);
     }
 }

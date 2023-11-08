@@ -20,6 +20,7 @@ public class CrawlingMediaServiceImpl implements CrawlingMediaService{
     public List<Media> getMediaList(String url) {
         List<Media> mediaList = new ArrayList<>();
         Document doc = null;
+
         Connection conn = Jsoup.connect(url);
         try {
             doc = conn.get();

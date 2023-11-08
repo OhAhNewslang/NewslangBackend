@@ -3,6 +3,7 @@ package ohai.newslang.domain.entity.subscribe;
 import lombok.Getter;
 
 import jakarta.persistence.*;
+import ohai.newslang.domain.enumulate.SubscribeStatus;
 
 @Entity
 @Getter
