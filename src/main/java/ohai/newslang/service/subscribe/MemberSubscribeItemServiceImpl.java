@@ -120,7 +120,7 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     @Transactional
     public RequestResult updateMediaSubscribeStatus(SubscribeStatus subscribeStatus) {
         Long memberId = td.currentMemberId();
-        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseThrow();
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseGet(this::createMemberSubscribeInfo);
         memberSubscribeItem.setMediaSubscribeStatus(subscribeStatus);
         return RequestResult.builder()
                 .resultCode("200")
@@ -129,9 +129,10 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     }
 
     @Override
+    @Transactional
     public RequestResult updateCategorySubscribeStatus(SubscribeStatus subscribeStatus) {
         Long memberId = td.currentMemberId();
-        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseThrow();
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseGet(this::createMemberSubscribeInfo);
         memberSubscribeItem.setCategorySubscribeStatus(subscribeStatus);
         return RequestResult.builder()
                 .resultCode("200")
@@ -140,9 +141,10 @@ public class MemberSubscribeItemServiceImpl implements MemberSubscribeItemServic
     }
 
     @Override
+    @Transactional
     public RequestResult updateKeywordSubscribeStatus(SubscribeStatus subscribeStatus) {
         Long memberId = td.currentMemberId();
-        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseThrow();
+        MemberSubscribeItem memberSubscribeItem = memberSubscribeItemRepository.findByMemberId(memberId).orElseGet(this::createMemberSubscribeInfo);
         memberSubscribeItem.setKeywordSubscribeStatus(subscribeStatus);
         return RequestResult.builder()
                 .resultCode("200")

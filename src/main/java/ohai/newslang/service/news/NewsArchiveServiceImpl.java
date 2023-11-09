@@ -12,19 +12,26 @@ import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
+import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
+import ohai.newslang.domain.enumulate.SubscribeStatus;
 import ohai.newslang.domain.vo.MemberNewsStatus;
 import ohai.newslang.repository.news.NewsArchiveRepository;
 import ohai.newslang.repository.recommand.MemberRecommendRepository;
 import ohai.newslang.repository.recommand.NewsRecommendRepository;
 import ohai.newslang.repository.scrap.MemberScrapNewsRepository;
 import ohai.newslang.repository.subscribe.MemberSubscribeItemRepository;
+import ohai.newslang.repository.subscribe.subscribeReference.CategoryRepository;
+import ohai.newslang.repository.subscribe.subscribeReference.MediaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,6 +43,8 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
     private final NewsRecommendRepository newsRecommendRepository;
     private final MemberRecommendRepository memberRecommendRepository;
     private final MemberScrapNewsRepository memberScrapNewsRepository;
+    private final MediaRepository mediaRepository;
+    private final CategoryRepository categoryRepository;
     private final TokenDecoder td;
 
     // 크롤링에 사용 되는 뉴스 서비스 1
@@ -117,21 +126,49 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
 
         // 전체 구독 목록 조회
         MemberSubscribeItem memberSubscribeItem = subscribeItemRepository
-        .findSubscribeMediaByMemberId(td.currentMemberId()).orElseGet(MemberSubscribeItem::new);
+                .findByMemberId(td.currentMemberId()).orElseGet(MemberSubscribeItem::new);
+
+        // 구독 상태
+        SubscribeStatus mediaSubscribeStatus = memberSubscribeItem.getMediaSubscribeStatus();
+        SubscribeStatus categorySubscribeStatus = memberSubscribeItem.getCategorySubscribeStatus();
+        SubscribeStatus keywordSubscribeStatus = memberSubscribeItem.getKeywordSubscribeStatus();
+
+        // 언론사, 카테고리 구독 리스트 취득
+        Set<String> mediaSet = memberSubscribeItem.getMemberSubscribeMediaItemList().stream().map(s -> s.getMedia().getName()).collect(Collectors.toSet());
+        Set<String> categorySet = memberSubscribeItem.getSubscribeCategoryList().stream().map(SubscribeCategory::getName).collect(Collectors.toSet());
 
         // 페이징 조건
         PageRequest pageable = PageRequest
-        .of(page - 1, limit, Sort.by("post_Date_Time").descending());
+                .of(page - 1, limit, Sort.by("post_Date_Time").descending());
 
-        // 페이징 쿼리
-        Page<NewsArchive> pagingSubscribeNews = newsArchiveRepository
-        // 전체 구독 목록에서 언론사 부분만 추출?
-        .findAllByFilters(memberSubscribeItem.getMemberSubscribeMediaItemList().stream().map(s -> s.getMedia().getName()).toList(),
-        // 전체 구독 목록에서 카테고리 부분만 추출?
-        memberSubscribeItem.getSubscribeCategoryList().stream().map(SubscribeCategory::getName).toList(),
-        // 전체 구독 목록에서 키워드 부분만 추출?
-        // 키워드는 하나의 문자열로 만들어서 찾아야함.
-        String.join("|", memberSubscribeItem.getSubscribeKeywordList().stream().map(SubscribeKeyword::getName).toList()), pageable);
+        // 전체 구독인 경우 모든 미디어 추가
+        if (mediaSubscribeStatus == SubscribeStatus.ALL) {
+            List<String> mediaList = mediaRepository.findAll().stream().map(m -> m.getName()).toList();
+            mediaSet.addAll(mediaList);
+        }
+
+        // 전체 구독인 경우 모든 카테고리 추가
+        if (categorySubscribeStatus == SubscribeStatus.ALL) {
+            List<String> categoryList = categoryRepository.findAll().stream().map(m -> m.getName()).toList();
+            categorySet.addAll(categoryList);
+        }
+
+        Page<NewsArchive> pagingSubscribeNews;
+        if (keywordSubscribeStatus == SubscribeStatus.ALL){
+            // 키워드 제외의 경우
+            pagingSubscribeNews = newsArchiveRepository
+                    .findAllByFiltersIgnoreKeywords(mediaSet.stream().toList(),
+                            categorySet.stream().toList(),
+                            pageable);
+        }else{
+            // 키워드 포함의 경우
+            String keywords = String.join("|", memberSubscribeItem.getSubscribeKeywordList().stream().map(SubscribeKeyword::getName).toList());
+            pagingSubscribeNews = newsArchiveRepository
+                    .findAllByFilters(mediaSet.stream().toList(),
+                            categorySet.stream().toList(),
+                            // REGEXP 조건을 위한 하나의 문자열로 만듬 (| : or 조건)
+                            keywords, pageable);
+        }
 
         // 이번 페이징 조건에 맞게 페이징된
         // Entity Page를 DTO List로 변환하여 리턴

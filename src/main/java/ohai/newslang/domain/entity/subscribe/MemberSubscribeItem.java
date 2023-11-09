@@ -43,7 +43,7 @@ public class MemberSubscribeItem {
     private SubscribeStatus categorySubscribeStatus = SubscribeStatus.SELECT;
 
     @Column
-    private SubscribeStatus keywordSubscribeStatus = SubscribeStatus.SELECT;
+    private SubscribeStatus keywordSubscribeStatus = SubscribeStatus.ALL;
 
     //연관관계 메서드
     public void setMember(Member member){

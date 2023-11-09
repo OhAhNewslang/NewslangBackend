@@ -27,10 +27,18 @@ public interface NewsArchiveRepository extends JpaRepository<NewsArchive, Long> 
     @Query(value = "select * from News_Archive" +
             " where media_name in :mediaNameList" +
             " and category in :categoryList" +
-            " and (contents REGEXP :keywords)",
-           nativeQuery = true)
+            " and (contents REGEXP :keywords or title REGEXP :keywords)",
+            nativeQuery = true)
     Page<NewsArchive> findAllByFilters(@Param("mediaNameList") List<String> mediaNameList,
-                                    @Param("categoryList") List<String> categoryList,
-                                    @Param("keywords") String keywords,
-                                    Pageable pageable);
+                                       @Param("categoryList") List<String> categoryList,
+                                       @Param("keywords") String keywords,
+                                       Pageable pageable);
+
+    @Query(value = "select * from News_Archive" +
+            " where media_name in :mediaNameList" +
+            " and category in :categoryList",
+            nativeQuery = true)
+    Page<NewsArchive> findAllByFiltersIgnoreKeywords(@Param("mediaNameList") List<String> mediaNameList,
+                                       @Param("categoryList") List<String> categoryList,
+                                       Pageable pageable);
 }
