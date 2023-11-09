@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import ohai.newslang.domain.dto.news.KeywordNewsDto;
 import ohai.newslang.domain.dto.news.MemberNewsStatusDto;
 import ohai.newslang.domain.dto.news.ResponseThumbnailNewsDto;
 import ohai.newslang.domain.dto.news.ResultDetailNewsDto;
@@ -38,9 +39,15 @@ public class NewsArchiveApiController {
 
     @GetMapping("/subscribe")
     public ResponseThumbnailNewsDto getSubscribeNews(
-        @RequestParam("page") int page,
-        @RequestParam("limit") int limit) {
+            @RequestParam("page") int page,
+            @RequestParam("limit") int limit) {
         return newsArchiveService.findAllSubscribeNews(page,limit);
+    }
+
+    @GetMapping("/keyword")
+    public KeywordNewsDto getKeywordsNews(
+            @RequestParam("keyword") String keyword) {
+        return newsArchiveService.findAllKeywordNews(keyword);
     }
 
     @GetMapping("/guest/detail")

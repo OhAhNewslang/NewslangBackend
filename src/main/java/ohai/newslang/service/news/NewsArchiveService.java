@@ -1,9 +1,6 @@
 package ohai.newslang.service.news;
 
-import ohai.newslang.domain.dto.news.MemberNewsStatusDto;
-import ohai.newslang.domain.dto.news.ResponseThumbnailNewsDto;
-import ohai.newslang.domain.dto.news.ResultDetailNewsDto;
-import ohai.newslang.domain.dto.news.ThumbnailNewsDto;
+import ohai.newslang.domain.dto.news.*;
 import ohai.newslang.domain.entity.news.NewsArchive;
 import org.springframework.data.domain.Page;
 
@@ -16,4 +13,5 @@ public interface NewsArchiveService {
     MemberNewsStatusDto findNewsStatusByUrl(String url);
     ResponseThumbnailNewsDto findAllLiveNews(int page, int limit);
     ResponseThumbnailNewsDto findAllSubscribeNews(int page, int limit);
+    KeywordNewsDto findAllKeywordNews(String keyword);
 }

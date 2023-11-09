@@ -184,18 +184,48 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         .build()).build();
     }
 
+    @Override
+    public KeywordNewsDto findAllKeywordNews(String keyword) {
+
+        List<NewsArchive> pagingSubscribeNews = newsArchiveRepository
+                .findTop3ByKeyword(keyword);
+
+        // 이번 페이징 조건에 맞게 페이징된
+        // Entity Page를 DTO List로 변환하여 리턴
+        return KeywordNewsDto.builder()
+                .thumbnailNewsList(newsArchiveToThumbnailDto(pagingSubscribeNews))
+                .result(RequestResult.builder()
+                        .resultCode("200")
+                        .resultMessage("구독 뉴스 조회 성공")
+                        .build()).build();
+    }
+
     private List<ThumbnailNewsDto> newsArchiveToThumbnailDto(Page<NewsArchive> newsArchivePage) {
 
         // Page객체의 너무 많은 정보들을 정리하고
         // 이번 페이지의 내용만 List로 변환함.
         return newsArchivePage.stream()
-        .map(n -> ThumbnailNewsDto.builder()
-        .url(n.getUrl())
-        .media(n.getMediaName())
-        .category(n.getCategory())
-        .title(n.getTitle()).summary("")
-        .imagePath(n.getImagePath())
-        .postDateTime(n.getPostDateTime()).build()).toList();
+                .map(n -> ThumbnailNewsDto.builder()
+                        .url(n.getUrl())
+                        .media(n.getMediaName())
+                        .category(n.getCategory())
+                        .title(n.getTitle()).summary("")
+                        .imagePath(n.getImagePath())
+                        .postDateTime(n.getPostDateTime()).build()).toList();
+    }
+
+    private List<ThumbnailNewsDto> newsArchiveToThumbnailDto(List<NewsArchive> newsArchivePage) {
+
+        // Page객체의 너무 많은 정보들을 정리하고
+        // 이번 페이지의 내용만 List로 변환함.
+        return newsArchivePage.stream()
+                .map(n -> ThumbnailNewsDto.builder()
+                        .url(n.getUrl())
+                        .media(n.getMediaName())
+                        .category(n.getCategory())
+                        .title(n.getTitle()).summary("")
+                        .imagePath(n.getImagePath())
+                        .postDateTime(n.getPostDateTime()).build()).toList();
     }
 
     // 이미 스크랩된 뉴스인지 확인.
