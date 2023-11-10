@@ -77,4 +77,6 @@ public class Member extends TimeStamp {
     public void updateEmail(String newEmail){
         email = newEmail;
     }
+
+    public void updateRole(UserRole newRole) { role = newRole; }
 }

@@ -22,7 +22,7 @@ public class NewsArchive {
     @Column(name = "news_archive_id")
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private String url;
 
     @Column
@@ -36,6 +36,9 @@ public class NewsArchive {
 
     @Column(length = Integer.MAX_VALUE)
     private String contents;
+
+    @Column(length = Integer.MAX_VALUE)
+    private String summary;
 
     @Column
     private String imagePath;
@@ -77,6 +80,10 @@ public class NewsArchive {
     public void updateLikeCount(int count) {
         likeCount += count;
         checkCount(likeCount);
+    }
+
+    public void updateSummary(String summary){
+        this.summary = summary;
     }
 
     // 추천 수가 0 밑으로 내려가면 0으로 초기화

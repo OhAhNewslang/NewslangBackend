@@ -76,6 +76,8 @@ public class SecurityConfiguration {
             .requestMatchers(new AntPathRequestMatcher("/api/news/**")).hasRole("USER")
             .requestMatchers(new AntPathRequestMatcher("/api/subscribe/**")).hasRole("USER")
             .requestMatchers(new AntPathRequestMatcher("/api/scrap/**")).hasRole("USER")
+            .requestMatchers(new AntPathRequestMatcher("/api/chat/news/**")).hasAnyRole("USER", "ADMIN")
+            .requestMatchers(new AntPathRequestMatcher("/api/chat/admin/**")).hasRole("ADMIN")
             .anyRequest().authenticated())// 그 외 인증없이 접근 X
             // whitelist 방식
             // 커스텀 필터 추가 : 요청이 시작되기 전에 만들어놓은 JwtTokenFilter를 사용할 필터로 설정

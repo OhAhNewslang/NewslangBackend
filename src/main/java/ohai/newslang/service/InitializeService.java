@@ -1,14 +1,11 @@
 package ohai.newslang.service;
 
 import lombok.RequiredArgsConstructor;
-import ohai.newslang.domain.entity.CrawlerProperties;
+import ohai.newslang.domain.entity.properties.CrawlerProperties;
+import ohai.newslang.domain.entity.properties.GptProperties;
 import ohai.newslang.domain.entity.member.Member;
-import ohai.newslang.domain.entity.news.NewsArchive;
-import ohai.newslang.domain.entity.opinion.Opinion;
-import ohai.newslang.domain.entity.recommend.NewsRecommend;
 import ohai.newslang.domain.entity.recommend.MemberRecommend;
-import ohai.newslang.domain.entity.recommend.OpinionRecommend;
-import ohai.newslang.domain.enumulate.RecommendStatus;
+import ohai.newslang.domain.enumulate.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,9 +24,8 @@ public class InitializeService {
 
     @PostConstruct
     public void start(){
-        initService.initDetailNews();
-        initService.initOpinion();
-        initService.initCrawlerProperties();
+        initService.initTestMembers();
+        initService.initAdminProperties();
     }
 
     @Bean
@@ -46,33 +42,29 @@ public class InitializeService {
         private final EntityManager em;
         private final PasswordEncoder pe;
 
-        public void initCrawlerProperties() {
+        public void initAdminProperties() {
+            Member member = Member.createMember(
+                    MemberRecommend.createMemberRecommend(),
+                    "뉴스랑",
+                    "admin",
+                    "admin@newslang.com",
+                    pe.encode("admin"));
+            member.updateRole(UserRole.ROLE_ADMIN);
+            em.persist(member);
             CrawlerProperties cp = CrawlerProperties.builder().crawlingDate(LocalDateTime.MIN).crawlingPeriodSecond(600).build();
             em.persist(cp);
+            GptProperties gp = GptProperties.createGptProperties("", "");
+            em.persist(gp);
         }
 
-        public void initDetailNews() {
-            MemberRecommend memberRecommend = MemberRecommend.createMemberRecommend();
-//
-            em.persist(Member.createMember(
-                    memberRecommend,
+        public void initTestMembers() {
+
+            Member member0 = Member.createMember(
+                    MemberRecommend.createMemberRecommend(),
                     "오진석",
                     "ojs",
                     "EFGH@gmail.com",
-                    pe.encode("1234")
-            ));
-
-//            NewsArchive news = NewsArchive.builder()
-//                    .url("http://dummyUrl1:8080").build();
-//
-//            NewsRecommend
-//                    .createNewsRecommend(memberRecommend, news, RecommendStatus.NONE);
-//
-//            em.persist(news);
-
-        }
-
-        public void initOpinion() {
+                    pe.encode("1234"));
 
             Member member1 = Member.createMember(
                     MemberRecommend.createMemberRecommend(),
@@ -115,41 +107,42 @@ public class InitializeService {
                     pe.encode("1234")
             );
 
+            em.persist(member0);
             em.persist(member1);
             em.persist(member2);
             em.persist(member3);
             em.persist(member4);
             em.persist(member5);
 
-            NewsArchive news = NewsArchive.builder()
-                    .url("http://dummyUrl2:8080").build();
-
-            em.persist(news);
-
-            Opinion opinion1 = Opinion.createOpinion(member1, news, "의견1 의견");
-
-            OpinionRecommend
-                    .createOpinionRecommend(member2.getMemberRecommend(), opinion1, RecommendStatus.LIKE);
-
-            Opinion opinion2 = Opinion.createOpinion(member1, news, "의견2 의견");
-
-            OpinionRecommend
-                    .createOpinionRecommend(member3.getMemberRecommend(), opinion2, RecommendStatus.LIKE);
-            OpinionRecommend
-                    .createOpinionRecommend(member4.getMemberRecommend(), opinion2, RecommendStatus.LIKE);
-
-            Opinion opinion3 = Opinion.createOpinion(member1, news, "의견3 의견");
-
-            OpinionRecommend
-                    .createOpinionRecommend(member3.getMemberRecommend(), opinion3, RecommendStatus.LIKE);
-            OpinionRecommend
-                    .createOpinionRecommend(member4.getMemberRecommend(), opinion3, RecommendStatus.LIKE);
-            OpinionRecommend
-                    .createOpinionRecommend(member5.getMemberRecommend(), opinion3, RecommendStatus.LIKE);
-
-            em.persist(opinion1);
-            em.persist(opinion2);
-            em.persist(opinion3);
+//            NewsArchive news = NewsArchive.builder()
+//                    .url("http://dummyUrl2:8080").build();
+//
+//            em.persist(news);
+//
+//            Opinion opinion1 = Opinion.createOpinion(member1, news, "의견1 의견");
+//
+//            OpinionRecommend
+//                    .createOpinionRecommend(member2.getMemberRecommend(), opinion1, RecommendStatus.LIKE);
+//
+//            Opinion opinion2 = Opinion.createOpinion(member1, news, "의견2 의견");
+//
+//            OpinionRecommend
+//                    .createOpinionRecommend(member3.getMemberRecommend(), opinion2, RecommendStatus.LIKE);
+//            OpinionRecommend
+//                    .createOpinionRecommend(member4.getMemberRecommend(), opinion2, RecommendStatus.LIKE);
+//
+//            Opinion opinion3 = Opinion.createOpinion(member1, news, "의견3 의견");
+//
+//            OpinionRecommend
+//                    .createOpinionRecommend(member3.getMemberRecommend(), opinion3, RecommendStatus.LIKE);
+//            OpinionRecommend
+//                    .createOpinionRecommend(member4.getMemberRecommend(), opinion3, RecommendStatus.LIKE);
+//            OpinionRecommend
+//                    .createOpinionRecommend(member5.getMemberRecommend(), opinion3, RecommendStatus.LIKE);
+//
+//            em.persist(opinion1);
+//            em.persist(opinion2);
+//            em.persist(opinion3);
         }
     }
 }
