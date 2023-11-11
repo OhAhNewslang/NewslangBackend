@@ -16,9 +16,10 @@ public class ChatRequest {
     private double temperature;
 
     @Builder
-    public ChatRequest(String model, String prompt, int n, double temperature) {
+    public ChatRequest(String model, String systemPrompt, String prompt, int n, double temperature) {
         this.model = model;
         this.messages = new ArrayList<>();
+//        this.messages.add(new Message("system", systemPrompt));
         this.messages.add(new Message("user", prompt));
         this.n = n;
         this.temperature = temperature;

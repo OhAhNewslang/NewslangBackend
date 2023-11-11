@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class News {
     private String url;
     private String title;
-    private String summary;
+    private String article;
     private String contents;
     private String imagePath;
     private String media;
@@ -22,10 +22,10 @@ public class News {
     private String reporter;
 
     @Builder
-    public News(String url, String title, String summary, String contents, String imagePath, String media, String oId, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
+    public News(String url, String title, String article, String contents, String imagePath, String media, String oId, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
         this.url = url;
         this.title = title;
-        this.summary = summary;
+        this.article = article;
         this.contents = contents;
         this.imagePath = imagePath;
         this.media = media;

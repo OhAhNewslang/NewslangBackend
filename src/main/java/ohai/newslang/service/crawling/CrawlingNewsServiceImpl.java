@@ -35,6 +35,9 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService {
     }
 
     private List<News> parsingScriptToThumbnailNews(Elements root, String oId){
+//        Document.OutputSettings outputSettings = new Document.OutputSettings();
+//        outputSettings.prettyPrint(false);
+
         List<News> newsList = new ArrayList<>();
         try {
             for (Element item : root) {
@@ -52,19 +55,24 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService {
                         String title = dt2.html();
                         String link = dt2.select("a").attr("href");
                         Elements dd = innerItem.select("dd");
-                        String summary = dd.select("span").get(0).html();
                         String mediaName = dd.select("span").get(1).html();
 
-                        String contents = "";
-                        String reporter = "";
-                        LocalDateTime postDateTime = null;
-                        LocalDateTime modifyDateTime = null;
 
                         Document doc = getDocument(link,
                                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
                                 30000);
-                        Elements article = doc.getElementsByClass("go_trans _article_content");
-                        contents += article.toString();
+                        String reporter = "";
+                        LocalDateTime postDateTime = null;
+                        LocalDateTime modifyDateTime = null;
+
+                        Elements ela = doc.getElementsByClass("go_trans _article_content");
+                        String article = ela.toString();
+
+
+                        Document jsoupDoc = Jsoup.parse(ela.html());
+//                        jsoupDoc.outputSettings(outputSettings);
+                        String contents = jsoupDoc.wholeText();
+
                         postDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_DATE_TIME", "data-date-time");
                         modifyDateTime = getDateTime(doc, "media_end_head_info_datestamp_time _ARTICLE_MODIFY_DATE_TIME", "data-modify-date-time");
                         if (modifyDateTime == null) modifyDateTime = postDateTime;
@@ -78,7 +86,7 @@ public class CrawlingNewsServiceImpl implements CrawlingNewsService {
                                 }
                             }
                         }
-                        newsList.add(News.builder().url(link).title(title).summary(summary).contents(contents).imagePath(imagePath).media(mediaName).oId(oId).postDateTime(postDateTime).modifyDateTime(modifyDateTime).reporter(reporter).build());
+                        newsList.add(News.builder().url(link).title(title).article(article).contents(contents).imagePath(imagePath).media(mediaName).oId(oId).postDateTime(postDateTime).modifyDateTime(modifyDateTime).reporter(reporter).build());
                     }catch (RuntimeException e) {
                         throw new RuntimeException(e);
                     }

@@ -76,6 +76,7 @@ public class CrawlingNews implements Runnable{
                                         .mediaName(t.getMedia())
                                         .category(category)
                                         .title(t.getTitle())
+                                        .article(t.getArticle())
                                         .contents(t.getContents())
                                         .imagePath(t.getImagePath())
                                         .countLike(0L)

@@ -70,12 +70,12 @@ public class SecurityConfiguration {
             // 세션을 유지하여 SessionId를 확인할 필요없이 요청 시에 토큰을 받아서 사용하면 되므로 세션을 유지할 이유가 없다.
             .authorizeHttpRequests(
             (authorize) -> authorize
-            .requestMatchers(mvcMatcherBuilder.pattern("/api/members/**")).hasRole("USER")
-            .requestMatchers(mvcMatcherBuilder.pattern("/api/opinions/**")).hasRole("USER")
-            .requestMatchers(new AntPathRequestMatcher("/api/recommends/**")).hasRole("USER")
-            .requestMatchers(new AntPathRequestMatcher("/api/news/**")).hasRole("USER")
-            .requestMatchers(new AntPathRequestMatcher("/api/subscribe/**")).hasRole("USER")
-            .requestMatchers(new AntPathRequestMatcher("/api/scrap/**")).hasRole("USER")
+            .requestMatchers(mvcMatcherBuilder.pattern("/api/members/**")).hasAnyRole("USER", "ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern("/api/opinions/**")).hasAnyRole("USER", "ADMIN")
+            .requestMatchers(new AntPathRequestMatcher("/api/recommends/**")).hasAnyRole("USER", "ADMIN")
+            .requestMatchers(new AntPathRequestMatcher("/api/news/**")).hasAnyRole("USER", "ADMIN")
+            .requestMatchers(new AntPathRequestMatcher("/api/subscribe/**")).hasAnyRole("USER", "ADMIN")
+            .requestMatchers(new AntPathRequestMatcher("/api/scrap/**")).hasAnyRole("USER", "ADMIN")
             .requestMatchers(new AntPathRequestMatcher("/api/chat/news/**")).hasAnyRole("USER", "ADMIN")
             .requestMatchers(new AntPathRequestMatcher("/api/chat/admin/**")).hasRole("ADMIN")
             .anyRequest().authenticated())// 그 외 인증없이 접근 X

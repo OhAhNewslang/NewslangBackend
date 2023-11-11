@@ -2,7 +2,6 @@ package ohai.newslang.domain.dto.news;
 
 import lombok.Builder;
 import lombok.Getter;
-import ohai.newslang.domain.enumulate.RecommendStatus;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +9,7 @@ import java.time.LocalDateTime;
 public class DetailNewsDto {
     private String url;
     private String title;
-    private String contents;
+    private String article;
     private String media;
     private int likeCount;
     private LocalDateTime postDateTime;
@@ -18,10 +17,10 @@ public class DetailNewsDto {
     private String reporter;
 
     @Builder
-    public DetailNewsDto(String url, String title, String contents, String media, int likeCount, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
+    public DetailNewsDto(String url, String title, String article, String media, int likeCount, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
         this.url = url;
         this.title = title;
-        this.contents = contents;
+        this.article = article;
         this.media = media;
         this.likeCount = likeCount;
         this.postDateTime = postDateTime;

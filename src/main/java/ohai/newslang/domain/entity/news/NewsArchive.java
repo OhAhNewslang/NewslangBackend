@@ -35,6 +35,9 @@ public class NewsArchive {
     private String title;
 
     @Column(length = Integer.MAX_VALUE)
+    private String article;
+
+    @Column(length = Integer.MAX_VALUE)
     private String contents;
 
     @Column(length = Integer.MAX_VALUE)
@@ -62,12 +65,13 @@ public class NewsArchive {
     private List<Opinion> opinions = new ArrayList<>();
 
     @Builder
-    public NewsArchive(Long id, String url, String mediaName, String category, String title, String contents, String imagePath, Long countLike, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
+    public NewsArchive(Long id, String url, String mediaName, String category, String title, String article, String contents, String imagePath, Long countLike, LocalDateTime postDateTime, LocalDateTime modifyDateTime, String reporter) {
         this.id = id;
         this.url = url;
         this.mediaName = mediaName;
         this.category = category;
         this.title = title;
+        this.article = article;
         this.contents = contents;
         this.imagePath = imagePath;
         this.likeCount = 0;

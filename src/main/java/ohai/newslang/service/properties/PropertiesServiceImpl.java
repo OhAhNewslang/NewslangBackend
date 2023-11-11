@@ -2,6 +2,8 @@ package ohai.newslang.service.properties;
 
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.configuration.jwt.TokenDecoder;
+import ohai.newslang.domain.dto.gpt.ApiKeyResponseDto;
+import ohai.newslang.domain.dto.gpt.GptApiKeyDto;
 import ohai.newslang.domain.dto.request.RequestResult;
 import ohai.newslang.domain.entity.properties.GptProperties;
 import ohai.newslang.repository.properties.GptPropertiesRepository;
@@ -55,6 +57,26 @@ public class PropertiesServiceImpl implements PropertiesService {
             gptProperties.setTranslationKey(translationKey);
         }
         return getResult(isAlreadyProperties);
+    }
+
+    @Override
+    public ApiKeyResponseDto getApiKeys() {
+        List<GptProperties> gptPropertiesList = gptPropertiesRepository.findAll();
+        GptApiKeyDto gptApiKeyDto = GptApiKeyDto.builder()
+                .apiKey("")
+                .translationKey("")
+                .build();
+        boolean isAlreadyProperties = gptPropertiesList.size() > 0;
+        if (isAlreadyProperties){
+            GptProperties gptProperties = gptPropertiesList.get(0);
+            gptApiKeyDto.setApiKey(gptProperties.getApiKey());
+            gptApiKeyDto.setTranslationKey(gptProperties.getTranslationKey());
+        }
+        RequestResult result = getResult(isAlreadyProperties);
+        return ApiKeyResponseDto.builder()
+                .apiKeys(gptApiKeyDto)
+                .result(result)
+                .build();
     }
 
     private RequestResult getResult(boolean alreadyData){

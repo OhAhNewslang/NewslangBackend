@@ -12,7 +12,6 @@ import ohai.newslang.domain.entity.scrap.MemberScrapNewsArchive;
 import ohai.newslang.domain.entity.subscribe.MemberSubscribeItem;
 import ohai.newslang.domain.entity.subscribe.SubscribeCategory;
 import ohai.newslang.domain.entity.subscribe.SubscribeKeyword;
-import ohai.newslang.domain.entity.subscribe.subscribeReference.Media;
 import ohai.newslang.domain.enumulate.SubscribeStatus;
 import ohai.newslang.domain.vo.MemberNewsStatus;
 import ohai.newslang.repository.news.NewsArchiveRepository;
@@ -28,7 +27,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,7 +66,7 @@ public class NewsArchiveServiceImpl implements NewsArchiveService{
         .detailNews(DetailNewsDto.builder()
         .url(findDetailNews.getUrl())
         .title(findDetailNews.getTitle())
-        .contents(findDetailNews.getContents())
+        .article(findDetailNews.getArticle())
         .media(findDetailNews.getMediaName())
         .likeCount(findDetailNews.getLikeCount())
         .postDateTime(findDetailNews.getPostDateTime())

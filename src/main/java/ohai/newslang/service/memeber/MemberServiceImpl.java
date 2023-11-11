@@ -83,6 +83,7 @@ public class MemberServiceImpl implements MemberService{
         .email(currentMember.getEmail())
         .loginId(currentMember.getLoginId())
         .name(currentMember.getName())
+        .role(currentMember.getRole())
         .result(RequestResult.builder().resultCode("200").resultMessage("").build())
         .build();
     }
