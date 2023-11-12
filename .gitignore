@@ -36,5 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-### SMTP ###
-application-smtp.yml
+### db ###
+application-db.yml

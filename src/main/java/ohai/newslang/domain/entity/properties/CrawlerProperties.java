@@ -20,6 +20,7 @@ public class CrawlerProperties {
     @Column(name = "crawler_properties_id")
     private Long id;
 
+    @Column
     private LocalDateTime crawlingDate;
 
     private int crawlingPeriodSecond;
