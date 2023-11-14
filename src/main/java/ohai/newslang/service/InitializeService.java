@@ -1,5 +1,6 @@
 package ohai.newslang.service;
 
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import ohai.newslang.domain.entity.properties.CrawlerProperties;
 import ohai.newslang.domain.entity.properties.GptProperties;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -43,20 +45,23 @@ public class InitializeService {
         private final PasswordEncoder pe;
 
         public void initAdminProperties() {
-            Member member = Member.createMember(
-                    MemberRecommend.createMemberRecommend(),
-                    "뉴스랑",
-                    "admin",
-                    "admin@newslang.com",
-                    pe.encode("admin"));
-            member.updateRole(UserRole.ROLE_ADMIN);
-            em.persist(member);
-            CrawlerProperties cp = CrawlerProperties.builder()
-                    .crawlingDate(LocalDateTime.of(1970,1,1,0,0,0,1))
-                    .crawlingPeriodSecond(600).build();
-            em.persist(cp);
-            GptProperties gp = GptProperties.createGptProperties("", "");
-            em.persist(gp);
+            List<Member> memberList = em.createQuery("select m from Member m where m.loginId = 'admin'", Member.class).getResultList();
+            if (memberList.size() < 1) {
+                Member member = Member.createMember(
+                        MemberRecommend.createMemberRecommend(),
+                        "뉴스랑",
+                        "admin",
+                        "admin@newslang.com",
+                        pe.encode("admin"));
+                member.updateRole(UserRole.ROLE_ADMIN);
+                em.persist(member);
+                CrawlerProperties cp = CrawlerProperties.builder()
+                        .crawlingDate(LocalDateTime.of(1970, 1, 1, 0, 0, 0, 1))
+                        .crawlingPeriodSecond(600).build();
+                em.persist(cp);
+                GptProperties gp = GptProperties.createGptProperties("", "");
+                em.persist(gp);
+            }
         }
     }
 }

@@ -54,24 +54,22 @@ public class GptServiceImpl implements GptService{
             String answer = getAnswer(gptProperties,
                     "",
                     "You are a professional journalist.\n" +
-                                "Extract keywords by referring to the provided context, summarize the brief in 50 characters or less, and summarize the entire document in 300 characters or less.\n" +
+                                "Extract keywords by referring to the provided context, summarize the brief in 50 characters or less, and summarize the entire document in 250 characters or less.\n" +
                                 "Please refer to the answer format below.\n" +
                                 "Answers will be in Korean.\n" +
                                 "1. 키워드\n" +
-                                "   - 마이크로소프트\n" +
                                 "   - Bing\n" +
                                 "   - 대기 목록\n" +
-                                "   - 기술\n" +
+                                "   - 인공지능 기술\n" +
                                 "\n" +
                                 "2. 브리프\n" +
-                                "   - 마이크로소프트\n" +
+                                "   - 김수진님은 인공지능 기술에 관심\n" +
                                 "   - Bing 대기 목록 없애고 GPT4 무료 접근 제공\n" +
                                 "\n" +
                                 "3. 본문 요약\n" +
-                                "   - 마이크로소프트는 Bing 대기 목록을 제거하여 사용자들이 GPT-4에 무료로 접금할 수 있도록 결정했습니다.\n" +
+                                "   - 김수진님은 인공지능 기술에 관심이 많아 GPT-4가 흥미로웠습니다.\n" +
+                                "   - Bing 대기 목록을 제거하여 사용자들이 GPT-4에 무료로 접근할 수 있도록 결정했습니다.\n" +
                                 "   - 사용자 경험 개선과 콘텐츠 생성의 효율성 향상을 목표로 합니다.\n" +
-                                "   - GPT4는 인공 지능 기반의 텍스트 생성 엔진입니다.\n" +
-                                "   - 마이크로소프트는 인공 지능 기반 기술 개발을 고도화합니다.\n" +
                                 "Answers will be in Korean.\n\n" +
                                 "--- Context ---\n" + questionEng);
             if (newsArchive != null) newsArchive.updateSummary(answer);
